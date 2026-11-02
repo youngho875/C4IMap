@@ -468,54 +468,37 @@ void CC4IMapView::ZoomOut()
 
 void CC4IMapView::OnSize(UINT nType, int cx, int cy)
 {
-	CView::OnSize(nType, cx, cy);
-	if (cx <= 0 || cy <= 0 || m_pCoordMgr == NULL)
-		return;
+    CView::OnSize(nType, cx, cy);
+    if (nType == SIZE_MINIMIZED || cx <= 0 || cy <= 0 || m_pCoordMgr == nullptr)
+        return;
 
-	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-	CRect rec = m_recSave;
-	GetWindowRect(&m_recSave);
+    const CRect previousWindow = m_recSave;
+    GetWindowRect(&m_recSave);
+    const CRect client(0, 0, cx, cy);
 
-	CRect pRectView;
-	pRectView.top = 0;
-	pRectView.left = 0;
-	pRectView.right = cx;
-	pRectView.bottom = cy;
+    double centerX, centerY;
+    m_pCoordMgr->GetDisplayCenter(&centerX, &centerY);
+    if (m_bDCInitialized)
+    {
+        m_pCoordMgr->m_fCenterX = centerX + previousWindow.left - m_recSave.left;
+        m_pCoordMgr->m_fCenterY = centerY + previousWindow.top - m_recSave.top;
+    }
 
-	double x, y;
-	m_pCoordMgr->GetDisplayCenter(&x, &y);
-	if (m_bDCInitialized)
-	{
-		m_pCoordMgr->m_fCenterX = x + rec.left - m_recSave.left;
-		m_pCoordMgr->m_fCenterY = y + rec.top - m_recSave.top;
-	}
+    m_pCoordMgr->m_nDisplayViewWidth = cx;
+    m_pCoordMgr->m_nDisplayViewHeight = cy;
+    m_pCoordMgr->m_fHorVerRatio = static_cast<double>(cx) / cy;
+    m_pCoordMgr->InitDisplayParameter(client);
 
+    if (!m_bDCInitialized)
+        return;
 
+    ReInitializeDCs();
+    m_mapFrameCache.InvalidateFrom();
 
-	m_pCoordMgr->m_nDisplayViewWidth = pRectView.Width();
-	m_pCoordMgr->m_nDisplayViewHeight = pRectView.Height();
-	m_pCoordMgr->m_fHorVerRatio = (double)(pRectView.Width()) / (double)(pRectView.Height());
-
-	m_pCoordMgr->InitDisplayParameter(pRectView);
-
-
-	GetWindowRect(pRectView);
-	//	m_wndToolBar.GetWindowRect(pRectDlg); //0310����
-
-	//m_DlgMenuBar.SetViewPosSize(pRectView); //0310����
-
-	if (m_bDCInitialized) {
-		//		m_DlgMenuBar.SetViewPosSize(pRectView); //0310���� 
-		//		m_wndToolBar.SetViewPosSize(pRectView); //0310���� 
-
-		ReInitializeDCs();
-		//m_pOverlayThread->OnSize(cx,cy);
-		SetFocus();
-		//DrawSituation(TRUE, TRUE, TRUE, TRUE);
-	}
+    // Schedule a buffered repaint after layout completes. Do not steal focus
+    // from docked controls or paint synchronously inside WM_SIZE.
+    Invalidate(FALSE);
 }
-
-
 
 
 void CC4IMapView::OnSetFocus(CWnd* pOldWnd)
