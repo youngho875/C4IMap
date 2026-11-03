@@ -123,11 +123,11 @@ public:
 	CBitmap m_pBitmap4Raster;
 	CBitmap	m_pBitmap4Sym;
 
-	CBitmap* m_pOldBitmap4MainTemp;
-	CBitmap* m_pOldBitmap4Map;
-	CBitmap* m_pOldBitmap4Shape;
-	CBitmap* m_pOldBitmap4DTED;
-	CBitmap* m_pOldBitmap4Raster;
+	HGDIOBJ m_pOldBitmap4MainTemp;
+	HGDIOBJ m_pOldBitmap4Map;
+	HGDIOBJ m_pOldBitmap4Shape;
+	HGDIOBJ m_pOldBitmap4DTED;
+	HGDIOBJ m_pOldBitmap4Raster;
 	CBitmap* m_pOldBitmap4Sym;
 
 	CBrush m_brush_10_10_10;
@@ -137,6 +137,7 @@ public:
 
 	CDC BufferDC;
 	CBitmap bmpBuffer;
+    HGDIOBJ m_oldBufferBitmap = nullptr;
 	BOOL mb_moving;
 
 	int m_nHookType;

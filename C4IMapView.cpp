@@ -176,16 +176,20 @@ CC4IMapView::CC4IMapView()
 
 CC4IMapView::~CC4IMapView()
 {
+    if (BufferDC.GetSafeHdc() && m_oldBufferBitmap)
+        ::SelectObject(BufferDC.GetSafeHdc(), m_oldBufferBitmap);
+    bmpBuffer.DeleteObject();
+    BufferDC.DeleteDC();
 	if (m_dcMainTemp && m_pOldBitmap4MainTemp)
-		m_dcMainTemp->SelectObject(m_pOldBitmap4MainTemp);
+		::SelectObject(m_dcMainTemp->GetSafeHdc(), m_pOldBitmap4MainTemp);
 	if (m_dcMapLayer && m_pOldBitmap4Map)
-		m_dcMapLayer->SelectObject(m_pOldBitmap4Map);
+		::SelectObject(m_dcMapLayer->GetSafeHdc(), m_pOldBitmap4Map);
 	if (m_dcShpLayer && m_pOldBitmap4Shape)
-		m_dcShpLayer->SelectObject(m_pOldBitmap4Shape);
+		::SelectObject(m_dcShpLayer->GetSafeHdc(), m_pOldBitmap4Shape);
 	if (m_dcDTEDLayer && m_pOldBitmap4DTED)
-		m_dcDTEDLayer->SelectObject(m_pOldBitmap4DTED);
+		::SelectObject(m_dcDTEDLayer->GetSafeHdc(), m_pOldBitmap4DTED);
 	if (m_dcRasterLayer && m_pOldBitmap4Raster)
-		m_dcRasterLayer->SelectObject(m_pOldBitmap4Raster);
+		::SelectObject(m_dcRasterLayer->GetSafeHdc(), m_pOldBitmap4Raster);
 	//m_dcSymLayer->SelectObject(m_pOldBitmap4Sym);
 
 	m_pBitmap4MainTemp.DeleteObject();
@@ -472,7 +476,8 @@ void CC4IMapView::OnSize(UINT nType, int cx, int cy)
     if (nType == SIZE_MINIMIZED || cx <= 0 || cy <= 0 || m_pCoordMgr == nullptr)
         return;
 
-    const CRect previousWindow = m_recSave;
+    const int previousWidth = m_pCoordMgr->m_nDisplayViewWidth;
+    const int previousHeight = m_pCoordMgr->m_nDisplayViewHeight;
     GetWindowRect(&m_recSave);
     const CRect client(0, 0, cx, cy);
 
@@ -480,8 +485,8 @@ void CC4IMapView::OnSize(UINT nType, int cx, int cy)
     m_pCoordMgr->GetDisplayCenter(&centerX, &centerY);
     if (m_bDCInitialized)
     {
-        m_pCoordMgr->m_fCenterX = centerX + previousWindow.left - m_recSave.left;
-        m_pCoordMgr->m_fCenterY = centerY + previousWindow.top - m_recSave.top;
+        m_pCoordMgr->m_fCenterX = centerX + (cx - previousWidth) * 0.5;
+        m_pCoordMgr->m_fCenterY = centerY + (cy - previousHeight) * 0.5;
     }
 
     m_pCoordMgr->m_nDisplayViewWidth = cx;
@@ -575,7 +580,8 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
     CString title;std::vector<CString> fields,values;
     auto frame=get_mainfrm();
     frame->m_wndMapProperties.ClearPropList();
-    if((C4MAP_SHAPE_MODE!=2 && frame->m_indexMap.IdentifyLocal(point,title,fields,values)) || MapSources().Identify(point,m_pCoordMgr,title,fields,values))
+    if((C4MAP_SHAPE_MODE!=2 && frame->m_indexMap.IdentifyLocal(point,title,fields,values)) || 
+		MapSources().Identify(point,m_pCoordMgr,title,fields,values))
 	{
         frame->m_wndMapProperties.SetSearchFeatureInfo(title,fields,values);
         frame->m_wndMapProperties.ShowPane(TRUE,FALSE,TRUE);
@@ -590,7 +596,9 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
 void CC4IMapView::OnLocalOverlayCommand(UINT id)
 {
     m_localOverlay.Cancel();
-    if(GetCapture()==this)ReleaseCapture();
+    if(GetCapture()==this)
+		ReleaseCapture();
+
     m_bPanning=FALSE;
 	m_bMapMove=FALSE;
 	m_bOnZoom=FALSE;
@@ -606,7 +614,8 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
 	}
     else if(id==ID_C4OVER_UNDO)
 		m_localOverlay.Undo();
-    else if(id==ID_C4OVER_REDO) m_localOverlay.Redo();
+    else if(id==ID_C4OVER_REDO) 
+		m_localOverlay.Redo();
     else if(id==ID_C4OVER_SAVE || id==ID_C4OVER_LOAD)
 	{
         BOOL load=id==ID_C4OVER_LOAD;
@@ -645,6 +654,7 @@ BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
     }
     return CView::PreTranslateMessage(msg);
 }
+
 void CC4IMapView::OnCaptureChanged(CWnd* wnd)
 {
     m_rotationDragging=false;

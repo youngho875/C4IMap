@@ -21,7 +21,8 @@ void CC4IMapView::draw_maindc_only(CPoint ptNewPoint)
 	BufferDC.BitBlt(ptNewPoint.x, ptNewPoint.y, fWidth, fHeight, m_dcMainTemp, 0, 0, SRCCOPY);
 
 	DrawMapDecoration(&BufferDC,m_pCoordMgr,get_mainfrm(),rect);
-	m_dcMain->BitBlt(0, 0, fWidth, fHeight, &BufferDC, 0, 0, SRCCOPY);
+	CClientDC screen(this);
+    screen.BitBlt(0, 0, fWidth, fHeight, &BufferDC, 0, 0, SRCCOPY);
 }
 
 void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedraw, CPoint pStartPoint)
@@ -114,7 +115,8 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
 	BufferDC.MoveTo(center_x, center_y - 10);
 	BufferDC.LineTo(center_x, center_y + 10);
 	BufferDC.SelectObject(p_pen);
-    m_dcMain->BitBlt(0, 0, fWidth, fHeight, &BufferDC, 0, 0, SRCCOPY);
+    CClientDC screen(this);
+    screen.BitBlt(0, 0, fWidth, fHeight, &BufferDC, 0, 0, SRCCOPY);
 }
 
 void CC4IMapView::DrawMap()

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "C4IMapViewHeader.h"
+#include "ViewBitmapBuffers.h"
 
 
 
@@ -50,11 +51,11 @@ void CC4IMapView::OnInitialUpdate()
 	m_pBitmap4Raster.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
 
 
-	m_pOldBitmap4MainTemp = m_dcMainTemp->SelectObject(&m_pBitmap4MainTemp);
-	m_pOldBitmap4Map = m_dcMapLayer->SelectObject(&m_pBitmap4Map);
-	m_pOldBitmap4Shape = m_dcShpLayer->SelectObject(&m_pBitmap4Shape);
-	m_pOldBitmap4DTED = m_dcDTEDLayer->SelectObject(&m_pBitmap4DTED);
-	m_pOldBitmap4Raster = m_dcRasterLayer->SelectObject(&m_pBitmap4Raster);
+	m_pOldBitmap4MainTemp = ::SelectObject(m_dcMainTemp->GetSafeHdc(), m_pBitmap4MainTemp.GetSafeHandle());
+	m_pOldBitmap4Map = ::SelectObject(m_dcMapLayer->GetSafeHdc(), m_pBitmap4Map.GetSafeHandle());
+	m_pOldBitmap4Shape = ::SelectObject(m_dcShpLayer->GetSafeHdc(), m_pBitmap4Shape.GetSafeHandle());
+	m_pOldBitmap4DTED = ::SelectObject(m_dcDTEDLayer->GetSafeHdc(), m_pBitmap4DTED.GetSafeHandle());
+	m_pOldBitmap4Raster = ::SelectObject(m_dcRasterLayer->GetSafeHdc(), m_pBitmap4Raster.GetSafeHandle());
 
 	 
 	// 임시로 막음 유영호
@@ -80,8 +81,8 @@ void CC4IMapView::OnInitialUpdate()
 
 	BufferDC.CreateCompatibleDC(m_dcMain);
 	//bmpBuffer.CreateCompatibleBitmap(m_dcMain, rect.Width(), rect.Height());
-	bmpBuffer.CreateCompatibleBitmap(m_dcMain, 2000, 2000);
-	(CBitmap*)BufferDC.SelectObject(&bmpBuffer);
+	bmpBuffer.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
+	m_oldBufferBitmap = ::SelectObject(BufferDC.GetSafeHdc(), bmpBuffer.GetSafeHandle());
 
 	// ini 파일 구조 점검이 필요해서 잠시 막음
 	//m_pMapConfigMgr = new CMapConfigMgr(this);
@@ -152,40 +153,30 @@ void CC4IMapView::InitializeDisplayParameter(CRect pClientRect)
 
 void CC4IMapView::ReInitializeDCs()
 {
-	int nWidth, nHeight;
-	nWidth = m_pCoordMgr->m_nDisplayViewWidth;
-	nHeight = m_pCoordMgr->m_nDisplayViewHeight;
+    if (!m_bDCInitialized || !BufferDC.GetSafeHdc())
+        return;
 
-	// 투명도 디바이스 컨텍스트에게 현재 view정보를 전달한다.
-	m_dcMainTemp->SetCoordMgr(m_pCoordMgr);
+    CRect client;
+    GetClientRect(&client);
+    if (client.IsRectEmpty())
+        return;
 
-	m_dcMainTemp->SelectObject(m_pOldBitmap4MainTemp);
-	m_dcMapLayer->SelectObject(m_pOldBitmap4Map);
-	m_dcShpLayer->SelectObject(m_pOldBitmap4Shape);
-	m_dcDTEDLayer->SelectObject(m_pOldBitmap4DTED);
-	m_dcRasterLayer->SelectObject(m_pOldBitmap4Raster);
-
-	m_pBitmap4MainTemp.DeleteObject();
-	m_pBitmap4Map.DeleteObject();
-	m_pBitmap4Shape.DeleteObject();
-	m_pBitmap4DTED.DeleteObject();
-	m_pBitmap4Raster.DeleteObject();
-
-	m_pBitmap4MainTemp.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
-	m_pBitmap4Map.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
-	m_pBitmap4Shape.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
-	m_pBitmap4DTED.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
-	m_pBitmap4Raster.CreateCompatibleBitmap(m_dcMain, nWidth, nHeight);
-
-	m_dcMainTemp->SelectObject(m_pOldBitmap4MainTemp);
-	m_dcMapLayer->SelectObject(m_pOldBitmap4Map);
-	m_dcShpLayer->SelectObject(m_pOldBitmap4Shape);
-	m_dcDTEDLayer->SelectObject(m_pOldBitmap4DTED);
-	m_dcRasterLayer->SelectObject(m_pOldBitmap4Raster);
-
-	m_pOldBitmap4MainTemp = m_dcMainTemp->SelectObject(&m_pBitmap4MainTemp);
-	m_pOldBitmap4Map = m_dcMapLayer->SelectObject(&m_pBitmap4Map);
-	m_pOldBitmap4Shape = m_dcShpLayer->SelectObject(&m_pBitmap4Shape);
-	m_pOldBitmap4DTED = m_dcDTEDLayer->SelectObject(&m_pBitmap4DTED);
-	m_pOldBitmap4Raster = m_dcRasterLayer->SelectObject(&m_pBitmap4Raster);
+    // A fresh window DC follows the current monitor and client clipping region.
+    CClientDC reference(this);
+    const std::array<CDC*, 6> contexts = {
+        m_dcMainTemp, m_dcMapLayer, m_dcShpLayer,
+        m_dcDTEDLayer, m_dcRasterLayer, &BufferDC
+    };
+    const std::array<CBitmap*, 6> bitmaps = {
+        &m_pBitmap4MainTemp, &m_pBitmap4Map, &m_pBitmap4Shape,
+        &m_pBitmap4DTED, &m_pBitmap4Raster, &bmpBuffer
+    };
+    if (!ResizeViewBitmapBuffers(reference, client.Width(), client.Height(),
+        contexts, bitmaps))
+    {
+        TRACE("C4IMap: cannot resize map buffers to %d x %d\n",
+            client.Width(), client.Height());
+        return;
+    }
+    m_dcMainTemp->SetCoordMgr(m_pCoordMgr);
 }
