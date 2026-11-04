@@ -977,10 +977,27 @@ void CMapObjectViewTree::RefreshLocalShapeTree(){
     if(m_baseRoot)DeleteItem(m_baseRoot);m_baseRoot=nullptr;m_baseItems.clear();
 #if C4MAP_ENABLE_LOCAL || C4MAP_ENABLE_TERRAIN_LOCAL || C4MAP_ENABLE_TERRAIN_SERVER
     if(!m_hRootItem)InsertMapObjectTitle();
-    m_baseRoot=InsertItem(_T("기본지도"),0,0,m_hRootItem);
     const LPCTSTR titles[]={_T("소축척 지도"),_T("세계지도"),_T("Natural Earth 배경영상"),_T("지명"),_T("고도 데이터 (DTED/SRTM)"),_T("Terrain 파일 (로컬)"),_T("Terrain 서버 (Cesium)")};
-    for(int i=0;i<7;++i){if((i<5&&!C4MAP_ENABLE_LOCAL)||(i==5&&!C4MAP_ENABLE_TERRAIN_LOCAL)||(i==6&&!C4MAP_ENABLE_TERRAIN_SERVER))continue;auto item=InsertItem(titles[i],0,0,m_baseRoot);m_baseItems[item]=i;SetCheck(item,BaseMapVisible(i));}
-    UpdateCheckEventParentItem(m_baseRoot);Expand(m_baseRoot,TVE_EXPAND);Expand(m_hRootItem,TVE_EXPAND);
+    for (int i = 0; i < 7; ++i)
+    {
+        if ((i < 5 && !C4MAP_ENABLE_LOCAL) ||
+            (i == 5 && !C4MAP_ENABLE_TERRAIN_LOCAL) ||
+            (i == 6 && !C4MAP_ENABLE_TERRAIN_SERVER) ||
+            !BaseMapConfigured(i))
+            continue;
+
+        if (!m_baseRoot)
+            m_baseRoot = InsertItem(_T("기본지도"), 0, 0, m_hRootItem);
+        auto item = InsertItem(titles[i], 0, 0, m_baseRoot);
+        m_baseItems[item] = i;
+        SetCheck(item, BaseMapVisible(i));
+    }
+    if (m_baseRoot)
+    {
+        UpdateCheckEventParentItem(m_baseRoot);
+        Expand(m_baseRoot, TVE_EXPAND);
+        Expand(m_hRootItem, TVE_EXPAND);
+    }
 #endif
 #if C4MAP_TILE_TREE_ONLY || !C4MAP_ENABLE_LOCAL || C4MAP_SHAPE_MODE == 2
     return;
