@@ -77,7 +77,7 @@ struct BaseMapState
                     for(size_t i=0;i<keep.size();++i)
                         if(keep[i])
                             reduced.push_back(out.points[i]);
-                            out.points.swap(reduced);
+                                out.points.swap(reduced);
                 }
             }
             out.bounds.MinX=out.bounds.MaxX=out.points[0].getX();
@@ -139,7 +139,8 @@ struct BaseMapState
         for(auto key:{"TXTDESC","PLACENAME","NAME_KO","NAME","name","NAME_EN"})
         {
             field=layer->GetLayerDefn()->GetFieldIndex(key);
-            if(field>=0)break;
+            if(field>=0)
+                break;
         }
         layer->ResetReading();
         while(auto feature=layer->GetNextFeature())
@@ -161,14 +162,17 @@ struct BaseMapState
             }
             OGRGeometryFactory::destroyGeometry(g);OGRFeature::DestroyFeature(feature);
         }
-        if(transform)OCTDestroyCoordinateTransformation(transform);GDALClose(ds);
+        if(transform)
+            OCTDestroyCoordinateTransformation(transform);GDALClose(ds);
     }
 };
 #pragma pack(pop)
 
 void CShapeT::DrawBaseDetails(CDC* dc,float cx,float cy,float scale){
-#if C4MAP_ENABLE_LOCAL
-    if(!dc||scale<=0||(!BaseMapVisible(0)&&!BaseMapVisible(1))) return;
+#if C4MAP_ENABLE_BASEMAP
+    if(!dc||scale<=0||(!BaseMapVisible(0)&&!BaseMapVisible(1))) 
+        return;
+
     if(!m_baseMap)
     {
         m_baseMap=std::make_unique<BaseMapState>();
@@ -202,18 +206,22 @@ void CShapeT::DrawBaseDetails(CDC* dc,float cx,float cy,float scale){
         for(auto& p:line.points)
         {
             auto xy=screen(p.getX(),p.getY());
-            if(mgr->HasDisplayTransform() && (abs(xy.x)>=999999||abs(xy.y)>=999999)){
-                if(points.size()>1)dc->Polyline(points.data(),(int)points.size());points.clear();continue;
+            if(mgr->HasDisplayTransform() && (abs(xy.x)>=999999||abs(xy.y)>=999999))
+            {
+                if(points.size()>1)
+                dc->Polyline(points.data(),(int)points.size());points.clear();continue;
             }
             if(mgr->HasDisplayTransform()&&!points.empty()&&
-                (abs(xy.x-points.back().x)>viewport.Width()*4||abs(xy.y-points.back().y)>viewport.Height()*4)){
-                if(points.size()>1)dc->Polyline(points.data(),(int)points.size());points.clear();
+                (abs(xy.x-points.back().x)>viewport.Width()*4||abs(xy.y-points.back().y)>viewport.Height()*4))
+            {
+                if(points.size()>1)
+                dc->Polyline(points.data(),(int)points.size());points.clear();
             }
             if(points.empty()||abs(xy.x-points.back().x)+abs(xy.y-points.back().y)>1)
             points.push_back(xy);
         }
         if(points.size()>1)
-        dc->Polyline(points.data(),(int)points.size());
+            dc->Polyline(points.data(),(int)points.size());
     }
     if(BaseMapVisible(3))
     {
@@ -236,7 +244,8 @@ void CShapeT::DrawBaseDetails(CDC* dc,float cx,float cy,float scale){
             bool hit=false;
             for(auto& previous:occupied)
             {
-                CRect overlap;if(overlap.IntersectRect(previous,box))
+                CRect overlap;
+                if(overlap.IntersectRect(previous,box))
                 {
                     hit=true;   break;
                 }

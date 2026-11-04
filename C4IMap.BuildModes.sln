@@ -1,0 +1,28 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C4IMap.Local", "C4IMap.Local.vcxproj", "{9C742793-6BE8-4A3D-9120-C96645F4FBAA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C4IMap.Tiles", "C4IMap.Tiles.vcxproj", "{31D2FDA6-8726-47B0-BAC3-2B4725FE4124}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "C4IMap.Network", "C4IMap.Network.vcxproj", "{65E1EE9C-8E01-4A3C-A0AD-9401DC97BA10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C742793-6BE8-4A3D-9120-C96645F4FBAA}.Debug|x64.ActiveCfg = Debug|x64
+		{9C742793-6BE8-4A3D-9120-C96645F4FBAA}.Debug|x64.Build.0 = Debug|x64
+		{9C742793-6BE8-4A3D-9120-C96645F4FBAA}.Release|x64.ActiveCfg = Release|x64
+		{9C742793-6BE8-4A3D-9120-C96645F4FBAA}.Release|x64.Build.0 = Release|x64
+		{31D2FDA6-8726-47B0-BAC3-2B4725FE4124}.Debug|x64.ActiveCfg = Debug|x64
+		{31D2FDA6-8726-47B0-BAC3-2B4725FE4124}.Debug|x64.Build.0 = Debug|x64
+		{31D2FDA6-8726-47B0-BAC3-2B4725FE4124}.Release|x64.ActiveCfg = Release|x64
+		{31D2FDA6-8726-47B0-BAC3-2B4725FE4124}.Release|x64.Build.0 = Release|x64
+		{65E1EE9C-8E01-4A3C-A0AD-9401DC97BA10}.Debug|x64.ActiveCfg = Debug|x64
+		{65E1EE9C-8E01-4A3C-A0AD-9401DC97BA10}.Debug|x64.Build.0 = Debug|x64
+		{65E1EE9C-8E01-4A3C-A0AD-9401DC97BA10}.Release|x64.ActiveCfg = Release|x64
+		{65E1EE9C-8E01-4A3C-A0AD-9401DC97BA10}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+EndGlobal

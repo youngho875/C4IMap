@@ -1,51 +1,57 @@
 ﻿#pragma once
-// Set in Project Properties > C/C++ > Preprocessor Definitions.
-#ifndef C4MAP_ENABLE_LOCAL
-#define C4MAP_ENABLE_LOCAL 1
+// The only user-facing map build option:
+// 1 = original local SHP/raster/CIB files
+// 2 = local vector/raster/CIB tiles
+// 3 = network WMS/WFS/WMTS and terrain server
+#ifndef C4MAP_BUILD_MODE
+#define C4MAP_BUILD_MODE 2
 #endif
-#ifndef C4MAP_ENABLE_OGC
-#define C4MAP_ENABLE_OGC 1
-#endif
-#if !C4MAP_ENABLE_LOCAL && !C4MAP_ENABLE_OGC
-#error Enable at least one map source backend.
-#endif
-
-// Terrain backends follow the existing Local / Network deployment by default.
-#ifndef C4MAP_ENABLE_TERRAIN_LOCAL
-#define C4MAP_ENABLE_TERRAIN_LOCAL C4MAP_ENABLE_LOCAL
-#endif
-#ifndef C4MAP_ENABLE_TERRAIN_SERVER
-#define C4MAP_ENABLE_TERRAIN_SERVER C4MAP_ENABLE_OGC
+#if C4MAP_BUILD_MODE < 1 || C4MAP_BUILD_MODE > 3
+#error C4MAP_BUILD_MODE must be 1 (original), 2 (tiles), or 3 (network).
 #endif
 
-// 0: honor XML (both), 1: georeferenced original files only, 2: XYZ only.
-#ifndef C4MAP_RASTER_MODE
-#define C4MAP_RASTER_MODE 0
+// Derived implementation switches. Legacy project definitions cannot override
+// the selected mode. Configure C4MAP_BUILD_MODE only.
+#ifdef C4MAP_ENABLE_LOCAL
+#undef C4MAP_ENABLE_LOCAL
 #endif
-#ifndef C4MAP_CIB_MODE
-#define C4MAP_CIB_MODE 0
+#ifdef C4MAP_ENABLE_OGC
+#undef C4MAP_ENABLE_OGC
 #endif
-#if C4MAP_RASTER_MODE < 0 || C4MAP_RASTER_MODE > 2 || C4MAP_CIB_MODE < 0 || C4MAP_CIB_MODE > 2
-#error Map input mode must be 0 (XML), 1 (original raster), or 2 (XYZ).
+#ifdef C4MAP_ENABLE_TERRAIN_LOCAL
+#undef C4MAP_ENABLE_TERRAIN_LOCAL
 #endif
-
-// 0: both, 1: original SHP, 2: MVT vector tiles.
-#ifndef C4MAP_SHAPE_MODE
-#define C4MAP_SHAPE_MODE 1
+#ifdef C4MAP_ENABLE_TERRAIN_SERVER
+#undef C4MAP_ENABLE_TERRAIN_SERVER
 #endif
-#if C4MAP_SHAPE_MODE < 0 || C4MAP_SHAPE_MODE > 2
-#error C4MAP_SHAPE_MODE must be 0, 1 or 2.
-#endif
-
-// Tile-only map management. Base maps and elevation sampling remain available.
-#ifndef C4MAP_TILE_TREE_ONLY
-#define C4MAP_TILE_TREE_ONLY 1
-#endif
-#if C4MAP_TILE_TREE_ONLY
-#undef C4MAP_SHAPE_MODE
-#define C4MAP_SHAPE_MODE 2
+#ifdef C4MAP_RASTER_MODE
 #undef C4MAP_RASTER_MODE
-#define C4MAP_RASTER_MODE 2
+#endif
+#ifdef C4MAP_CIB_MODE
 #undef C4MAP_CIB_MODE
+#endif
+#ifdef C4MAP_SHAPE_MODE
+#undef C4MAP_SHAPE_MODE
+#endif
+#ifdef C4MAP_TILE_TREE_ONLY
+#undef C4MAP_TILE_TREE_ONLY
+#endif
+#ifdef C4MAP_ENABLE_BASEMAP
+#undef C4MAP_ENABLE_BASEMAP
+#endif
+
+#define C4MAP_ENABLE_BASEMAP 1
+#define C4MAP_ENABLE_LOCAL (C4MAP_BUILD_MODE != 3)
+#define C4MAP_ENABLE_OGC (C4MAP_BUILD_MODE == 3)
+#define C4MAP_ENABLE_TERRAIN_LOCAL C4MAP_ENABLE_LOCAL
+#define C4MAP_ENABLE_TERRAIN_SERVER C4MAP_ENABLE_OGC
+#define C4MAP_TILE_TREE_ONLY (C4MAP_BUILD_MODE == 2)
+#if C4MAP_BUILD_MODE == 1
+#define C4MAP_SHAPE_MODE 1
+#define C4MAP_RASTER_MODE 1
+#define C4MAP_CIB_MODE 1
+#else
+#define C4MAP_SHAPE_MODE 2
+#define C4MAP_RASTER_MODE 2
 #define C4MAP_CIB_MODE 2
 #endif

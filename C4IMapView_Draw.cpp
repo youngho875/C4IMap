@@ -66,7 +66,7 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
                     });
                     m_mapFrameCache.Store(CMapFrameCache::Elevation,m_dcMainTemp);
                 }
-#if C4MAP_ENABLE_LOCAL
+#if C4MAP_ENABLE_BASEMAP
                 if(BaseMapVisible(2))
 				{
 					m_TmsMgr.Load(ClientRect);
@@ -175,7 +175,7 @@ void CC4IMapView::DrawMap()
 
 void CC4IMapView::DrawShape()
 {
-    if(!C4MAP_ENABLE_LOCAL)
+    if(!C4MAP_ENABLE_BASEMAP && !C4MAP_ENABLE_LOCAL)
 		return;
 	//ReInitializeDCs();
 	//m_dcShpLayer->FillSolidRect(0, 0, m_pCoordMgr->m_nDisplayViewWidth, m_pCoordMgr->m_nDisplayViewHeight, RGB(10, 0, 0));

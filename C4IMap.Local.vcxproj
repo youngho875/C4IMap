@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{6E0FEC84-CBA7-47B3-B4FC-7A34D2626114}</ProjectGuid>
+    <ProjectGuid>{9C742793-6BE8-4A3D-9120-C96645F4FBAA}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
-    <RootNamespace>C4IMapLocal</RootNamespace>
+    <RootNamespace>C4IMap</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -129,7 +129,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>D:/work/상황도/Debug/Bin/C4IMap.exe</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>d:/work/상황도/Debug/Lib;c:/gdal_sdk/lib;D:\work\상황도\Debug\Lib\ICOPS2010V11520</AdditionalLibraryDirectories>
       <AdditionalDependencies>GeoDC.lib;GeoTrans.lib;CIDataMgr.lib;Loadshp_rtree.lib;geotiff.lib;tiff.lib;BMGlib.lib;BMGLibJPEG.lib;BMGLibPNG.lib;BMGGeoTIFF.lib;Overlay.lib;AltitudeMgr.lib;gdal_i.lib;rpcrt4.lib;ICOPS_Framework_2010.lib;ICOPS_LogManager_2010.lib;ICOPS_WarSym_2010.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
@@ -190,7 +190,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>$(ProjectDir)dist\Local\C4IMap.exe</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>$(ProjectDir)OverlaySDK\bin\x64\Release\C4Overlay.lib;GeoDC.lib;GeoTrans.lib;geotiff.lib;tiff.lib;gdal_i.lib;AltitudeMgr.lib;rpcrt4.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\LibSrc\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSrc\lib;$(ProjectDir)..\gdal_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -206,42 +206,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
-  
-  
-  
-  
-  
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(ProjectDir)dist\Local\</OutDir><IntDir>$(ProjectDir)obj\Local\</IntDir><TargetName>C4IMap</TargetName>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile><PreprocessorDefinitions>C4MAP_ENABLE_LOCAL=1;C4MAP_ENABLE_OGC=0;%(PreprocessorDefinitions)</PreprocessorDefinitions></ClCompile>
-  </ItemDefinitionGroup>
-<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <Target Name="BuildC4OverlaySDK" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <MSBuild Projects="$(ProjectDir)OverlaySDK\LibSrc\Overlay\Overlay.vcxproj" Targets="Build" Properties="Configuration=Release;Platform=x64" />
-  </Target>
-  <Target Name="CopyC4OverlaySDK" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Copy SourceFiles="$(ProjectDir)OverlaySDK\bin\x64\Release\C4Overlay.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
-  </Target>
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
-  <Target Name="CopyMapSourcesCatalog" AfterTargets="Build" Condition="!Exists('$(TargetDir)map-sources.xml')">
-    <Copy SourceFiles="$(ProjectDir)map-sources.xml" DestinationFolder="$(TargetDir)" />
-  </Target>
-  
-  <Target Name="CopyBaseMapCatalog" AfterTargets="Build" Condition="!Exists('$(TargetDir)base-map.xml')">
-    <Copy SourceFiles="$(ProjectDir)base-map.xml" DestinationFolder="$(TargetDir)" />
-  </Target>
-  
-  <PropertyGroup><TerrainSdkRoot Condition="'$(TerrainSdkRoot)'==''">D:\work1\libsrc-sdk-work-20260917\libsrc</TerrainSdkRoot></PropertyGroup>
-  <Target Name="BuildTerrainElevation" BeforeTargets="PrepareForBuild" Condition="'$(Platform)'=='x64'">
-    <MSBuild Projects="$(TerrainSdkRoot)\TerrainElevation\TerrainElevation.vcxproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64;GdalSdkDir=$(ProjectDir)..\gdal_sdk" />
-  </Target>
-  <Target Name="CopyTerrainElevation" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
-    <Copy SourceFiles="$(TerrainSdkRoot)\bin\x64\$(Configuration)\TerrainElevation.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
-  </Target>
-<ItemGroup>
+  <ItemGroup>
     <ClInclude Include="GPoint.h" />
     <ClInclude Include="MapSources.h" />
     <ClInclude Include="MapBuildOptions.h" />
@@ -276,7 +241,7 @@
     <ClInclude Include="ViewList.h" />
     <ClInclude Include="ViewTree.h" />
   </ItemGroup>
-<ItemGroup>
+  <ItemGroup>
     <ClCompile Include="GPoint.cpp" />
     <ClCompile Include="MapSources.cpp" />
     <ClCompile Include="LocalOverlay.cpp" />
@@ -314,10 +279,10 @@
     <ClCompile Include="ViewList.cpp" />
     <ClCompile Include="ViewTree.cpp" />
   </ItemGroup>
-<ItemGroup>
+  <ItemGroup>
     <ResourceCompile Include="C4IMap.rc" />
   </ItemGroup>
-<ItemGroup>
+  <ItemGroup>
     <Image Include="..\LIBSrc\GeoDC\res\disconnect.png" />
     <Image Include="res\bitmap1.bmp" />
     <Image Include="res\bmp00001.bmp" />
@@ -454,7 +419,7 @@
     <Image Include="res\writelarge.bmp" />
     <Image Include="res\writesmall.bmp" />
   </ItemGroup>
-<ItemGroup>
+  <ItemGroup>
     <None Include="res\C4IMap.rc2" />
     <None Include="res\cursor1.cur" />
     <None Include="res\cursor\00_default.cur" />
@@ -474,16 +439,57 @@
     <None Include="res\cursor\14_CoordCapture.cur" />
     <None Include="res\ribbon.mfcribbon-ms" />
   </ItemGroup>
-<ItemGroup>
+  <PropertyGroup>
+    <C4MapBuildMode>1</C4MapBuildMode>
+    <OutDir>$(ProjectDir)dist\Local\</OutDir>
+    <OutDir Condition="'$(Configuration)'=='Debug'">$(ProjectDir)dist\Local\Debug\</OutDir>
+    <IntDir>$(ProjectDir)obj\Local\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>C4IMap</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile><PreprocessorDefinitions>C4MAP_BUILD_MODE=$(C4MapBuildMode);%(PreprocessorDefinitions)</PreprocessorDefinitions></ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="BuildC4OverlaySDK" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <MSBuild Projects="$(ProjectDir)OverlaySDK\LibSrc\Overlay\Overlay.vcxproj" Targets="Build" Properties="Configuration=Release;Platform=x64" />
+  </Target>
+  <Target Name="CopyC4OverlaySDK" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Copy SourceFiles="$(ProjectDir)OverlaySDK\bin\x64\Release\C4Overlay.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <Target Name="CopyMapSourcesCatalog" AfterTargets="Build" Condition="!Exists('$(TargetDir)map-sources.xml')">
+    <Copy SourceFiles="$(ProjectDir)map-sources.xml" DestinationFolder="$(TargetDir)" />
+  </Target>
+  <ItemGroup>
     <ClInclude Include="BaseMapOptions.h" />
     <ClInclude Include="MapDecoration.h" />
     <None Include="BaseMapDetails.inc" />
     <None Include="base-map.xml" />
-    <None Include="BaseMap-Guide.md" />
   </ItemGroup>
-<ItemGroup><ClInclude Include="TerrainLayer.h" /><ClInclude Include="TerrainElevation.h" /></ItemGroup>
-  <ItemGroup><ClInclude Include="TerrainTileLayer.h" /><ClInclude Include="TerrainTiles.h" /></ItemGroup>
-  <PropertyGroup><TerrainSdkRoot Condition="'$(TerrainSdkRoot)'==''">D:\work1\libsrc-sdk-work-20260917\libsrc</TerrainSdkRoot></PropertyGroup>
+  <Target Name="CopyBaseMapCatalog" AfterTargets="Build" Condition="!Exists('$(TargetDir)base-map.xml')">
+    <Copy SourceFiles="$(ProjectDir)base-map.xml" DestinationFolder="$(TargetDir)" />
+  </Target>
+  <ItemGroup>
+    <ClInclude Include="TerrainLayer.h" />
+    <ClInclude Include="TerrainElevation.h" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TerrainSdkRoot Condition="'$(TerrainSdkRoot)'==''">D:\work1\libsrc-sdk-work-20260917\libsrc</TerrainSdkRoot>
+  </PropertyGroup>
+  <Target Name="BuildTerrainElevation" BeforeTargets="PrepareForBuild" Condition="'$(Platform)'=='x64'">
+    <MSBuild Projects="$(TerrainSdkRoot)\TerrainElevation\TerrainElevation.vcxproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64;GdalSdkDir=$(ProjectDir)..\gdal_sdk" />
+  </Target>
+  <Target Name="CopyTerrainElevation" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
+    <Copy SourceFiles="$(TerrainSdkRoot)\bin\x64\$(Configuration)\TerrainElevation.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+  <ItemGroup>
+    <ClInclude Include="TerrainTileLayer.h" />
+    <ClInclude Include="TerrainTiles.h" />
+  </ItemGroup>
+  <PropertyGroup>
+    <TerrainSdkRoot Condition="'$(TerrainSdkRoot)'==''">D:\work1\libsrc-sdk-work-20260917\libsrc</TerrainSdkRoot>
+  </PropertyGroup>
   <Target Name="BuildTerrainTiles" BeforeTargets="PrepareForBuild" Condition="'$(Platform)'=='x64'">
     <MSBuild Projects="$(TerrainSdkRoot)\TerrainTiles\TerrainTiles.vcxproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64;GdalSdkDir=$(ProjectDir)..\gdal_sdk" />
   </Target>

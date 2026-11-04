@@ -975,12 +975,13 @@ void CMapObjectViewTree::RefreshLocalShapeTree(){
     m_localShapeRoot=nullptr;m_localShapeItems.clear();
     auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());if(!frame)return;
     if(m_baseRoot)DeleteItem(m_baseRoot);m_baseRoot=nullptr;m_baseItems.clear();
-#if C4MAP_ENABLE_LOCAL || C4MAP_ENABLE_TERRAIN_LOCAL || C4MAP_ENABLE_TERRAIN_SERVER
+#if C4MAP_ENABLE_BASEMAP || C4MAP_ENABLE_LOCAL || C4MAP_ENABLE_TERRAIN_LOCAL || C4MAP_ENABLE_TERRAIN_SERVER
     if(!m_hRootItem)InsertMapObjectTitle();
     const LPCTSTR titles[]={_T("소축척 지도"),_T("세계지도"),_T("Natural Earth 배경영상"),_T("지명"),_T("고도 데이터 (DTED/SRTM)"),_T("Terrain 파일 (로컬)"),_T("Terrain 서버 (Cesium)")};
     for (int i = 0; i < 7; ++i)
     {
-        if ((i < 5 && !C4MAP_ENABLE_LOCAL) ||
+        if ((i < 4 && !C4MAP_ENABLE_BASEMAP) ||
+            (i == 4 && !C4MAP_ENABLE_LOCAL) ||
             (i == 5 && !C4MAP_ENABLE_TERRAIN_LOCAL) ||
             (i == 6 && !C4MAP_ENABLE_TERRAIN_SERVER) ||
             !BaseMapConfigured(i))

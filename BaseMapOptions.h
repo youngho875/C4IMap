@@ -25,7 +25,8 @@ struct BaseMapConfiguration
             CPLDestroyXMLNode(xml);
             xml=nullptr;
         }
-        if(!xml)
+        const bool createDefaults = GetFileAttributesW(path)==INVALID_FILE_ATTRIBUTES;
+        if(!xml && createDefaults)
         {
             xml=CPLParseXMLString("<BaseMap version=\"1\"><SmallScale><Path>D:/map/small_scale_map/small_map.shp</Path>" \
                 "<LabelPath>D:/map/small_scale_map/name_map.shp</LabelPath><visual>true</visual></SmallScale>" \
@@ -37,19 +38,19 @@ struct BaseMapConfiguration
                 Save();
         }
         auto root=CPLGetXMLNode(xml,"=BaseMap");
-        if(root && !CPLGetXMLNode(root,"Elevation")){
+        if(createDefaults && root && !CPLGetXMLNode(root,"Elevation")){
             CPLSetXMLValue(root,"Elevation.Path","D:/map/strm");
             CPLSetXMLValue(root,"Elevation.visual","false");Save();
         }
-        if(root && !CPLGetXMLNode(root,"TerrainLocal")){
+        if(createDefaults && root && !CPLGetXMLNode(root,"TerrainLocal")){
             CPLSetXMLValue(root,"TerrainLocal.LayerJson","D:/map/terrain/layer.json");
             CPLSetXMLValue(root,"TerrainLocal.visual","false");Save();
         }
-        if(root && !CPLGetXMLNode(root,"TerrainServer")){
+        if(createDefaults && root && !CPLGetXMLNode(root,"TerrainServer")){
             CPLSetXMLValue(root,"TerrainServer.LayerJson","");
             CPLSetXMLValue(root,"TerrainServer.visual","false");Save();
         }
-        if(root && !CPLGetXMLNode(root,"AltitudeSource")){
+        if(createDefaults && root && !CPLGetXMLNode(root,"AltitudeSource")){
             CPLSetXMLValue(root,"AltitudeSource","auto");Save();
         }
     }
@@ -81,16 +82,30 @@ inline BaseMapConfiguration& BaseMapConfig()
     return config;
 }
 
+// Missing or commented sections are not configured layers.
+inline bool BaseMapConfigured(int index)
+{
+    static const char* sections[] = {
+        "SmallScale", "World", "NaturalEarth", "Names",
+        "Elevation", "TerrainLocal", "TerrainServer"
+    };
+    if (index < 0 || index >= 7)
+        return false;
+    auto root = CPLGetXMLNode(BaseMapConfig().xml, "=BaseMap");
+    auto node = root ? CPLGetXMLNode(root, sections[index]) : nullptr;
+    return node && node->eType == CXT_Element;
+}
+
 inline bool BaseMapVisible(int index)
 {
     static const char* keys[]={"SmallScale.visual","World.visual","NaturalEarth.visual","Names.visual","Elevation.visual","TerrainLocal.visual","TerrainServer.visual"};
-    return index>=0 && index<7 && (index==5?C4MAP_ENABLE_TERRAIN_LOCAL:index==6?C4MAP_ENABLE_TERRAIN_SERVER:C4MAP_ENABLE_LOCAL) && BaseMapConfig().Flag(keys[index]);
+    return BaseMapConfigured(index) && (index<4?C4MAP_ENABLE_BASEMAP:index==5?C4MAP_ENABLE_TERRAIN_LOCAL:index==6?C4MAP_ENABLE_TERRAIN_SERVER:C4MAP_ENABLE_LOCAL) && BaseMapConfig().Flag(keys[index]);
 }
 
 inline void SetBaseMapVisible(int index,bool visible)
 {
     static const char* keys[]={"SmallScale.visual","World.visual","NaturalEarth.visual","Names.visual","Elevation.visual","TerrainLocal.visual","TerrainServer.visual"};
-    if(index>=0 && index<7)
+    if(BaseMapConfigured(index))
     {
         CPLSetXMLValue(CPLGetXMLNode(BaseMapConfig().xml,"=BaseMap"),keys[index],visible?"true":"false");
         BaseMapConfig().Save();

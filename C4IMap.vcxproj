@@ -129,7 +129,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <OutputFile>D:/work/상황도/Debug/Bin/C4IMap.exe</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>d:/work/상황도/Debug/Lib;c:/gdal_sdk/lib;D:\work\상황도\Debug\Lib\ICOPS2010V11520</AdditionalLibraryDirectories>
       <AdditionalDependencies>GeoDC.lib;GeoTrans.lib;CIDataMgr.lib;Loadshp_rtree.lib;geotiff.lib;tiff.lib;BMGlib.lib;BMGLibJPEG.lib;BMGLibPNG.lib;BMGGeoTIFF.lib;Overlay.lib;AltitudeMgr.lib;gdal_i.lib;rpcrt4.lib;ICOPS_Framework_2010.lib;ICOPS_LogManager_2010.lib;ICOPS_WarSym_2010.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
@@ -178,7 +178,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NOMINMAX;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;C4MAP_SHAPE_MODE=2;C4MAP_TILE_TREE_ONLY=1;C4MAP_RASTER_MODE=2;C4MAP_CIB_MODE=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -190,7 +190,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <OutputFile>D:/work/상황도/Release/Bin/C4IMap.exe</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalDependencies>$(ProjectDir)OverlaySDK\bin\x64\Release\C4Overlay.lib;GeoDC.lib;GeoTrans.lib;geotiff.lib;tiff.lib;gdal_i.lib;AltitudeMgr.lib;rpcrt4.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\LibSrc\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSrc\lib;$(ProjectDir)..\gdal_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
@@ -439,6 +439,12 @@
     <None Include="res\cursor\14_CoordCapture.cur" />
     <None Include="res\ribbon.mfcribbon-ms" />
   </ItemGroup>
+  <PropertyGroup>
+    <C4MapBuildMode Condition="'$(C4MapBuildMode)'==''">2</C4MapBuildMode>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile><PreprocessorDefinitions>C4MAP_BUILD_MODE=$(C4MapBuildMode);%(PreprocessorDefinitions)</PreprocessorDefinitions></ClCompile>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="BuildC4OverlaySDK" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <MSBuild Projects="$(ProjectDir)OverlaySDK\LibSrc\Overlay\Overlay.vcxproj" Targets="Build" Properties="Configuration=Release;Platform=x64" />

@@ -232,8 +232,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		//m_indexMap = new CShapeT();
 
-#if C4MAP_ENABLE_LOCAL
+#if C4MAP_ENABLE_BASEMAP
         m_indexMap.OpenShapeFile();
+#endif
+#if C4MAP_ENABLE_LOCAL && C4MAP_SHAPE_MODE == 1
         CString localMessage;
         CString style=_T("D:\\map\\styles\\cop_land_100_unix.xml");
         if(GetFileAttributes(style)==INVALID_FILE_ATTRIBUTES)style.Empty();

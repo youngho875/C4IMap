@@ -216,7 +216,7 @@ CShapeT::CShapeT()
     }
 #endif
 	OGRRegisterAll();
-#if C4MAP_ENABLE_LOCAL
+#if C4MAP_ENABLE_BASEMAP
 	SetBase();
 #endif
 
@@ -603,7 +603,7 @@ void CShapeT::shapeDraw(CDC* pDC, float fCenterX, float fCenterY, float fScale)
 	//pDC->SelectObject(pPen);
 
     DrawBaseDetails(pDC,fCenterX,fCenterY,fScale);
-    if(C4MAP_SHAPE_MODE!=2)DrawLocal(pDC,fCenterX,fCenterY,fScale);
+    if(C4MAP_ENABLE_LOCAL && C4MAP_SHAPE_MODE==1)DrawLocal(pDC,fCenterX,fCenterY,fScale);
 }
 
 void CShapeT::PolylineshapeDraw(CDC* pDC, float fCenterX, float fCenterY, float fScale)

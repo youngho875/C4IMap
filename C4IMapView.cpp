@@ -301,7 +301,7 @@ BOOL CC4IMapView::BeginView()
 
 	//m_TmsMgr = new CTmsMgr();
 
-#if C4MAP_ENABLE_LOCAL
+#if C4MAP_ENABLE_BASEMAP
 	m_TmsMgr.Initalize();
 #endif
     SetTimer(59200,150,nullptr);
