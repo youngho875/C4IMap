@@ -13,24 +13,24 @@
 	</Provider>
 </Providers>
 <Layers>
-	<Layer alias="πŸ¥Ÿ_∏È">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="Î∞îÎã§_Î©¥">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BA040A01]πŸ¥Ÿ_∏È</GeometryStyleName>
+		<GeometryStyleName>[BA040A01]Î∞îÎã§_Î©¥</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>aba040_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="¥‹√§Ωƒ_∏È">
-		<Category>∞Ìµµ</Category>
+	<Layer alias="Îã®Ï±ÑÏãù_Î©¥">
+		<Category>Í≥†ÎèÑ</Category>
 		<Visible>FALSE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>¥‹√§Ωƒ_∏Èst</StyleTableName>
+		<StyleTableName>Îã®Ï±ÑÏãù_Î©¥st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -38,36 +38,36 @@
 		<Source>gng_elev_tint_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="≥Ì_∏È">
-		<Category>Ωƒª˝</Category>
+	<Layer alias="ÎÖº_Î©¥">
+		<Category>ÏãùÏÉù</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BH135A01]≥Ì_∏È</GeometryStyleName>
+		<GeometryStyleName>[BH135A01]ÎÖº_Î©¥</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>abh135_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="¥À/Ω¿¡ˆ_∏È">
-		<Category>Ωƒª˝</Category>
+	<Layer alias="Îä™/ÏäµÏßÄ_Î©¥">
+		<Category>ÏãùÏÉù</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BH095A01]¥À/Ω¿¡ˆ_∏È</GeometryStyleName>
+		<GeometryStyleName>[BH095A01]Îä™/ÏäµÏßÄ_Î©¥</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>abh095_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="»£ºˆ_∏È">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="Ìò∏Ïàò_Î©¥">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>»£ºˆ_∏Èst</StyleTableName>
+		<StyleTableName>Ìò∏Ïàò_Î©¥st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -75,12 +75,12 @@
 		<Source>abh080_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="¿˙ºˆ¡ˆ_∏È">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="Ï†ÄÏàòÏßÄ_Î©¥">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>¿˙ºˆ¡ˆ_∏Èst</StyleTableName>
+		<StyleTableName>Ï†ÄÏàòÏßÄ_Î©¥st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -88,24 +88,24 @@
 		<Source>abh130_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∞≠/«œ√µ_∏È">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="Í∞ï/ÌïòÏ≤ú_Î©¥">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BH140A01]∞≠/«œ√µ_∏È</GeometryStyleName>
+		<GeometryStyleName>[BH140A01]Í∞ï/ÌïòÏ≤ú_Î©¥</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>abh140_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="ªÁ±∏_∏È">
-		<Category>¡ˆ«¸</Category>
+	<Layer alias="ÏÇ¨Íµ¨_Î©¥">
+		<Category>ÏßÄÌòï</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>ªÁ±∏_∏Èst</StyleTableName>
+		<StyleTableName>ÏÇ¨Íµ¨_Î©¥st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -113,36 +113,36 @@
 		<Source>adb170_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="π–¡˝¡ˆø™_∏È">
-		<Category>¡÷∞≈¡ˆø™</Category>
+	<Layer alias="Î∞ÄÏßëÏßÄÏó≠_Î©¥">
+		<Category>Ï£ºÍ±∞ÏßÄÏó≠</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AL020A01]π–¡˝¡ˆø™_∏È</GeometryStyleName>
+		<GeometryStyleName>[AL020A01]Î∞ÄÏßëÏßÄÏó≠_Î©¥</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>1500000</MaxScale>
 		<Source>aal020_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="πﬂ¿¸º“ ∫Œ¡ˆ_∏È">
-		<Category>∞¯¿Õº≥∫Ò</Category>
+	<Layer alias="Î∞úÏ†ÑÏÜå Î∂ÄÏßÄ_Î©¥">
+		<Category>Í≥µÏùµÏÑ§ÎπÑ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AD010A01]πﬂ¿¸º“ ∫Œ¡ˆ_∏È</GeometryStyleName>
+		<GeometryStyleName>[AD010A01]Î∞úÏ†ÑÏÜå Î∂ÄÏßÄ_Î©¥</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>aad010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="«ÿæ»º±_º±">
-		<Category>∞Ê∞Ë</Category>
+	<Layer alias="Ìï¥ÏïàÏÑ†_ÏÑ†">
+		<Category>Í≤ΩÍ≥Ñ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>«ÿæ»º±_º±st</StyleTableName>
+		<StyleTableName>Ìï¥ÏïàÏÑ†_ÏÑ†st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -150,12 +150,12 @@
 		<Source>lba010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="±π∞°∞Ê∞Ë_º±">
-		<Category>∞Ê∞Ë</Category>
+	<Layer alias="Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†">
+		<Category>Í≤ΩÍ≥Ñ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>±π∞°∞Ê∞Ë_º±st</StyleTableName>
+		<StyleTableName>Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -163,156 +163,156 @@
 		<Source>lfa000_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="»ﬁ¿¸º±_º±">
-		<Category>∞Ê∞Ë</Category>
+	<Layer alias="Ìú¥Ï†ÑÏÑ†_ÏÑ†">
+		<Category>Í≤ΩÍ≥Ñ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[FA020L01]»ﬁ¿¸º±_º±</GeometryStyleName>
+		<GeometryStyleName>[FA020L01]Ìú¥Ï†ÑÏÑ†_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>lfa020_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∫–∞Ëº±_º±">
-		<Category>∞Ê∞Ë</Category>
+	<Layer alias="Î∂ÑÍ≥ÑÏÑ†_ÏÑ†">
+		<Category>Í≤ΩÍ≥Ñ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[FA060L01]∫–∞Ëº±_º±</GeometryStyleName>
+		<GeometryStyleName>[FA060L01]Î∂ÑÍ≥ÑÏÑ†_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>lfa060_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="¡÷µ–¡ˆø™_º±">
-		<Category>∞Ê∞Ë</Category>
+	<Layer alias="Ï£ºÎëîÏßÄÏó≠_ÏÑ†">
+		<Category>Í≤ΩÍ≥Ñ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[FA170L01]¡÷µ–¡ˆø™_º±</GeometryStyleName>
+		<GeometryStyleName>[FA170L01]Ï£ºÎëîÏßÄÏó≠_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>lfa170_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="ºˆæ÷º±_º±">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="ÏàòÏï†ÏÑ†_ÏÑ†">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BH210L01]ºˆæ÷º±_º±</GeometryStyleName>
+		<GeometryStyleName>[BH210L01]ÏàòÏï†ÏÑ†_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>lbh210_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∞≠/«œ√µ_º±">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="Í∞ï/ÌïòÏ≤ú_ÏÑ†">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BH140L01]∞≠/«œ√µ_º±</GeometryStyleName>
+		<GeometryStyleName>[BH140L01]Í∞ï/ÌïòÏ≤ú_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>900000</MaxScale>
 		<Source>lbh140_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="¥Ô/∫∏_º±">
-		<Category>ºˆ∫Œ</Category>
+	<Layer alias="Îåê/Î≥¥_ÏÑ†">
+		<Category>ÏàòÎ∂Ä</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BI020L01]¥Ô/∫∏_º±</GeometryStyleName>
+		<GeometryStyleName>[BI020L01]Îåê/Î≥¥_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>800000</MaxScale>
 		<Source>lbi020_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="µÓ∞Ìº±_º±">
-		<Category>∞Ìµµ</Category>
+	<Layer alias="Îì±Í≥†ÏÑ†_ÏÑ†">
+		<Category>Í≥†ÎèÑ</Category>
 		<Visible>FALSE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[CA010L02]µÓ∞Ìº±_º±</GeometryStyleName>
+		<GeometryStyleName>[CA010L02]Îì±Í≥†ÏÑ†_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>lca010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="µÓΩ…º±_º±">
-		<Category>∞Ìµµ</Category>
+	<Layer alias="Îì±Ïã¨ÏÑ†_ÏÑ†">
+		<Category>Í≥†ÎèÑ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BE015L01]µÓΩ…º±_º±</GeometryStyleName>
+		<GeometryStyleName>[BE015L01]Îì±Ïã¨ÏÑ†_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>3000000</MaxScale>
 		<Source>lbe015_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="≥™∑Á_º±">
-		<Category>±≥≈Î</Category>
+	<Layer alias="ÎÇòÎ£®_ÏÑ†">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AQ070L01]≥™∑Á_º±</GeometryStyleName>
+		<GeometryStyleName>[AQ070L01]ÎÇòÎ£®_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>800000</MaxScale>
 		<Source>laq070_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∫ŒµŒ_º±">
-		<Category>±≥≈Î</Category>
+	<Layer alias="Î∂ÄÎëê_ÏÑ†">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BB190L01]∫ŒµŒ_º±</GeometryStyleName>
+		<GeometryStyleName>[BB190L01]Î∂ÄÎëê_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>800000</MaxScale>
 		<Source>lbb190_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="øÏ∏∂¬˜∑Œ_º±">
-		<Category>±≥≈Î</Category>
+	<Layer alias="Ïö∞ÎßàÏ∞®Î°ú_ÏÑ†">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AP010L01]øÏ∏∂¬˜∑Œ_º±</GeometryStyleName>
+		<GeometryStyleName>[AP010L01]Ïö∞ÎßàÏ∞®Î°ú_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>900000</MaxScale>
 		<Source>lap010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="º“∑Œ_º±">
-		<Category>±≥≈Î</Category>
+	<Layer alias="ÏÜåÎ°ú_ÏÑ†">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AP050L01]º“∑Œ_º±</GeometryStyleName>
+		<GeometryStyleName>[AP050L01]ÏÜåÎ°ú_ÏÑ†</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>900000</MaxScale>
 		<Source>lap050_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="µµ∑Œ_º±">
-		<Category>±≥≈Î</Category>
+	<Layer alias="ÎèÑÎ°ú_ÏÑ†">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>µµ∑Œ_º±st</StyleTableName>
+		<StyleTableName>ÎèÑÎ°ú_ÏÑ†st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -320,12 +320,12 @@
 		<Source>lap030_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="√∂µµ_º±">
-		<Category>±≥≈Î</Category>
+	<Layer alias="Ï≤†ÎèÑ_ÏÑ†">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>√∂µµ_º±st</StyleTableName>
+		<StyleTableName>Ï≤†ÎèÑ_ÏÑ†st</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -333,24 +333,24 @@
 		<Source>lan010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∞Ì∞≥_¡°">
-		<Category>¡ˆ«¸</Category>
+	<Layer alias="Í≥†Í∞ú_Ï†ê">
+		<Category>ÏßÄÌòï</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[DB150P01]∞Ì∞≥_¡°</GeometryStyleName>
+		<GeometryStyleName>[DB150P01]Í≥†Í∞ú_Ï†ê</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>800000</MaxScale>
 		<Source>pdb150_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∞«π∞_¡°">
-		<Category>¡÷∞≈¡ˆø™</Category>
+	<Layer alias="Í±¥Î¨º_Ï†ê">
+		<Category>Ï£ºÍ±∞ÏßÄÏó≠</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>∞«π∞_¡°st</StyleTableName>
+		<StyleTableName>Í±¥Î¨º_Ï†êst</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -358,12 +358,12 @@
 		<Source>pal015_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="π–¡˝¡ˆø™/√Î∂Ù_¡°">
-		<Category>¡÷∞≈¡ˆø™</Category>
+	<Layer alias="Î∞ÄÏßëÏßÄÏó≠/Ï∑®ÎùΩ_Ï†ê">
+		<Category>Ï£ºÍ±∞ÏßÄÏó≠</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>π–¡˝¡ˆø™/√Î∂Ù_¡°st</StyleTableName>
+		<StyleTableName>Î∞ÄÏßëÏßÄÏó≠/Ï∑®ÎùΩ_Ï†êst</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -371,36 +371,36 @@
 		<Source>pal020_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="±§ªÍ_¡°">
-		<Category>ªÍæ˜Ω√º≥</Category>
+	<Layer alias="Í¥ëÏÇ∞_Ï†ê">
+		<Category>ÏÇ∞ÏóÖÏãúÏÑ§</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AA010P01]øÓøµ¡ﬂ ±§ªÍ_¡°</GeometryStyleName>
+		<GeometryStyleName>[AA010P01]Ïö¥ÏòÅÏ§ë Í¥ëÏÇ∞_Ï†ê</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>500000</MaxScale>
 		<Source>paa010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="πﬂ¿¸º“_¡°">
-		<Category>∞¯¿Õº≥∫Ò</Category>
+	<Layer alias="Î∞úÏ†ÑÏÜå_Ï†ê">
+		<Category>Í≥µÏùµÏÑ§ÎπÑ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AD010P01]πﬂ¿¸º“_¡°</GeometryStyleName>
+		<GeometryStyleName>[AD010P01]Î∞úÏ†ÑÏÜå_Ï†ê</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>500000</MaxScale>
 		<Source>pad010_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∫Ò«‡¿Â/«Ô±‚¿Â_¡°">
-		<Category>±≥≈Î</Category>
+	<Layer alias="ÎπÑÌñâÏû•/Ìó¨Í∏∞Ïû•_Ï†ê">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>∫Ò«‡¿Â/«Ô±‚¿Â_¡°st</StyleTableName>
+		<StyleTableName>ÎπÑÌñâÏû•/Ìó¨Í∏∞Ïû•_Ï†êst</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -408,52 +408,52 @@
 		<Source>pgb005_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="»ﬁ∞‘º“_¡°">
-		<Category>±≥≈Î</Category>
+	<Layer alias="Ìú¥Í≤åÏÜå_Ï†ê">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[AQ135P01]»ﬁ∞‘º“_¡°</GeometryStyleName>
+		<GeometryStyleName>[AQ135P01]Ìú¥Í≤åÏÜå_Ï†ê</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>500000</MaxScale>
 		<Source>paq135_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="∫ŒµŒ_¡°">
-		<Category>±≥≈Î</Category>
+	<Layer alias="Î∂ÄÎëê_Ï†ê">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Geometry</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[BB190P01]∫ŒµŒ_¡°</GeometryStyleName>
+		<GeometryStyleName>[BB190P01]Î∂ÄÎëê_Ï†ê</GeometryStyleName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>500000</MaxScale>
 		<Source>pbb190_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="µµ∑Œπ¯»£_¡°">
-		<Category>±≥≈Î</Category>
+	<Layer alias="ÎèÑÎ°úÎ≤àÌò∏_Ï†ê">
+		<Category>ÍµêÌÜµ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Both</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>µµ∑Œπ¯»£_¡°st</StyleTableName>
-		<GeometryStyleName>µµ∑Œπ¯»£_¡°</GeometryStyleName>
+		<StyleTableName>ÎèÑÎ°úÎ≤àÌò∏_Ï†êst</StyleTableName>
+		<GeometryStyleName>ÎèÑÎ°úÎ≤àÌò∏_Ï†ê</GeometryStyleName>
 		<StyleColumnName>map_cd</StyleColumnName>
-		<LabelColumnName>µµ∑Œπ¯»£</LabelColumnName>
+		<LabelColumnName>ÎèÑÎ°úÎ≤àÌò∏</LabelColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>999999</MaxScale>
 		<Source>roadname_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="«•∞Ì¡°_¡°">
-		<Category>∞Ìµµ</Category>
+	<Layer alias="ÌëúÍ≥†Ï†ê_Ï†ê">
+		<Category>Í≥†ÎèÑ</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Both</DisplayType>
 		<UseStyleTable>FALSE</UseStyleTable>
-		<GeometryStyleName>[CA030P01]∏Ì»Æ«— «•∞Ì¡°(»Æ¿Œºˆƒ°)_¡°</GeometryStyleName>
-		<LabelStyleName>[CA030T01]∏Ì»Æ«— «•∞Ì¡°(»Æ¿Œºˆƒ°)_¡°</LabelStyleName>
+		<GeometryStyleName>[CA030P01]Î™ÖÌôïÌïú ÌëúÍ≥†Ï†ê(ÌôïÏù∏ÏàòÏπò)_Ï†ê</GeometryStyleName>
+		<LabelStyleName>[CA030T01]Î™ÖÌôïÌïú ÌëúÍ≥†Ï†ê(ÌôïÏù∏ÏàòÏπò)_Ï†ê</LabelStyleName>
 		<LabelColumnName>ZV2</LabelColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
@@ -461,14 +461,14 @@
 		<Source>pca030_tmk</Source>
 		<ProviderName>MXS</ProviderName>
 	</Layer>
-	<Layer alias="¡ˆ∏Ì_¡°">
-		<Category>¡ˆ∏Ì</Category>
+	<Layer alias="ÏßÄÎ™Ö_Ï†ê">
+		<Category>ÏßÄÎ™Ö</Category>
 		<Visible>TRUE</Visible>
 		<DisplayType>Label</DisplayType>
 		<UseStyleTable>TRUE</UseStyleTable>
-		<StyleTableName>¡ˆ∏Ì_¡°st</StyleTableName>
+		<StyleTableName>ÏßÄÎ™Ö_Ï†êst</StyleTableName>
 		<StyleColumnName>map_cd</StyleColumnName>
-		<LabelColumnName>«•±‚«—±€</LabelColumnName>
+		<LabelColumnName>ÌëúÍ∏∞ÌïúÍ∏Ä</LabelColumnName>
 		<UseScale>TRUE</UseScale>
 		<MinScale>70000</MinScale>
 		<MaxScale>1200000</MaxScale>
@@ -476,118 +476,118 @@
 		<ProviderName>MXS</ProviderName>
 	</Layer>
 </Layers>
-	<StyleTable name="¥‹√§Ωƒ_∏Èst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
-		<Element value="1014" point="" line="" polygon="[ETint_1]¥‹√§Ωƒ_∏È" label=""/>
-		<Element value="1026" point="" line="" polygon="[ETint_6]¥‹√§Ωƒ_∏È" label=""/>
-		<Element value="1027" point="" line="" polygon="[ETint_7]¥‹√§Ωƒ_∏È" label=""/>
-		<Element value="1029" point="" line="" polygon="[ETint_9]¥‹√§Ωƒ_∏È" label=""/>
-		<Element value="1015" point="" line="" polygon="[ETint_10]¥‹√§Ωƒ_∏È" label=""/>
-		<Element value="1017" point="" line="" polygon="[ETint_12]¥‹√§Ωƒ_∏È" label=""/>
+	<StyleTable name="Îã®Ï±ÑÏãù_Î©¥st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
+		<Element value="1014" point="" line="" polygon="[ETint_1]Îã®Ï±ÑÏãù_Î©¥" label=""/>
+		<Element value="1026" point="" line="" polygon="[ETint_6]Îã®Ï±ÑÏãù_Î©¥" label=""/>
+		<Element value="1027" point="" line="" polygon="[ETint_7]Îã®Ï±ÑÏãù_Î©¥" label=""/>
+		<Element value="1029" point="" line="" polygon="[ETint_9]Îã®Ï±ÑÏãù_Î©¥" label=""/>
+		<Element value="1015" point="" line="" polygon="[ETint_10]Îã®Ï±ÑÏãù_Î©¥" label=""/>
+		<Element value="1017" point="" line="" polygon="[ETint_12]Îã®Ï±ÑÏãù_Î©¥" label=""/>
 	</StyleTable>
-	<StyleTable name="»£ºˆ_∏Èst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
-		<Element value="942" point="" line="" polygon="[BH080A01]øµ±∏¿˚ »£ºˆ_∏È" label=""/>
-		<Element value="944" point="" line="" polygon="[BH080A03]∞£«Ê¿˚ »£ºˆ_∏È" label=""/>
-		<Element value="944" point="" line="" polygon="[BH080A03]∞«¡∂«— »£ºˆ_∏È" label=""/>
+	<StyleTable name="Ìò∏Ïàò_Î©¥st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
+		<Element value="942" point="" line="" polygon="[BH080A01]ÏòÅÍµ¨Ï†Å Ìò∏Ïàò_Î©¥" label=""/>
+		<Element value="944" point="" line="" polygon="[BH080A03]Í∞ÑÌóêÏ†Å Ìò∏Ïàò_Î©¥" label=""/>
+		<Element value="944" point="" line="" polygon="[BH080A03]Í±¥Ï°∞Ìïú Ìò∏Ïàò_Î©¥" label=""/>
 	</StyleTable>
-	<StyleTable name="¿˙ºˆ¡ˆ_∏Èst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
-		<Element value="948" point="" line="" polygon="[BH130A01]øÓøµ¡ﬂ ¿˙ºˆ¡ˆ_∏È" label=""/>
-		<Element value="949" point="" line="" polygon="[BH130A02]∞«º≥¡ﬂ ¿˙ºˆ¡ˆ_∏È" label=""/>
+	<StyleTable name="Ï†ÄÏàòÏßÄ_Î©¥st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
+		<Element value="948" point="" line="" polygon="[BH130A01]Ïö¥ÏòÅÏ§ë Ï†ÄÏàòÏßÄ_Î©¥" label=""/>
+		<Element value="949" point="" line="" polygon="[BH130A02]Í±¥ÏÑ§Ï§ë Ï†ÄÏàòÏßÄ_Î©¥" label=""/>
 	</StyleTable>
-	<StyleTable name="ªÁ±∏_∏Èst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
-		<Element value="989" point="" line="" polygon="[DB170A01]ªÁ±∏_∏È" label=""/>
-		<Element value="990" point="" line="" polygon="[DB170A02]≈©∏Æºæ∆Æ_∏È" label=""/>
-		<Element value="991" point="" line="" polygon="[DB170A03]√¯∏È ªÁ±∏_∏È" label=""/>
-		<Element value="992" point="" line="" polygon="[DB170A04]æ¥ˆ ªÁ±∏_∏È" label=""/>
-		<Element value="993" point="" line="" polygon="[DB170A05]¿‹π∞∞· ªÁ±∏_∏È" label=""/>
-		<Element value="994" point="" line="" polygon="[DB170A06]∫∞ ªÁ±∏_∏È" label=""/>
-		<Element value="995" point="" line="" polygon="[DB170A07]∞°∑Œ≥ı¿Œ ªÁ±∏_∏È" label=""/>
+	<StyleTable name="ÏÇ¨Íµ¨_Î©¥st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Polygon">
+		<Element value="989" point="" line="" polygon="[DB170A01]ÏÇ¨Íµ¨_Î©¥" label=""/>
+		<Element value="990" point="" line="" polygon="[DB170A02]ÌÅ¨Î¶¨ÏÑºÌä∏_Î©¥" label=""/>
+		<Element value="991" point="" line="" polygon="[DB170A03]Ï∏°Î©¥ ÏÇ¨Íµ¨_Î©¥" label=""/>
+		<Element value="992" point="" line="" polygon="[DB170A04]Ïñ∏Îçï ÏÇ¨Íµ¨_Î©¥" label=""/>
+		<Element value="993" point="" line="" polygon="[DB170A05]ÏûîÎ¨ºÍ≤∞ ÏÇ¨Íµ¨_Î©¥" label=""/>
+		<Element value="994" point="" line="" polygon="[DB170A06]Î≥Ñ ÏÇ¨Íµ¨_Î©¥" label=""/>
+		<Element value="995" point="" line="" polygon="[DB170A07]Í∞ÄÎ°úÎÜìÏù∏ ÏÇ¨Íµ¨_Î©¥" label=""/>
 	</StyleTable>
-	<StyleTable name="«ÿæ»º±_º±st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
-		<Element value="634" point="" line="[BA010L01]∏Ì»Æ«— «ÿæ»º±_º±" polygon="" label=""/>
-		<Element value="635" point="" line="[BA010L02]∫“∏Ì»Æ«—«ÿæ»º±_º±" polygon="" label=""/>
-		<Element value="636" point="" line="[BA010L03]∫“∏Ì»Æ«— Ω¿¡ˆ«ÿæ»º±_º±" polygon="" label=""/>
+	<StyleTable name="Ìï¥ÏïàÏÑ†_ÏÑ†st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
+		<Element value="634" point="" line="[BA010L01]Î™ÖÌôïÌïú Ìï¥ÏïàÏÑ†_ÏÑ†" polygon="" label=""/>
+		<Element value="635" point="" line="[BA010L02]Î∂àÎ™ÖÌôïÌïúÌï¥ÏïàÏÑ†_ÏÑ†" polygon="" label=""/>
+		<Element value="636" point="" line="[BA010L03]Î∂àÎ™ÖÌôïÌïú ÏäµÏßÄÌï¥ÏïàÏÑ†_ÏÑ†" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="±π∞°∞Ê∞Ë_º±st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
-		<Element value="725" point="" line="[FA000L01]±π∞°∞Ê∞Ë_º±" polygon="" label=""/>
-		<Element value="725" point="" line="[FA000L01]±π∞°∞Ê∞Ë_º±" polygon="" label=""/>
-		<Element value="726" point="" line="[FA000L02]1¬˜∞Ê∞Ë_º±" polygon="" label=""/>
-		<Element value="726" point="" line="[FA000L02]1¬˜∞Ê∞Ë_º±" polygon="" label=""/>
+	<StyleTable name="Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
+		<Element value="725" point="" line="[FA000L01]Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†" polygon="" label=""/>
+		<Element value="725" point="" line="[FA000L01]Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†" polygon="" label=""/>
+		<Element value="726" point="" line="[FA000L02]1Ï∞®Í≤ΩÍ≥Ñ_ÏÑ†" polygon="" label=""/>
+		<Element value="726" point="" line="[FA000L02]1Ï∞®Í≤ΩÍ≥Ñ_ÏÑ†" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="µµ∑Œ_º±st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
-		<Element value="579" point="" line="[AP030L15]∫–∏Æ¥ÎÍÛ ∞Ìº”±πµµ_º±" polygon="" label=""/>
-		<Element value="580" point="" line="[AP030L16]∫–∏Æ¥ÎŸÌ ∞Ìº”±πµµ_º±" polygon="" label=""/>
-		<Element value="581" point="" line="[AP030L17]∫–∏Æ¥ÎÍÛ ∞«º≥¡ﬂ ∞Ìº”±πµµ_º±" polygon="" label=""/>
-		<Element value="582" point="" line="[AP030L18]∫–∏Æ¥ÎŸÌ ∞«º≥¡ﬂ ∞Ìº”±πµµ_º±" polygon="" label=""/>
-		<Element value="583" point="" line="[AP030L19]2¬˜º±¿ÃªÛ ∆˜¿Âµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="584" point="" line="[AP030L20]1¬˜º± ∆˜¿Âµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="571" point="" line="[AP030L07]2¬˜º±¿ÃªÛ ∫Ò∆˜¿Âµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="572" point="" line="[AP030L08]1¬˜º± ∫Ò∆˜¿Âµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="573" point="" line="[AP030L09]5µÓ(∏º∞≈≥™ ∞«¡∂Ω√∏∏ ≈Î«‡∞°¥…)_º±" polygon="" label=""/>
-		<Element value="585" point="" line="[AP030L21]∞«º≥¡ﬂ 2¬˜º±¿ÃªÛ ∆˜¿Âµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="586" point="" line="[AP030L22]∞«º≥¡ﬂ 1¬˜º± ∆˜¿Âµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="576" point="" line="[AP030L12]∆˜¿Â ∞¸≈Îµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="577" point="" line="[AP030L13]∫Ò∆˜¿Â ∞¸≈Îµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="578" point="" line="[AP030L14]∞°∑Œ/5µÓ∞¸≈Îµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="578" point="" line="[AP030L14]∞°∑Œ/5µÓ∞¸≈Îµµ∑Œ_º±" polygon="" label=""/>
-		<Element value="564" point="" line="[AP030L00]πÃ∫–∑˘ µµ∑Œ_º±" polygon="" label=""/>
+	<StyleTable name="ÎèÑÎ°ú_ÏÑ†st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
+		<Element value="579" point="" line="[AP030L15]Î∂ÑÎ¶¨ÎåÄÊúâ Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="580" point="" line="[AP030L16]Î∂ÑÎ¶¨ÎåÄÁÑ° Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="581" point="" line="[AP030L17]Î∂ÑÎ¶¨ÎåÄÊúâ Í±¥ÏÑ§Ï§ë Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="582" point="" line="[AP030L18]Î∂ÑÎ¶¨ÎåÄÁÑ° Í±¥ÏÑ§Ï§ë Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="583" point="" line="[AP030L19]2Ï∞®ÏÑ†Ïù¥ÏÉÅ Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="584" point="" line="[AP030L20]1Ï∞®ÏÑ† Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="571" point="" line="[AP030L07]2Ï∞®ÏÑ†Ïù¥ÏÉÅ ÎπÑÌè¨Ïû•ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="572" point="" line="[AP030L08]1Ï∞®ÏÑ† ÎπÑÌè¨Ïû•ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="573" point="" line="[AP030L09]5Îì±(ÎßëÍ±∞ÎÇò Í±¥Ï°∞ÏãúÎßå ÌÜµÌñâÍ∞ÄÎä•)_ÏÑ†" polygon="" label=""/>
+		<Element value="585" point="" line="[AP030L21]Í±¥ÏÑ§Ï§ë 2Ï∞®ÏÑ†Ïù¥ÏÉÅ Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="586" point="" line="[AP030L22]Í±¥ÏÑ§Ï§ë 1Ï∞®ÏÑ† Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="576" point="" line="[AP030L12]Ìè¨Ïû• Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="577" point="" line="[AP030L13]ÎπÑÌè¨Ïû• Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="578" point="" line="[AP030L14]Í∞ÄÎ°ú/5Îì±Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="578" point="" line="[AP030L14]Í∞ÄÎ°ú/5Îì±Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
+		<Element value="564" point="" line="[AP030L00]ÎØ∏Î∂ÑÎ•ò ÎèÑÎ°ú_ÏÑ†" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="√∂µµ_º±st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
-		<Element value="537" point="" line="[AN010L01]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ¥‹º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="538" point="" line="[AN010L02]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ∫πº±√∂µµ_º±" polygon="" label=""/>
-		<Element value="539" point="" line="[AN010L03]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ¥‹¿¸±‚º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="540" point="" line="[AN010L04]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ∫πº±¿¸±‚√∂µµ_º±" polygon="" label=""/>
-		<Element value="541" point="" line="[AN010L05]øÓ«‡¡ﬂ «˘±À ¥‹º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="542" point="" line="[AN010L06]øÓ«‡¡ﬂ «˘±À ∫πº±√∂µµ_º±" polygon="" label=""/>
-		<Element value="543" point="" line="[AN010L07]øÓ«‡¡ﬂ «˘±À ¥‹¿¸±‚º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="544" point="" line="[AN010L08]øÓ«‡¡ﬂ «˘±À ∫πº±¿¸±‚√∂µµ_º±" polygon="" label=""/>
-		<Element value="545" point="" line="[AN010L09]øÓ«‡¡ﬂ ¿¸¬˜_º±" polygon="" label=""/>
-		<Element value="546" point="" line="[AN010L10]øÓ«‡¡ﬂ µµ∑Œ≥ª √∂µµ_º±" polygon="" label=""/>
-		<Element value="547" point="" line="[AN010L11]∫ÒøÓ«‡ «•¡ÿ±À∞£ ¥‹º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="548" point="" line="[AN010L12]∫ÒøÓ«‡ «•¡ÿ±À∞£ ∫πº±√∂µµ_º±" polygon="" label=""/>
-		<Element value="549" point="" line="[AN010L13]∫ÒøÓ«‡ «•¡ÿ±À∞£ ¥‹¿¸±‚º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="550" point="" line="[AN010L14]∫ÒøÓ«‡ «•¡ÿ±À∞£ ∫πº±¿¸±‚√∂µµ_º±" polygon="" label=""/>
-		<Element value="551" point="" line="[AN010L15]∫ÒøÓ«‡ «˘±À ¥‹º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="552" point="" line="[AN010L16]∫ÒøÓ«‡ «˘±À ∫πº±√∂µµ_º±" polygon="" label=""/>
-		<Element value="553" point="" line="[AN010L17]∫ÒøÓ«‡ «˘±À ¥‹¿¸±‚º±√∂µµ_º±" polygon="" label=""/>
-		<Element value="554" point="" line="[AN010L18]∫ÒøÓ«‡ «˘±À ∫πº±¿¸±‚√∂µµ_º±" polygon="" label=""/>
-		<Element value="555" point="" line="[AN010L19]¡¶∞≈µ» √∂µµ_º±" polygon="" label=""/>
-		<Element value="536" point="" line="[AN010L00]πÃ∫–∑˘ √∂µµ_º±" polygon="" label=""/>
+	<StyleTable name="Ï≤†ÎèÑ_ÏÑ†st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Line">
+		<Element value="537" point="" line="[AN010L01]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="538" point="" line="[AN010L02]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="539" point="" line="[AN010L03]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="540" point="" line="[AN010L04]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="541" point="" line="[AN010L05]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="542" point="" line="[AN010L06]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="543" point="" line="[AN010L07]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="544" point="" line="[AN010L08]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="545" point="" line="[AN010L09]Ïö¥ÌñâÏ§ë Ï†ÑÏ∞®_ÏÑ†" polygon="" label=""/>
+		<Element value="546" point="" line="[AN010L10]Ïö¥ÌñâÏ§ë ÎèÑÎ°úÎÇ¥ Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="547" point="" line="[AN010L11]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="548" point="" line="[AN010L12]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="549" point="" line="[AN010L13]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="550" point="" line="[AN010L14]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="551" point="" line="[AN010L15]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="552" point="" line="[AN010L16]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="553" point="" line="[AN010L17]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="554" point="" line="[AN010L18]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="555" point="" line="[AN010L19]Ï†úÍ±∞Îêú Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
+		<Element value="536" point="" line="[AN010L00]ÎØ∏Î∂ÑÎ•ò Ï≤†ÎèÑ_ÏÑ†" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="∞«π∞_¡°st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
-		<Element value="41" point="[AL015P01]øÎµµ∏Ò«•π∞_¡°" line="" polygon="" label=""/>
-		<Element value="41" point="[AL015P01]±‚¬˜ø™_¡°" line="" polygon="" label=""/>
-		<Element value="41" point="[AL015P01]πﬂ¿¸º“_¡°" line="" polygon="" label=""/>
-		<Element value="45" point="[AL015P05]µÓ¥Î_¡°" line="" polygon="" label=""/>
-		<Element value="50" point="[AL015P10]¿˝_¡°" line="" polygon="" label=""/>
+	<StyleTable name="Í±¥Î¨º_Ï†êst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
+		<Element value="41" point="[AL015P01]Ïö©ÎèÑÎ™©ÌëúÎ¨º_Ï†ê" line="" polygon="" label=""/>
+		<Element value="41" point="[AL015P01]Í∏∞Ï∞®Ïó≠_Ï†ê" line="" polygon="" label=""/>
+		<Element value="41" point="[AL015P01]Î∞úÏ†ÑÏÜå_Ï†ê" line="" polygon="" label=""/>
+		<Element value="45" point="[AL015P05]Îì±ÎåÄ_Ï†ê" line="" polygon="" label=""/>
+		<Element value="50" point="[AL015P10]Ï†à_Ï†ê" line="" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="π–¡˝¡ˆø™/√Î∂Ù_¡°st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
-		<Element value="70" point="[AL020P03]µµ√ª/Ω√√ªº“¿Á¡ˆ_¡°" line="" polygon="" label=""/>
-		<Element value="71" point="[AL020P04]±∫√ª/¿æªÁπ´º“º“¿Á¡ˆ_¡°" line="" polygon="" label=""/>
-		<Element value="71" point="[AL020P04]±∏√ª/∏ÈªÁπ´º“º“¿Á¡ˆ_¡°" line="" polygon="" label=""/>
-		<Element value="68" point="[AL020P01]√Î∂Ù_¡°" line="" polygon="" label=""/>
+	<StyleTable name="Î∞ÄÏßëÏßÄÏó≠/Ï∑®ÎùΩ_Ï†êst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
+		<Element value="70" point="[AL020P03]ÎèÑÏ≤≠/ÏãúÏ≤≠ÏÜåÏû¨ÏßÄ_Ï†ê" line="" polygon="" label=""/>
+		<Element value="71" point="[AL020P04]Íµ∞Ï≤≠/ÏùçÏÇ¨Î¨¥ÏÜåÏÜåÏû¨ÏßÄ_Ï†ê" line="" polygon="" label=""/>
+		<Element value="71" point="[AL020P04]Íµ¨Ï≤≠/Î©¥ÏÇ¨Î¨¥ÏÜåÏÜåÏû¨ÏßÄ_Ï†ê" line="" polygon="" label=""/>
+		<Element value="68" point="[AL020P01]Ï∑®ÎùΩ_Ï†ê" line="" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="∫Ò«‡¿Â/«Ô±‚¿Â_¡°st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
-		<Element value="502" point="[GB005P01]∫Ò«‡¿Â(∞¯«◊)_¡°" line="" polygon="" label=""/>
-		<Element value="507" point="[GB005P06]«Ô±‚¿Â_¡°" line="" polygon="" label=""/>
+	<StyleTable name="ÎπÑÌñâÏû•/Ìó¨Í∏∞Ïû•_Ï†êst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
+		<Element value="502" point="[GB005P01]ÎπÑÌñâÏû•(Í≥µÌï≠)_Ï†ê" line="" polygon="" label=""/>
+		<Element value="507" point="[GB005P06]Ìó¨Í∏∞Ïû•_Ï†ê" line="" polygon="" label=""/>
 	</StyleTable>
-	<StyleTable name="µµ∑Œπ¯»£_¡°st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
-		<Element value="523" point="[ROADNAMEP01]∞Ìº”±πµµ_¡°" line="" polygon="" label="[RoadnameT01]∞Ìº”±πµµ_¡°"/>
-		<Element value="524" point="[ROADNAMEP02]±πµµπ¯»£_¡°" line="" polygon="" label="[RoadnameT02]±πµµπ¯»£_¡°"/>
-		<Element value="525" point="[ROADNAMEP03]¡ˆπÊµµ_¡°" line="" polygon="" label="[RoadnameT03]¡ˆπÊµµ_¡°"/>
+	<StyleTable name="ÎèÑÎ°úÎ≤àÌò∏_Ï†êst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
+		<Element value="523" point="[ROADNAMEP01]Í≥†ÏÜçÍµ≠ÎèÑ_Ï†ê" line="" polygon="" label="[RoadnameT01]Í≥†ÏÜçÍµ≠ÎèÑ_Ï†ê"/>
+		<Element value="524" point="[ROADNAMEP02]Íµ≠ÎèÑÎ≤àÌò∏_Ï†ê" line="" polygon="" label="[RoadnameT02]Íµ≠ÎèÑÎ≤àÌò∏_Ï†ê"/>
+		<Element value="525" point="[ROADNAMEP03]ÏßÄÎ∞©ÎèÑ_Ï†ê" line="" polygon="" label="[RoadnameT03]ÏßÄÎ∞©ÎèÑ_Ï†ê"/>
 	</StyleTable>
-	<StyleTable name="¡ˆ∏Ì_¡°st" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
-		<Element value="1156" point="" line="" polygon="" label="[GeonameLandT01]∞Ê∞Ë_«—±€"/>
-		<Element value="1157" point="" line="" polygon="" label="[GeonameLandT02]∞Ì∞≥/∞Ò∏Ì_«—±€"/>
-		<Element value="1158" point="" line="" polygon="" label="[GeonameLandT03]πŸ¥Ÿ/∏∏/«◊_«—±€"/>
-		<Element value="1159" point="" line="" polygon="" label="[GeonameLandT04]π˝¡§¡ˆ∏Ì_«—±€"/>
-		<Element value="1160" point="" line="" polygon="" label="[GeonameLandT05]º∂∏Ì_«—±€"/>
-		<Element value="1162" point="" line="" polygon="" label="[GeonameLandT07]¿œπ›¡÷±‚_«—±€"/>
-		<Element value="1163" point="" line="" polygon="" label="[GeonameLandT08]¿˙ºˆ¡ˆ/»£ºˆ/«œ√µ/∞≠_«—±€"/>
-		<Element value="1164" point="" line="" polygon="" label="[GeonameLandT09]√ª¡÷±‚_«—±€"/>
-		<Element value="1165" point="" line="" polygon="" label="[GeonameLandT10]√Î∂Ù∏Ì_«—±€"/>
-		<Element value="1166" point="" line="" polygon="" label="[GeonameLandT11]∏∂¿ª∏Ì_«—±€"/>
+	<StyleTable name="ÏßÄÎ™Ö_Ï†êst" type="INTEGER" HashSize="0" Layer="" Column="" FeatureList="Point">
+		<Element value="1156" point="" line="" polygon="" label="[GeonameLandT01]Í≤ΩÍ≥Ñ_ÌïúÍ∏Ä"/>
+		<Element value="1157" point="" line="" polygon="" label="[GeonameLandT02]Í≥†Í∞ú/Í≥®Î™Ö_ÌïúÍ∏Ä"/>
+		<Element value="1158" point="" line="" polygon="" label="[GeonameLandT03]Î∞îÎã§/Îßå/Ìï≠_ÌïúÍ∏Ä"/>
+		<Element value="1159" point="" line="" polygon="" label="[GeonameLandT04]Î≤ïÏ†ïÏßÄÎ™Ö_ÌïúÍ∏Ä"/>
+		<Element value="1160" point="" line="" polygon="" label="[GeonameLandT05]ÏÑ¨Î™Ö_ÌïúÍ∏Ä"/>
+		<Element value="1162" point="" line="" polygon="" label="[GeonameLandT07]ÏùºÎ∞òÏ£ºÍ∏∞_ÌïúÍ∏Ä"/>
+		<Element value="1163" point="" line="" polygon="" label="[GeonameLandT08]Ï†ÄÏàòÏßÄ/Ìò∏Ïàò/ÌïòÏ≤ú/Í∞ï_ÌïúÍ∏Ä"/>
+		<Element value="1164" point="" line="" polygon="" label="[GeonameLandT09]Ï≤≠Ï£ºÍ∏∞_ÌïúÍ∏Ä"/>
+		<Element value="1165" point="" line="" polygon="" label="[GeonameLandT10]Ï∑®ÎùΩÎ™Ö_ÌïúÍ∏Ä"/>
+		<Element value="1166" point="" line="" polygon="" label="[GeonameLandT11]ÎßàÏùÑÎ™Ö_ÌïúÍ∏Ä"/>
 	</StyleTable>
-	<style name="[BA040A01]πŸ¥Ÿ_∏È" type="POLYGON">
+	<style name="[BA040A01]Î∞îÎã§_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -609,7 +609,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[ETint_1]¥‹√§Ωƒ_∏È" type="POLYGON">
+	<style name="[ETint_1]Îã®Ï±ÑÏãù_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -631,7 +631,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[ETint_6]¥‹√§Ωƒ_∏È" type="POLYGON">
+	<style name="[ETint_6]Îã®Ï±ÑÏãù_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -653,7 +653,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[ETint_7]¥‹√§Ωƒ_∏È" type="POLYGON">
+	<style name="[ETint_7]Îã®Ï±ÑÏãù_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -675,7 +675,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[ETint_9]¥‹√§Ωƒ_∏È" type="POLYGON">
+	<style name="[ETint_9]Îã®Ï±ÑÏãù_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -697,7 +697,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[ETint_10]¥‹√§Ωƒ_∏È" type="POLYGON">
+	<style name="[ETint_10]Îã®Ï±ÑÏãù_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -719,7 +719,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[ETint_12]¥‹√§Ωƒ_∏È" type="POLYGON">
+	<style name="[ETint_12]Îã®Ï±ÑÏãù_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -741,7 +741,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH135A01]≥Ì_∏È" type="POLYGON">
+	<style name="[BH135A01]ÎÖº_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -763,7 +763,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH095A01]¥À/Ω¿¡ˆ_∏È" type="POLYGON">
+	<style name="[BH095A01]Îä™/ÏäµÏßÄ_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -785,7 +785,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH080A01]øµ±∏¿˚ »£ºˆ_∏È" type="POLYGON">
+	<style name="[BH080A01]ÏòÅÍµ¨Ï†Å Ìò∏Ïàò_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -807,7 +807,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH080A03]∞£«Ê¿˚ »£ºˆ_∏È" type="POLYGON">
+	<style name="[BH080A03]Í∞ÑÌóêÏ†Å Ìò∏Ïàò_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -829,7 +829,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH080A03]∞«¡∂«— »£ºˆ_∏È" type="POLYGON">
+	<style name="[BH080A03]Í±¥Ï°∞Ìïú Ìò∏Ïàò_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -851,7 +851,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH130A01]øÓøµ¡ﬂ ¿˙ºˆ¡ˆ_∏È" type="POLYGON">
+	<style name="[BH130A01]Ïö¥ÏòÅÏ§ë Ï†ÄÏàòÏßÄ_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -873,7 +873,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH130A02]∞«º≥¡ﬂ ¿˙ºˆ¡ˆ_∏È" type="POLYGON">
+	<style name="[BH130A02]Í±¥ÏÑ§Ï§ë Ï†ÄÏàòÏßÄ_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -895,7 +895,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH140A01]∞≠/«œ√µ_∏È" type="POLYGON">
+	<style name="[BH140A01]Í∞ï/ÌïòÏ≤ú_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -917,7 +917,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A01]ªÁ±∏_∏È" type="POLYGON">
+	<style name="[DB170A01]ÏÇ¨Íµ¨_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -939,7 +939,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A02]≈©∏Æºæ∆Æ_∏È" type="POLYGON">
+	<style name="[DB170A02]ÌÅ¨Î¶¨ÏÑºÌä∏_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -961,7 +961,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A03]√¯∏È ªÁ±∏_∏È" type="POLYGON">
+	<style name="[DB170A03]Ï∏°Î©¥ ÏÇ¨Íµ¨_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -983,7 +983,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A04]æ¥ˆ ªÁ±∏_∏È" type="POLYGON">
+	<style name="[DB170A04]Ïñ∏Îçï ÏÇ¨Íµ¨_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -1005,7 +1005,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A05]¿‹π∞∞· ªÁ±∏_∏È" type="POLYGON">
+	<style name="[DB170A05]ÏûîÎ¨ºÍ≤∞ ÏÇ¨Íµ¨_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -1027,7 +1027,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A06]∫∞ ªÁ±∏_∏È" type="POLYGON">
+	<style name="[DB170A06]Î≥Ñ ÏÇ¨Íµ¨_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -1049,7 +1049,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB170A07]∞°∑Œ≥ı¿Œ ªÁ±∏_∏È" type="POLYGON">
+	<style name="[DB170A07]Í∞ÄÎ°úÎÜìÏù∏ ÏÇ¨Íµ¨_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>0</LineWidth>
 		<Interval>2</Interval>
@@ -1071,7 +1071,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AL020A01]π–¡˝¡ˆø™_∏È" type="POLYGON">
+	<style name="[AL020A01]Î∞ÄÏßëÏßÄÏó≠_Î©¥" type="POLYGON">
 		<LineType>0</LineType>
 		<LineWidth>1</LineWidth>
 		<Interval>2</Interval>
@@ -1093,7 +1093,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AD010A01]πﬂ¿¸º“ ∫Œ¡ˆ_∏È" type="POLYGON">
+	<style name="[AD010A01]Î∞úÏ†ÑÏÜå Î∂ÄÏßÄ_Î©¥" type="POLYGON">
 		<LineType>1</LineType>
 		<LineWidth>1</LineWidth>
 		<Interval>2</Interval>
@@ -1115,7 +1115,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BA010L01]∏Ì»Æ«— «ÿæ»º±_º±" type="LINE">
+	<style name="[BA010L01]Î™ÖÌôïÌïú Ìï¥ÏïàÏÑ†_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1135,7 +1135,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BA010L02]∫“∏Ì»Æ«—«ÿæ»º±_º±" type="LINE">
+	<style name="[BA010L02]Î∂àÎ™ÖÌôïÌïúÌï¥ÏïàÏÑ†_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>1</Width>
 		<Interval>6</Interval>
@@ -1155,7 +1155,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BA010L03]∫“∏Ì»Æ«— Ω¿¡ˆ«ÿæ»º±_º±" type="LINE">
+	<style name="[BA010L03]Î∂àÎ™ÖÌôïÌïú ÏäµÏßÄÌï¥ÏïàÏÑ†_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>1</Width>
 		<Interval>6</Interval>
@@ -1175,7 +1175,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA000L01]±π∞°∞Ê∞Ë_º±" type="LINE">
+	<style name="[FA000L01]Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†" type="LINE">
 		<Type>25</Type>
 		<Width>5</Width>
 		<Interval>6</Interval>
@@ -1195,7 +1195,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA000L01]±π∞°∞Ê∞Ë_º±" type="LINE">
+	<style name="[FA000L01]Íµ≠Í∞ÄÍ≤ΩÍ≥Ñ_ÏÑ†" type="LINE">
 		<Type>25</Type>
 		<Width>5</Width>
 		<Interval>6</Interval>
@@ -1215,7 +1215,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA000L02]1¬˜∞Ê∞Ë_º±" type="LINE">
+	<style name="[FA000L02]1Ï∞®Í≤ΩÍ≥Ñ_ÏÑ†" type="LINE">
 		<Type>48</Type>
 		<Width>3</Width>
 		<Interval>7</Interval>
@@ -1235,7 +1235,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA000L02]1¬˜∞Ê∞Ë_º±" type="LINE">
+	<style name="[FA000L02]1Ï∞®Í≤ΩÍ≥Ñ_ÏÑ†" type="LINE">
 		<Type>48</Type>
 		<Width>3</Width>
 		<Interval>7</Interval>
@@ -1255,7 +1255,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA020L01]»ﬁ¿¸º±_º±" type="LINE">
+	<style name="[FA020L01]Ìú¥Ï†ÑÏÑ†_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>2</Width>
 		<Interval>6</Interval>
@@ -1275,7 +1275,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA060L01]∫–∞Ëº±_º±" type="LINE">
+	<style name="[FA060L01]Î∂ÑÍ≥ÑÏÑ†_ÏÑ†" type="LINE">
 		<Type>25</Type>
 		<Width>6</Width>
 		<Interval>7</Interval>
@@ -1295,7 +1295,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[FA170L01]¡÷µ–¡ˆø™_º±" type="LINE">
+	<style name="[FA170L01]Ï£ºÎëîÏßÄÏó≠_ÏÑ†" type="LINE">
 		<Type>25</Type>
 		<Width>6</Width>
 		<Interval>7</Interval>
@@ -1315,7 +1315,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH210L01]ºˆæ÷º±_º±" type="LINE">
+	<style name="[BH210L01]ÏàòÏï†ÏÑ†_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1335,7 +1335,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BH140L01]∞≠/«œ√µ_º±" type="LINE">
+	<style name="[BH140L01]Í∞ï/ÌïòÏ≤ú_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1355,7 +1355,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BI020L01]¥Ô/∫∏_º±" type="LINE">
+	<style name="[BI020L01]Îåê/Î≥¥_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>3</Width>
 		<Interval>2</Interval>
@@ -1375,7 +1375,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[CA010L02]µÓ∞Ìº±_º±" type="LINE">
+	<style name="[CA010L02]Îì±Í≥†ÏÑ†_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1395,7 +1395,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BE015L01]µÓΩ…º±_º±" type="LINE">
+	<style name="[BE015L01]Îì±Ïã¨ÏÑ†_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1415,7 +1415,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AQ070L01]≥™∑Á_º±" type="LINE">
+	<style name="[AQ070L01]ÎÇòÎ£®_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>1</Width>
 		<Interval>1</Interval>
@@ -1435,7 +1435,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[BB190L01]∫ŒµŒ_º±" type="LINE">
+	<style name="[BB190L01]Î∂ÄÎëê_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1455,7 +1455,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP010L01]øÏ∏∂¬˜∑Œ_º±" type="LINE">
+	<style name="[AP010L01]Ïö∞ÎßàÏ∞®Î°ú_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>2</Width>
 		<Interval>2</Interval>
@@ -1475,7 +1475,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP050L01]º“∑Œ_º±" type="LINE">
+	<style name="[AP050L01]ÏÜåÎ°ú_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -1495,7 +1495,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L15]∫–∏Æ¥ÎÍÛ ∞Ìº”±πµµ_º±" type="LINE">
+	<style name="[AP030L15]Î∂ÑÎ¶¨ÎåÄÊúâ Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" type="LINE">
 		<Type>17</Type>
 		<Width>5</Width>
 		<Interval>1</Interval>
@@ -1515,7 +1515,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L16]∫–∏Æ¥ÎŸÌ ∞Ìº”±πµµ_º±" type="LINE">
+	<style name="[AP030L16]Î∂ÑÎ¶¨ÎåÄÁÑ° Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" type="LINE">
 		<Type>5</Type>
 		<Width>5</Width>
 		<Interval>2</Interval>
@@ -1535,7 +1535,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L17]∫–∏Æ¥ÎÍÛ ∞«º≥¡ﬂ ∞Ìº”±πµµ_º±" type="LINE">
+	<style name="[AP030L17]Î∂ÑÎ¶¨ÎåÄÊúâ Í±¥ÏÑ§Ï§ë Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" type="LINE">
 		<Type>18</Type>
 		<Width>3</Width>
 		<Interval>3</Interval>
@@ -1555,7 +1555,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L18]∫–∏Æ¥ÎŸÌ ∞«º≥¡ﬂ ∞Ìº”±πµµ_º±" type="LINE">
+	<style name="[AP030L18]Î∂ÑÎ¶¨ÎåÄÁÑ° Í±¥ÏÑ§Ï§ë Í≥†ÏÜçÍµ≠ÎèÑ_ÏÑ†" type="LINE">
 		<Type>19</Type>
 		<Width>4</Width>
 		<Interval>12</Interval>
@@ -1575,7 +1575,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L19]2¬˜º±¿ÃªÛ ∆˜¿Âµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L19]2Ï∞®ÏÑ†Ïù¥ÏÉÅ Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>5</Type>
 		<Width>3</Width>
 		<Interval>2</Interval>
@@ -1595,7 +1595,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L20]1¬˜º± ∆˜¿Âµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L20]1Ï∞®ÏÑ† Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>5</Type>
 		<Width>3</Width>
 		<Interval>2</Interval>
@@ -1615,7 +1615,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L07]2¬˜º±¿ÃªÛ ∫Ò∆˜¿Âµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L07]2Ï∞®ÏÑ†Ïù¥ÏÉÅ ÎπÑÌè¨Ïû•ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>6</Type>
 		<Width>3</Width>
 		<Interval>4</Interval>
@@ -1635,7 +1635,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L08]1¬˜º± ∫Ò∆˜¿Âµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L08]1Ï∞®ÏÑ† ÎπÑÌè¨Ïû•ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>6</Type>
 		<Width>2</Width>
 		<Interval>4</Interval>
@@ -1655,7 +1655,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L09]5µÓ(∏º∞≈≥™ ∞«¡∂Ω√∏∏ ≈Î«‡∞°¥…)_º±" type="LINE">
+	<style name="[AP030L09]5Îì±(ÎßëÍ±∞ÎÇò Í±¥Ï°∞ÏãúÎßå ÌÜµÌñâÍ∞ÄÎä•)_ÏÑ†" type="LINE">
 		<Type>0</Type>
 		<Width>2</Width>
 		<Interval>2</Interval>
@@ -1675,7 +1675,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L21]∞«º≥¡ﬂ 2¬˜º±¿ÃªÛ ∆˜¿Âµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L21]Í±¥ÏÑ§Ï§ë 2Ï∞®ÏÑ†Ïù¥ÏÉÅ Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>19</Type>
 		<Width>3</Width>
 		<Interval>4</Interval>
@@ -1695,7 +1695,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L22]∞«º≥¡ﬂ 1¬˜º± ∆˜¿Âµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L22]Í±¥ÏÑ§Ï§ë 1Ï∞®ÏÑ† Ìè¨Ïû•ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>19</Type>
 		<Width>2</Width>
 		<Interval>12</Interval>
@@ -1715,7 +1715,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L12]∆˜¿Â ∞¸≈Îµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L12]Ìè¨Ïû• Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>5</Type>
 		<Width>3</Width>
 		<Interval>2</Interval>
@@ -1735,7 +1735,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L13]∫Ò∆˜¿Â ∞¸≈Îµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L13]ÎπÑÌè¨Ïû• Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>6</Type>
 		<Width>2</Width>
 		<Interval>4</Interval>
@@ -1755,7 +1755,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L14]∞°∑Œ/5µÓ∞¸≈Îµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L14]Í∞ÄÎ°ú/5Îì±Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>20</Type>
 		<Width>5</Width>
 		<Interval>2</Interval>
@@ -1775,7 +1775,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L14]∞°∑Œ/5µÓ∞¸≈Îµµ∑Œ_º±" type="LINE">
+	<style name="[AP030L14]Í∞ÄÎ°ú/5Îì±Í¥ÄÌÜµÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>20</Type>
 		<Width>5</Width>
 		<Interval>2</Interval>
@@ -1795,7 +1795,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AP030L00]πÃ∫–∑˘ µµ∑Œ_º±" type="LINE">
+	<style name="[AP030L00]ÎØ∏Î∂ÑÎ•ò ÎèÑÎ°ú_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>4</Width>
 		<Interval>0</Interval>
@@ -1815,7 +1815,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L01]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ¥‹º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L01]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>9</Type>
 		<Width>2</Width>
 		<Interval>5</Interval>
@@ -1835,7 +1835,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L02]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ∫πº±√∂µµ_º±" type="LINE">
+	<style name="[AN010L02]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>13</Type>
 		<Width>2</Width>
 		<Interval>6</Interval>
@@ -1855,7 +1855,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L03]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ¥‹¿¸±‚º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L03]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>36</Type>
 		<Width>4</Width>
 		<Interval>5</Interval>
@@ -1875,7 +1875,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L04]øÓ«‡¡ﬂ «•¡ÿ±À∞£ ∫πº±¿¸±‚√∂µµ_º±" type="LINE">
+	<style name="[AN010L04]Ïö¥ÌñâÏ§ë ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>37</Type>
 		<Width>3</Width>
 		<Interval>5</Interval>
@@ -1895,7 +1895,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L05]øÓ«‡¡ﬂ «˘±À ¥‹º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L05]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>12</Type>
 		<Width>4</Width>
 		<Interval>5</Interval>
@@ -1915,7 +1915,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L06]øÓ«‡¡ﬂ «˘±À ∫πº±√∂µµ_º±" type="LINE">
+	<style name="[AN010L06]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>14</Type>
 		<Width>3</Width>
 		<Interval>5</Interval>
@@ -1935,7 +1935,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L07]øÓ«‡¡ﬂ «˘±À ¥‹¿¸±‚º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L07]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>59</Type>
 		<Width>4</Width>
 		<Interval>5</Interval>
@@ -1955,7 +1955,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L08]øÓ«‡¡ﬂ «˘±À ∫πº±¿¸±‚√∂µµ_º±" type="LINE">
+	<style name="[AN010L08]Ïö¥ÌñâÏ§ë ÌòëÍ∂§ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>60</Type>
 		<Width>4</Width>
 		<Interval>5</Interval>
@@ -1975,7 +1975,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L09]øÓ«‡¡ﬂ ¿¸¬˜_º±" type="LINE">
+	<style name="[AN010L09]Ïö¥ÌñâÏ§ë Ï†ÑÏ∞®_ÏÑ†" type="LINE">
 		<Type>9</Type>
 		<Width>2</Width>
 		<Interval>5</Interval>
@@ -1995,7 +1995,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L10]øÓ«‡¡ﬂ µµ∑Œ≥ª √∂µµ_º±" type="LINE">
+	<style name="[AN010L10]Ïö¥ÌñâÏ§ë ÎèÑÎ°úÎÇ¥ Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>9</Type>
 		<Width>2</Width>
 		<Interval>6</Interval>
@@ -2015,7 +2015,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L11]∫ÒøÓ«‡ «•¡ÿ±À∞£ ¥‹º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L11]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>61</Type>
 		<Width>3</Width>
 		<Interval>20</Interval>
@@ -2035,7 +2035,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L12]∫ÒøÓ«‡ «•¡ÿ±À∞£ ∫πº±√∂µµ_º±" type="LINE">
+	<style name="[AN010L12]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>62</Type>
 		<Width>3</Width>
 		<Interval>16</Interval>
@@ -2055,7 +2055,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L13]∫ÒøÓ«‡ «•¡ÿ±À∞£ ¥‹¿¸±‚º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L13]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>63</Type>
 		<Width>3</Width>
 		<Interval>16</Interval>
@@ -2075,7 +2075,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L14]∫ÒøÓ«‡ «•¡ÿ±À∞£ ∫πº±¿¸±‚√∂µµ_º±" type="LINE">
+	<style name="[AN010L14]ÎπÑÏö¥Ìñâ ÌëúÏ§ÄÍ∂§Í∞Ñ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>64</Type>
 		<Width>3</Width>
 		<Interval>16</Interval>
@@ -2095,7 +2095,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L15]∫ÒøÓ«‡ «˘±À ¥‹º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L15]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Îã®ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>65</Type>
 		<Width>4</Width>
 		<Interval>16</Interval>
@@ -2115,7 +2115,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L16]∫ÒøÓ«‡ «˘±À ∫πº±√∂µµ_º±" type="LINE">
+	<style name="[AN010L16]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Î≥µÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>66</Type>
 		<Width>3</Width>
 		<Interval>16</Interval>
@@ -2135,7 +2135,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L17]∫ÒøÓ«‡ «˘±À ¥‹¿¸±‚º±√∂µµ_º±" type="LINE">
+	<style name="[AN010L17]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Îã®Ï†ÑÍ∏∞ÏÑ†Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>63</Type>
 		<Width>3</Width>
 		<Interval>16</Interval>
@@ -2155,7 +2155,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L18]∫ÒøÓ«‡ «˘±À ∫πº±¿¸±‚√∂µµ_º±" type="LINE">
+	<style name="[AN010L18]ÎπÑÏö¥Ìñâ ÌòëÍ∂§ Î≥µÏÑ†Ï†ÑÍ∏∞Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>64</Type>
 		<Width>3</Width>
 		<Interval>16</Interval>
@@ -2175,7 +2175,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L19]¡¶∞≈µ» √∂µµ_º±" type="LINE">
+	<style name="[AN010L19]Ï†úÍ±∞Îêú Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>1</Width>
 		<Interval>2</Interval>
@@ -2195,7 +2195,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[AN010L00]πÃ∫–∑˘ √∂µµ_º±" type="LINE">
+	<style name="[AN010L00]ÎØ∏Î∂ÑÎ•ò Ï≤†ÎèÑ_ÏÑ†" type="LINE">
 		<Type>1</Type>
 		<Width>4</Width>
 		<Interval>0</Interval>
@@ -2215,7 +2215,7 @@
 		<IconNameAdd></IconNameAdd>
 		<IconNameEx></IconNameEx>
 	</style>
-	<style name="[DB150P01]∞Ì∞≥_¡°" type="POINT">
+	<style name="[DB150P01]Í≥†Í∞ú_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Pass</IconName>
@@ -2228,7 +2228,7 @@
 		<ymove>0</ymove>
 		<AngleColumn>aoo</AngleColumn>
 	</style>
-	<style name="[AL015P01]øÎµµ∏Ò«•π∞_¡°" type="POINT">
+	<style name="[AL015P01]Ïö©ÎèÑÎ™©ÌëúÎ¨º_Ï†ê" type="POINT">
 		<Type>1</Type>
 		<Size>4</Size>
 		<IconName></IconName>
@@ -2241,7 +2241,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL015P01]±‚¬˜ø™_¡°" type="POINT">
+	<style name="[AL015P01]Í∏∞Ï∞®Ïó≠_Ï†ê" type="POINT">
 		<Type>1</Type>
 		<Size>4</Size>
 		<IconName></IconName>
@@ -2254,7 +2254,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL015P01]πﬂ¿¸º“_¡°" type="POINT">
+	<style name="[AL015P01]Î∞úÏ†ÑÏÜå_Ï†ê" type="POINT">
 		<Type>1</Type>
 		<Size>4</Size>
 		<IconName></IconName>
@@ -2267,7 +2267,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL015P05]µÓ¥Î_¡°" type="POINT">
+	<style name="[AL015P05]Îì±ÎåÄ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Tower</IconName>
@@ -2280,7 +2280,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL015P10]¿˝_¡°" type="POINT">
+	<style name="[AL015P10]Ï†à_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Temple(P)</IconName>
@@ -2293,7 +2293,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL020P03]µµ√ª/Ω√√ªº“¿Á¡ˆ_¡°" type="POINT">
+	<style name="[AL020P03]ÎèÑÏ≤≠/ÏãúÏ≤≠ÏÜåÏû¨ÏßÄ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Colony_01</IconName>
@@ -2306,7 +2306,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL020P04]±∫√ª/¿æªÁπ´º“º“¿Á¡ˆ_¡°" type="POINT">
+	<style name="[AL020P04]Íµ∞Ï≤≠/ÏùçÏÇ¨Î¨¥ÏÜåÏÜåÏû¨ÏßÄ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Colony_03</IconName>
@@ -2319,7 +2319,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL020P04]±∏√ª/∏ÈªÁπ´º“º“¿Á¡ˆ_¡°" type="POINT">
+	<style name="[AL020P04]Íµ¨Ï≤≠/Î©¥ÏÇ¨Î¨¥ÏÜåÏÜåÏû¨ÏßÄ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Colony_03</IconName>
@@ -2332,7 +2332,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AL020P01]√Î∂Ù_¡°" type="POINT">
+	<style name="[AL020P01]Ï∑®ÎùΩ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Coastal_Policestation</IconName>
@@ -2345,7 +2345,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AA010P01]øÓøµ¡ﬂ ±§ªÍ_¡°" type="POINT">
+	<style name="[AA010P01]Ïö¥ÏòÅÏ§ë Í¥ëÏÇ∞_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>0</Size>
 		<IconName>Mine_Operataion</IconName>
@@ -2358,7 +2358,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AD010P01]πﬂ¿¸º“_¡°" type="POINT">
+	<style name="[AD010P01]Î∞úÏ†ÑÏÜå_Ï†ê" type="POINT">
 		<Type>1</Type>
 		<Size>4</Size>
 		<IconName></IconName>
@@ -2371,7 +2371,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[GB005P01]∫Ò«‡¿Â(∞¯«◊)_¡°" type="POINT">
+	<style name="[GB005P01]ÎπÑÌñâÏû•(Í≥µÌï≠)_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Airfield</IconName>
@@ -2384,7 +2384,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[GB005P06]«Ô±‚¿Â_¡°" type="POINT">
+	<style name="[GB005P06]Ìó¨Í∏∞Ïû•_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Airport_Other_02</IconName>
@@ -2397,7 +2397,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[AQ135P01]»ﬁ∞‘º“_¡°" type="POINT">
+	<style name="[AQ135P01]Ìú¥Í≤åÏÜå_Ï†ê" type="POINT">
 		<Type>1</Type>
 		<Size>4</Size>
 		<IconName></IconName>
@@ -2410,7 +2410,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[BB190P01]∫ŒµŒ_¡°" type="POINT">
+	<style name="[BB190P01]Î∂ÄÎëê_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Harbor</IconName>
@@ -2423,7 +2423,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[ROADNAMEP01]∞Ìº”±πµµ_¡°" type="POINT">
+	<style name="[ROADNAMEP01]Í≥†ÏÜçÍµ≠ÎèÑ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Highway</IconName>
@@ -2436,7 +2436,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[RoadnameT01]∞Ìº”±πµµ_¡°" type="LABEL">
+	<style name="[RoadnameT01]Í≥†ÏÜçÍµ≠ÎèÑ_Ï†ê" type="LABEL">
 		<Font>Arial</Font>
 		<Type>0</Type>
 		<Size>9</Size>
@@ -2455,7 +2455,7 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[ROADNAMEP02]±πµµπ¯»£_¡°" type="POINT">
+	<style name="[ROADNAMEP02]Íµ≠ÎèÑÎ≤àÌò∏_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>Highway(N)</IconName>
@@ -2468,7 +2468,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[RoadnameT02]±πµµπ¯»£_¡°" type="LABEL">
+	<style name="[RoadnameT02]Íµ≠ÎèÑÎ≤àÌò∏_Ï†ê" type="LABEL">
 		<Font>Arial</Font>
 		<Type>0</Type>
 		<Size>9</Size>
@@ -2487,7 +2487,7 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[ROADNAMEP03]¡ˆπÊµµ_¡°" type="POINT">
+	<style name="[ROADNAMEP03]ÏßÄÎ∞©ÎèÑ_Ï†ê" type="POINT">
 		<Type>2</Type>
 		<Size>3</Size>
 		<IconName>LocalRoad</IconName>
@@ -2500,7 +2500,7 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[RoadnameT03]¡ˆπÊµµ_¡°" type="LABEL">
+	<style name="[RoadnameT03]ÏßÄÎ∞©ÎèÑ_Ï†ê" type="LABEL">
 		<Font>Arial</Font>
 		<Type>0</Type>
 		<Size>9</Size>
@@ -2519,7 +2519,7 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[CA030P01]∏Ì»Æ«— «•∞Ì¡°(»Æ¿Œºˆƒ°)_¡°" type="POINT">
+	<style name="[CA030P01]Î™ÖÌôïÌïú ÌëúÍ≥†Ï†ê(ÌôïÏù∏ÏàòÏπò)_Ï†ê" type="POINT">
 		<Type>0</Type>
 		<Size>4</Size>
 		<IconName></IconName>
@@ -2532,8 +2532,8 @@
 		<ymove>0</ymove>
 		<AngleColumn></AngleColumn>
 	</style>
-	<style name="[CA030T01]∏Ì»Æ«— «•∞Ì¡°(»Æ¿Œºˆƒ°)_¡°" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[CA030T01]Î™ÖÌôïÌïú ÌëúÍ≥†Ï†ê(ÌôïÏù∏ÏàòÏπò)_Ï†ê" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
@@ -2551,8 +2551,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT01]∞Ê∞Ë_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT01]Í≤ΩÍ≥Ñ_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>10</Size>
 		<Color>000000</Color>
@@ -2570,8 +2570,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT02]∞Ì∞≥/∞Ò∏Ì_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT02]Í≥†Í∞ú/Í≥®Î™Ö_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
@@ -2589,8 +2589,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT03]πŸ¥Ÿ/∏∏/«◊_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT03]Î∞îÎã§/Îßå/Ìï≠_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>10</Size>
 		<Color>0063C6</Color>
@@ -2608,8 +2608,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT04]π˝¡§¡ˆ∏Ì_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT04]Î≤ïÏ†ïÏßÄÎ™Ö_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
@@ -2627,8 +2627,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT05]º∂∏Ì_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT05]ÏÑ¨Î™Ö_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
@@ -2646,8 +2646,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT07]¿œπ›¡÷±‚_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT07]ÏùºÎ∞òÏ£ºÍ∏∞_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
@@ -2665,8 +2665,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT08]¿˙ºˆ¡ˆ/»£ºˆ/«œ√µ/∞≠_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT08]Ï†ÄÏàòÏßÄ/Ìò∏Ïàò/ÌïòÏ≤ú/Í∞ï_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>10</Size>
 		<Color>0063C6</Color>
@@ -2684,8 +2684,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT09]√ª¡÷±‚_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT09]Ï≤≠Ï£ºÍ∏∞_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>0063C6</Color>
@@ -2703,8 +2703,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT10]√Î∂Ù∏Ì_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT10]Ï∑®ÎùΩÎ™Ö_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
@@ -2722,8 +2722,8 @@
 		<IconMoveX>0</IconMoveX>
 		<IconMoveY>0</IconMoveY>
 	</style>
-	<style name="[GeonameLandT11]∏∂¿ª∏Ì_«—±€" type="LABEL">
-		<Font>±º∏≤</Font>
+	<style name="[GeonameLandT11]ÎßàÏùÑÎ™Ö_ÌïúÍ∏Ä" type="LABEL">
+		<Font>Íµ¥Î¶º</Font>
 		<Type>0</Type>
 		<Size>9</Size>
 		<Color>000000</Color>
