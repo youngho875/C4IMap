@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapcache>
+  <cache name="ear100-disk" type="disk"><base>D:/ms4w/tmp/ear100-mapcache</base></cache>
+  <source name="src_AAL020" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>AAL020</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="AAL020"><source>src_AAL020</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABA030" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABA030</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABA030"><source>src_ABA030</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABA040" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABA040</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABA040"><source>src_ABA040</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABH080" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABH080</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABH080"><source>src_ABH080</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABH095" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABH095</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABH095"><source>src_ABH095</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABH130" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABH130</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABH130"><source>src_ABH130</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABH135" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABH135</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABH135"><source>src_ABH135</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ABH140" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ABH140</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ABH140"><source>src_ABH140</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_ADB170" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>ADB170</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="ADB170"><source>src_ADB170</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_clip" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>clip</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="clip"><source>src_clip</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_DB1000_anno" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>DB1000_anno</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="DB1000_anno"><source>src_DB1000_anno</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LAN010" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LAN010</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LAN010"><source>src_LAN010</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LAP010" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LAP010</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LAP010"><source>src_LAP010</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LAP030" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LAP030</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LAP030"><source>src_LAP030</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LAP050" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LAP050</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LAP050"><source>src_LAP050</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LAQ070" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LAQ070</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LAQ070"><source>src_LAQ070</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LBA010" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LBA010</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LBA010"><source>src_LBA010</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LBE015" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LBE015</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LBE015"><source>src_LBE015</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LBH140" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LBH140</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LBH140"><source>src_LBH140</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LBH210" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LBH210</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LBH210"><source>src_LBH210</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LBI020" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LBI020</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LBI020"><source>src_LBI020</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LCA010" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LCA010</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LCA010"><source>src_LCA010</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LFA000" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LFA000</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LFA000"><source>src_LFA000</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LFA020" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LFA020</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LFA020"><source>src_LFA020</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_LFA060" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>LFA060</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="LFA060"><source>src_LFA060</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PAA010" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PAA010</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PAA010"><source>src_PAA010</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PAD010" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PAD010</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PAD010"><source>src_PAD010</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PAL015" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PAL015</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PAL015"><source>src_PAL015</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PAL020" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PAL020</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PAL020"><source>src_PAL020</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PBB190" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PBB190</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PBB190"><source>src_PBB190</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PCA030" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PCA030</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PCA030"><source>src_PCA030</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PDB150" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PDB150</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PDB150"><source>src_PDB150</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <source name="src_PGB005" type="wms">
+    <getmap><params><FORMAT>image/png</FORMAT><LAYERS>PGB005</LAYERS><MAP>/ms4w/apps/local-demo/ear100-services.map</MAP><TRANSPARENT>true</TRANSPARENT></params></getmap>
+    <http><url>http://127.0.0.1/cgi-bin/mapserv.exe?</url></http>
+  </source>
+  <tileset name="PGB005"><source>src_PGB005</source><cache>ear100-disk</cache><grid>GoogleMapsCompatible</grid><format>PNG</format><metatile>2 2</metatile><metabuffer>10</metabuffer></tileset>
+  <service type="wmts" enabled="true"/>
+</mapcache>

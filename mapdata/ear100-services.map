@@ -1,0 +1,734 @@
+MAP
+  NAME "EAR_100M"
+  STATUS ON
+  SIZE 800 600
+  EXTENT 123 32 132 44
+  UNITS DD
+  IMAGETYPE "png"
+  PROJECTION "init=epsg:4326" END
+  SYMBOL
+    NAME "circle"
+    TYPE ELLIPSE
+    POINTS 1 1 END
+    FILLED TRUE
+  END
+  OUTPUTFORMAT
+    NAME "png"
+    DRIVER "AGG/PNG"
+    MIMETYPE "image/png"
+    IMAGEMODE RGBA
+    TRANSPARENT ON
+  END
+  OUTPUTFORMAT
+    NAME "geojson"
+    DRIVER "OGR/GEOJSON"
+    MIMETYPE "application/json"
+    FORMATOPTION "STORAGE=stream"
+    FORMATOPTION "FORM=SIMPLE"
+  END
+  WEB
+    METADATA
+      "ows_title" "EAR_100M layer services"
+      "ows_enable_request" "GetCapabilities GetMap GetFeatureInfo DescribeFeatureType GetFeature"
+      "ows_srs" "EPSG:4326 EPSG:3857"
+      "wfs_namespace_prefix" "ear"
+      "wfs_namespace_uri" "http://local-demo/ear100"
+      "wfs_getfeature_formatlist" "geojson"
+      "wms_getfeatureinfo_formatlist" "application/json"
+      "ows_onlineresource" "http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&"
+    END
+  END
+  LAYER
+    NAME "AAL020"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/AAL020.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "AAL020"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "AAL020"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABA030"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABA030.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABA030"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABA030"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABA040"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABA040.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABA040"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABA040"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABH080"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABH080.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABH080"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABH080"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABH095"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABH095.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABH095"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABH095"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABH130"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABH130.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABH130"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABH130"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABH135"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABH135.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABH135"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABH135"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ABH140"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ABH140.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ABH140"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ABH140"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "ADB170"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/ADB170.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "ADB170"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "ADB170"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "clip"
+    TYPE POLYGON
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/clip.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "clip"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "Id"
+    END
+    CLASS
+      NAME "clip"
+      STYLE COLOR 45 110 160 OPACITY 40 OUTLINECOLOR 70 110 130 END
+    END
+  END
+  LAYER
+    NAME "DB1000_anno"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/DB1000_anno.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "DB1000_anno"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "FeatureID"
+    END
+    CLASS
+      NAME "DB1000_anno"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "LAN010"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LAN010.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LAN010"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LAN010"
+      STYLE COLOR 65 65 65 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LAP010"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LAP010.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LAP010"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LAP010"
+      STYLE COLOR 210 65 45 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LAP030"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LAP030.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LAP030"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LAP030"
+      STYLE COLOR 210 65 45 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LAP050"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LAP050.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LAP050"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LAP050"
+      STYLE COLOR 210 65 45 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LAQ070"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LAQ070.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LAQ070"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LAQ070"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LBA010"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LBA010.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LBA010"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LBA010"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LBE015"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LBE015.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LBE015"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LBE015"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LBH140"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LBH140.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LBH140"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LBH140"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LBH210"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LBH210.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LBH210"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LBH210"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LBI020"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LBI020.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LBI020"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LBI020"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LCA010"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LCA010.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LCA010"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LCA010"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LFA000"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LFA000.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LFA000"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LFA000"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LFA020"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LFA020.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LFA020"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LFA020"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "LFA060"
+    TYPE LINE
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/LFA060.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "LFA060"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "LFA060"
+      STYLE COLOR 45 110 160 WIDTH 1.5 END
+    END
+  END
+  LAYER
+    NAME "PAA010"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PAA010.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PAA010"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PAA010"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PAD010"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PAD010.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PAD010"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PAD010"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PAL015"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PAL015.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PAL015"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PAL015"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PAL020"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PAL020.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PAL020"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PAL020"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PBB190"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PBB190.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PBB190"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PBB190"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PCA030"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PCA030.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PCA030"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PCA030"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PDB150"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PDB150.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PDB150"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PDB150"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+  LAYER
+    NAME "PGB005"
+    TYPE POINT
+    STATUS ON
+    DATA "D:/map/shp/EAR_100M/PGB005.shp"
+    ENCODING "CP949"
+    PROJECTION "init=epsg:4326" END
+    TEMPLATE "queryable"
+    TOLERANCE 7
+    TOLERANCEUNITS PIXELS
+    METADATA
+      "ows_title" "PGB005"
+      "gml_include_items" "all"
+      "gml_types" "auto"
+      "gml_featureid" "UID"
+    END
+    CLASS
+      NAME "PGB005"
+      STYLE COLOR 45 110 160 SYMBOL "circle" SIZE 7 END
+    END
+  END
+END
