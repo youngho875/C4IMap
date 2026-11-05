@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MapSources version="1">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- 네트워크 지도 -->
+  <Layer id="wms" name="WMS 서버 설정" type="WMS" family="WMS">
+    <visual>false</visual>
+    <Endpoint />
+    <LayerName />
+    <TileMatrixSet />
+    <Style />
+    <Version>1.1.1</Version>
+    <Format>image/png</Format>
+    <Scale>0</Scale>
+    <MinScale>0</MinScale>
+    <MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="wfs" name="WFS 서버 설정" type="WFS" family="WFS">
+    <visual>false</visual>
+    <Endpoint />
+    <LayerName />
+    <TileMatrixSet />
+    <Style />
+    <Version>2.0.0</Version>
+    <Format>image/png</Format>
+    <Scale>0</Scale>
+    <MinScale>0</MinScale>
+    <MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="wmts" name="WMTS 서버 설정" type="WMTS" family="WMTS">
+    <visual>false</visual>
+    <Endpoint />
+    <LayerName />
+    <TileMatrixSet />
+    <Style />
+    <Version>1.0.0</Version>
+    <Format>image/png</Format>
+    <Scale>0</Scale>
+    <MinScale>0</MinScale>
+    <MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wmts-AAL020" name="밀집지역_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>주거지역</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>AAL020</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABA030" name="섬_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABA030</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABA040" name="바다_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABA040</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABH080" name="호수_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABH080</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABH095" name="늪/습지_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>식생</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABH095</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABH130" name="저수지_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABH130</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABH135" name="논_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>식생</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABH135</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ABH140" name="강/하천_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ABH140</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-ADB170" name="사구_면" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>지형</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>ADB170</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-clip" name="지도 영역" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>기타</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>clip</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-DB1000_anno" name="지형 주기" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>주기</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>DB1000_anno</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LAN010" name="철도_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>true</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LAN010</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LAP010" name="우마차로_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LAP010</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LAP030" name="도로_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>true</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LAP030</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LAP050" name="소로_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LAP050</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LAQ070" name="나루_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LAQ070</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LBA010" name="해안선_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>경계</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LBA010</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LBE015" name="등심선_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>고도</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LBE015</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LBH140" name="강/하천_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LBH140</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LBH210" name="수애선_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LBH210</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LBI020" name="댐/보_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>수부</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LBI020</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LCA010" name="등고선_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>고도</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LCA010</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LFA000" name="국가경계_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>경계</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LFA000</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LFA020" name="휴전선_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>경계</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LFA020</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-LFA060" name="분계선_선" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>경계</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>LFA060</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PAA010" name="광산_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>산업시설</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PAA010</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PAD010" name="발전소_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>공익설비</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PAD010</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PAL015" name="건물_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>주거지역</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PAL015</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PAL020" name="밀집지역/취락_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>주거지역</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PAL020</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PBB190" name="부두_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PBB190</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PCA030" name="표고점_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>고도</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PCA030</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PDB150" name="고개_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>지형</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PDB150</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="ear100-wfs-PGB005" name="비행장/헬기장_점" type="WFS" family="육도">
+    <Scale>1000000</Scale><Category>교통</Category>
+    <visual>false</visual>
+    <Endpoint>http://127.0.0.1/cgi-bin/mapserv.exe?map=/ms4w/apps/local-demo/ear100-services.map&amp;</Endpoint><LayerName>PGB005</LayerName>
+    <Version>1.1.1</Version><Format>image/png</Format>
+    <MinScale>0</MinScale><MaxScale>0</MaxScale>
+  </Layer>
+  <!-- ######################################################################## -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  	
+</MapSources>
