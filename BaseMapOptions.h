@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "MapBuildOptions.h"
 #include "cpl_minixml.h"
 #include <atlconv.h>
@@ -63,9 +63,9 @@ struct BaseMapConfiguration
     {
         return CPLGetXMLValue(CPLGetXMLNode(xml,"=BaseMap"),key,fallback);
     }
-    bool Flag(const char* key) const
+    bool Flag(const char* key,bool defaultVisible=true) const
     {
-        auto value=Value(key,"true");
+        auto value=Value(key,defaultVisible?"true":"false");
         return value=="true"||value=="1"||value=="TRUE";
     }
     void Save()
@@ -99,7 +99,7 @@ inline bool BaseMapConfigured(int index)
 inline bool BaseMapVisible(int index)
 {
     static const char* keys[]={"SmallScale.visual","World.visual","NaturalEarth.visual","Names.visual","Elevation.visual","TerrainLocal.visual","TerrainServer.visual"};
-    return BaseMapConfigured(index) && (index<4?C4MAP_ENABLE_BASEMAP:index==5?C4MAP_ENABLE_TERRAIN_LOCAL:index==6?C4MAP_ENABLE_TERRAIN_SERVER:C4MAP_ENABLE_LOCAL) && BaseMapConfig().Flag(keys[index]);
+    return BaseMapConfigured(index) && (index<4?C4MAP_ENABLE_BASEMAP:index==5?C4MAP_ENABLE_TERRAIN_LOCAL:index==6?C4MAP_ENABLE_TERRAIN_SERVER:C4MAP_ENABLE_LOCAL) && BaseMapConfig().Flag(keys[index],index<4);
 }
 
 inline void SetBaseMapVisible(int index,bool visible)

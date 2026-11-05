@@ -14,6 +14,7 @@
 
 #include "pch.h"
 #include "MapSources.h"
+#include "MapSourceConfig.h"
 #include "framework.h"
 #include "C4IMap.h"
 
@@ -245,7 +246,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         TCHAR path[MAX_PATH]={0};
 		GetModuleFileName(nullptr,path,MAX_PATH);
 		CString catalog(path);
-		catalog=catalog.Left(catalog.ReverseFind('\\')+1)+_T("map-sources.xml");
+		catalog=catalog.Left(catalog.ReverseFind('\\')+1);
+        auto sourcePath=MapSourceConfig::Select(std::wstring(CStringW(catalog).GetString()),
+            [](const std::wstring& path){return GetFileAttributesW(path.c_str())!=INVALID_FILE_ATTRIBUTES;});
+        catalog=CString(sourcePath.c_str());
 		CString sourceError;MapSources().Load(catalog,sourceError);
         m_wndMapObjectManager.RefreshLocalShapeTree();
 	}
