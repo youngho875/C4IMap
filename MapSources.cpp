@@ -24,6 +24,7 @@
 #include <cmath>
 #include <functional>
 #include "VectorTileStyle.h"
+#include "RemoteMapIdentify.h"
 
 #pragma comment(lib,"msimg32.lib")
 
@@ -159,14 +160,18 @@ std::string Number(double v)
 std::string Connection(const MapSourceLayer& l)
 {
 #if C4MAP_ENABLE_OGC
-    if(l.type=="WMS")return "<GDAL_WMS><Service name=\"WMS\"><Version>"+SX(l.version)+"</Version><ServerUrl>"+SX(l.endpoint)+"</ServerUrl><SRS>EPSG:4326</SRS><CRS>EPSG:4326</CRS><BBoxOrder>"+(l.version=="1.3.0"?std::string("yxYX"):std::string("xyXY"))+"</BBoxOrder><Layers>"+SX(l.layer)+"</Layers><Styles>"+SX(l.style)+"</Styles><ImageFormat>"+SX(l.format)+"</ImageFormat><Transparent>TRUE</Transparent></Service><DataWindow><UpperLeftX>-180</UpperLeftX><UpperLeftY>90</UpperLeftY><LowerRightX>180</LowerRightX><LowerRightY>-90</LowerRightY><SizeX>268435456</SizeX><SizeY>134217728</SizeY></DataWindow><Projection>EPSG:4326</Projection><BandsCount>4</BandsCount><BlockSizeX>256</BlockSizeX><BlockSizeY>256</BlockSizeY><OverviewCount>20</OverviewCount><Timeout>8</Timeout><MaxConnections>2</MaxConnections></GDAL_WMS>";
-    if(l.type=="WMTS")return "<GDAL_WMTS><GetCapabilitiesUrl>"+SX(l.endpoint)+"</GetCapabilitiesUrl><Layer>"+SX(l.layer)+"</Layer><Style>"+SX(l.style)+"</Style><TileMatrixSet>"+SX(l.matrix)+"</TileMatrixSet></GDAL_WMTS>";
+    if(l.type=="WMS")
+        return "<GDAL_WMS><Service name=\"WMS\"><Version>"+SX(l.version)+"</Version><ServerUrl>"+SX(l.endpoint)+"</ServerUrl><SRS>EPSG:4326</SRS><CRS>EPSG:4326</CRS><BBoxOrder>"+(l.version=="1.3.0"?std::string("yxYX"):std::string("xyXY"))+"</BBoxOrder><Layers>"+SX(l.layer)+"</Layers><Styles>"+SX(l.style)+"</Styles><ImageFormat>"+SX(l.format)+"</ImageFormat><Transparent>TRUE</Transparent></Service><DataWindow><UpperLeftX>-180</UpperLeftX><UpperLeftY>90</UpperLeftY><LowerRightX>180</LowerRightX><LowerRightY>-90</LowerRightY><SizeX>268435456</SizeX><SizeY>134217728</SizeY></DataWindow><Projection>EPSG:4326</Projection><BandsCount>4</BandsCount><BlockSizeX>256</BlockSizeX><BlockSizeY>256</BlockSizeY><OverviewCount>20</OverviewCount><Timeout>8</Timeout><MaxConnections>2</MaxConnections></GDAL_WMS>";
+    if(l.type=="WMTS")
+        return "<GDAL_WMTS><GetCapabilitiesUrl>"+SX(l.endpoint)+"</GetCapabilitiesUrl><Layer>"+SX(l.layer)+"</Layer><Style>"+SX(l.style)+"</Style><TileMatrixSet>"+SX(l.matrix)+"</TileMatrixSet></GDAL_WMTS>";
 #endif
     return l.path;
 }
+
 }
 struct CMapSources::Impl 
 {
+    RemoteMapIdentify identify;
     mutable std::mutex mutex;
     std::condition_variable cv;
     std::thread worker;
@@ -197,9 +202,13 @@ struct CMapSources::Impl
             return found->second.dataset.get();
         }
 
+        // The catalog already identifies this file as MVT. Bypass header-only
+        // format probing, which can throw caught GPBException on valid tiles.
+        // The MVT decoder still validates the complete tile when opening it.
+        const std::string connection = "MVT:" + key;
         const char* drivers[] = { "MVT", nullptr };
         auto dataset = DS(static_cast<GDALDataset*>(GDALOpenEx(
-            key.c_str(), GDAL_OF_VECTOR | GDAL_OF_READONLY,
+            connection.c_str(), GDAL_OF_VECTOR | GDAL_OF_READONLY,
             drivers, nullptr, nullptr)));
         if (!dataset)
             return nullptr;
@@ -539,6 +548,15 @@ struct CMapSources::Impl
                 continue;
             OGRGeometryH h=copy.get();
             GDALRasterizeGeometries(image.get(),4,bands,1,&h,nullptr,nullptr,burn,opts,nullptr,nullptr);
+            VectorFeature hit;
+            hit.geometry=std::shared_ptr<OGRGeometry>(copy.release());
+            hit.title=source.name+" / "+source.layer;
+            for(int i=0;i<feature->GetFieldCount();++i)
+            {
+                hit.fields.push_back(feature->GetFieldDefnRef(i)->GetNameRef());
+                hit.values.push_back(feature->IsFieldSetAndNotNull(i)?feature->GetFieldAsString(i):"NULL");
+            }
+            tile.features.push_back(std::move(hit));
         }
         OCTDestroyCoordinateTransformation(forward);
         OCTDestroyCoordinateTransformation(inverse);
@@ -640,7 +658,7 @@ struct CMapSources::Impl
                 remote.clear();
                 generation=dataRev;
             }
-            if(renderingStyleScale!=r.styleScale){for(auto it=cache.begin();it!=cache.end();){auto id=std::get<0>(it->first);if(id<sources.size()&&!sources[id].styleSld.empty())it=cache.erase(it);else ++it;}renderingStyleScale=r.styleScale;}
+            if(r.styleScale > 0 && renderingStyleScale!=r.styleScale){for(auto it=cache.begin();it!=cache.end();){auto id=std::get<0>(it->first);if(id<sources.size()&&!sources[id].styleSld.empty())it=cache.erase(it);else ++it;}renderingStyleScale=r.styleScale;}
             const size_t imageCacheLimit = (std::min)(size_t(1024),
                 (std::max)(size_t(256), r.tiles.size() * r.sources.size()));
             std::vector<std::shared_ptr<Tile>> result;
@@ -750,21 +768,31 @@ CString CMapSources::Status()const
     return p->status;
 }
 
-void CMapSources::SetVisible(size_t i,bool visible)
+void CMapSources::SetVisible(size_t i, bool visible)
 {
-    std::lock_guard<std::mutex> l(p->mutex);
-    if(i<p->layers.size()&&p->layers[i].visual!=visible)
+    std::lock_guard<std::mutex> lock(p->mutex);
+    if (i >= p->layers.size() || p->layers[i].visual == visible)
+        return;
+
+    p->identify.Cancel();
+    p->layers[i].visual = visible;
+    ++p->revision; // Cancel only work belonging to the previous selection.
+    if (!visible)
     {
-        p->layers[i].visual=visible;
-        ++p->revision;
-        p->ready.clear();
-        p->request=Request();
-        p->changed=true;
+        // Keep every other layer's prepared image and hit-test geometry intact.
+        p->ready.erase(std::remove_if(p->ready.begin(), p->ready.end(),
+            [i](const std::shared_ptr<Tile>& tile)
+            {
+                return tile->sourceId == i;
+            }), p->ready.end());
     }
+    p->request = Request();
+    p->changed = true;
 }
 
 void CMapSources::ResetCache()
 {
+    p->identify.Cancel();
     std::lock_guard<std::mutex> l(p->mutex);
     ++p->revision;
     ++p->dataRevision;
@@ -788,6 +816,7 @@ bool CMapSources::WaitForIdle(unsigned ms)
 
 bool CMapSources::Load(const CString& xml,CString& error)
 {
+    p->identify.Cancel();
     try{
         auto bytes=ReadUtf8(xml);
         std::unique_ptr<CPLXMLNode,decltype(&CPLDestroyXMLNode)> doc(CPLParseXMLString(bytes.c_str()),CPLDestroyXMLNode);
@@ -814,6 +843,13 @@ bool CMapSources::Load(const CString& xml,CString& error)
             s.tileScheme=SV(n,"TileScheme");
             if(!s.tileScheme.empty()&&s.tileScheme!="XYZ")throw std::runtime_error("TileScheme must be XYZ or empty");
             s.extensions=Lower(SV(n,"Extensions","tif;tiff;img;vrt;tl2;tc2;i42;i21;i22;i41;ntf;nitf"));
+            s.identifyType=SV(n,"IdentifyType");
+            s.identifyEndpoint=SV(n,"IdentifyEndpoint");
+            s.identifyLayer=SV(n,"IdentifyLayer");
+            if(!s.identifyType.empty() && s.identifyType!="WMS" && s.identifyType!="WFS")
+                throw std::runtime_error("IdentifyType must be WMS or WFS");
+            if(!s.identifyEndpoint.empty() && s.identifyEndpoint.rfind("http://",0)!=0 && s.identifyEndpoint.rfind("https://",0)!=0)
+                throw std::runtime_error("IdentifyEndpoint must be HTTP(S)");
             s.endpoint=SV(n,"Endpoint");
             s.layer=SV(n,"LayerName");
             s.matrix=SV(n,"TileMatrixSet");
@@ -930,6 +966,9 @@ bool CMapSources::Save(const CString& xml,const std::vector<MapSourceLayer>& lay
             add("MinScale",Number(l.minScale));
             add("MaxScale",Number(l.maxScale));
             add("SRS",l.srs);
+            add("IdentifyType",l.identifyType);
+            add("IdentifyEndpoint",l.identifyEndpoint);
+            add("IdentifyLayer",l.identifyLayer);
             add("Endpoint",l.endpoint);
             add("LayerName",l.layer);
             add("Version",l.version);
@@ -955,6 +994,7 @@ bool CMapSources::Save(const CString& xml,const std::vector<MapSourceLayer>& lay
 }
 
 bool CMapSources::Identify(CPoint point,CCoordMgr* c,CString& title,std::vector<CString>& fields,std::vector<CString>& values){
+    p->identify.Cancel();
     if(!c||c->m_fScale<=0)return false;
     auto lonlat=[&](int x,int y,double& lon,double& lat){if(c->m_bFlat){lon=127.031+(x-c->m_fCenterX)/(47.5*c->m_fScale);lat=37.0861+(c->m_fCenterY-y)/(60*c->m_fScale);}else{double wx,wy;c->ScreenXY2WorldXY(x,y,&wx,&wy,c->m_fCenterX,c->m_fCenterY,c->m_fScale);CCoord conv;conv.x_y_to_degrees_lat_long(wx,wy,&lat,&lon);}};
     double lon,lat;lonlat(point.x,point.y,lon,lat);if(!std::isfinite(lon)||!std::isfinite(lat))return false;lon=fmod(lon+540,360)-180;
@@ -963,7 +1003,36 @@ bool CMapSources::Identify(CPoint point,CCoordMgr* c,CString& title,std::vector<
     std::vector<std::shared_ptr<Tile>> ready;{std::lock_guard<std::mutex> lock(p->mutex);ready=p->ready;}
     for(auto t=ready.rbegin();t!=ready.rend();++t){if(lon+dx<(*t)->west||lon-dx>(*t)->east||lat+dy<(*t)->south||lat-dy>(*t)->north)continue;
         for(auto f=(*t)->features.rbegin();f!=(*t)->features.rend();++f)if(f->geometry->Intersects(&box)){title=ST(f->title);fields.clear();values.clear();for(auto& v:f->fields)fields.push_back(ST(v));for(auto& v:f->values)values.push_back(ST(v));return true;}}
+#if C4MAP_ENABLE_OGC
+    std::vector<MapSourceLayer> candidates;
+    {
+        std::lock_guard<std::mutex> lock(p->mutex);
+        // Query only layers currently eligible for rendering, including scale limits.
+        for(auto id:p->request.sources)
+        {
+            if(id>=p->layers.size())continue;
+            auto source=p->layers[id];
+            if(!source.visual || !Allowed(source))continue;
+            if(source.type=="WMS" || source.type=="WFS" ||
+                (source.type=="WMTS" && !source.identifyType.empty() && !source.identifyEndpoint.empty()))
+                candidates.push_back(std::move(source));
+        }
+    }
+    if(!candidates.empty())
+        p->identify.Start(std::move(candidates),lon-dx,lat-dy,lon+dx,lat+dy);
+#endif
     return false;
+}
+bool CMapSources::IdentifyPending() const { return p->identify.Pending(); }
+void CMapSources::CancelIdentify() { p->identify.Cancel(); }
+bool CMapSources::PollIdentify(CString& title,std::vector<CString>& fields,std::vector<CString>& values)
+{
+    RemoteMapHit hit;
+    if(!p->identify.Poll(hit))return false;
+    title=ST(hit.title);fields.clear();values.clear();
+    for(const auto& field:hit.fields)fields.push_back(ST(field));
+    for(const auto& value:hit.values)values.push_back(ST(value));
+    return true;
 }
 bool CMapSources::Enabled(const MapSourceLayer& l){return Allowed(l);}
 
@@ -1026,7 +1095,16 @@ void CMapSources::Draw(CDC* dc,CCoordMgr* c)
         {
             // Preserve georeferenced tiles during pan/zoom until the replacement is ready.
             // Layer/scale selection changes must not keep now-hidden sources visible.
-            if(p->request.sources!=r.sources)p->ready.clear();
+            if (p->request.sources != r.sources)
+            {
+                // Selection/scale changes remove only ineligible layers. Cached
+                // tiles for the remaining layers stay visible while work runs.
+                p->ready.erase(std::remove_if(p->ready.begin(), p->ready.end(),
+                    [&](const std::shared_ptr<Tile>& tile)
+                    {
+                        return !std::binary_search(r.sources.begin(), r.sources.end(), tile->sourceId);
+                    }), p->ready.end());
+            }
             p->request=r;
             ++p->ticket;
             p->pending=true;

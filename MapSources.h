@@ -6,6 +6,7 @@
 class CCoordMgr;
 struct MapSourceLayer 
 {
+    std::string identifyType, identifyEndpoint, identifyLayer;
     std::string category,tileScheme,styleSld,localStyleXml,localLayerName;
     std::string id,name,type,family,path,extensions,endpoint,layer,matrix,style,format="image/png",version="1.1.1",srs="EPSG:4326";
     double scale=0,minScale=0,maxScale=0;
@@ -25,6 +26,9 @@ public:
     void Draw(CDC* dc,CCoordMgr* coord);
     static bool Enabled(const MapSourceLayer& layer);
     bool Identify(CPoint point,CCoordMgr* coord,CString& title,std::vector<CString>& fields,std::vector<CString>& values);
+    bool IdentifyPending() const;
+    void CancelIdentify();
+    bool PollIdentify(CString& title, std::vector<CString>& fields, std::vector<CString>& values);
     bool Poll();
     bool WaitForIdle(unsigned milliseconds);
     void ResetCache();

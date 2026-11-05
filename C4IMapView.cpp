@@ -579,6 +579,7 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
 {
     CString title;std::vector<CString> fields,values;
     auto frame=get_mainfrm();
+    MapSources().CancelIdentify();
     frame->m_wndMapProperties.ClearPropList();
     if((C4MAP_SHAPE_MODE!=2 && frame->m_indexMap.IdentifyLocal(point,title,fields,values)) || 
 		MapSources().Identify(point,m_pCoordMgr,title,fields,values))
@@ -588,7 +589,7 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
     }
 	else 
 	{
-		frame->m_wndMapProperties.SetSearchFeatureInfo(_T("SHP: 선택된 객체 없음"),fields,values);
+		frame->m_wndMapProperties.SetSearchFeatureInfo(MapSources().IdentifyPending()?_T("서버 속성 조회 중..."):_T("선택된 객체 없음"),fields,values);
 	}
     DrawSituation(TRUE,TRUE,TRUE,TRUE);
 }
@@ -689,6 +690,17 @@ void CC4IMapView::OnMapSourcesXml()
 
 void CC4IMapView::OnTimer(UINT_PTR id)
 {
+    if(id==59200)
+    {
+        CString title;std::vector<CString> fields,values;
+        if(MapSources().PollIdentify(title,fields,values))
+        {
+            auto frame=get_mainfrm();
+            frame->m_wndMapProperties.ClearPropList();
+            frame->m_wndMapProperties.SetSearchFeatureInfo(title,fields,values);
+            frame->m_wndMapProperties.ShowPane(TRUE,FALSE,TRUE);
+        }
+    }
     if(id==59200&&(TerrainLayer().Poll() | TerrainLocalLayer().Poll() | TerrainServerLayer().Poll()))
 	{
 		m_mapFrameCache.InvalidateFrom(CMapFrameCache::Elevation);
