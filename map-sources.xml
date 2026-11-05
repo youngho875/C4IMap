@@ -81,6 +81,45 @@
     <Extensions>png;jpg;jpeg</Extensions>
     <visual>true</visual>
   </Layer>
+  
+  <!-- 네트워크 지도 -->
+  <Layer id="wms" name="WMS 서버 설정" type="WMS" family="WMS">
+    <visual>false</visual>
+    <Endpoint />
+    <LayerName />
+    <TileMatrixSet />
+    <Style />
+    <Version>1.1.1</Version>
+    <Format>image/png</Format>
+    <Scale>0</Scale>
+    <MinScale>0</MinScale>
+    <MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="wfs" name="WFS 서버 설정" type="WFS" family="WFS">
+    <visual>false</visual>
+    <Endpoint />
+    <LayerName />
+    <TileMatrixSet />
+    <Style />
+    <Version>2.0.0</Version>
+    <Format>image/png</Format>
+    <Scale>0</Scale>
+    <MinScale>0</MinScale>
+    <MaxScale>0</MaxScale>
+  </Layer>
+  <Layer id="wmts" name="WMTS 서버 설정" type="WMTS" family="WMTS">
+    <visual>false</visual>
+    <Endpoint />
+    <LayerName />
+    <TileMatrixSet />
+    <Style />
+    <Version>1.0.0</Version>
+    <Format>image/png</Format>
+    <Scale>0</Scale>
+    <MinScale>0</MinScale>
+    <MaxScale>0</MaxScale>
+  </Layer>
+  <!-- ######################################################################## -->
   <Layer id="mvt_1" name="밀집지역_면" type="VectorTile" family="육도">
     <Path>D:\map\tileData\shape\mvt_17926003917757964\1_AAL020</Path>
     <visual>true</visual>
