@@ -161,9 +161,9 @@ std::string Connection(const MapSourceLayer& l)
 {
 #if C4MAP_ENABLE_OGC
     if(l.type=="WMS")
-        return "<GDAL_WMS><Service name=\"WMS\"><Version>"+SX(l.version)+"</Version><ServerUrl>"+SX(l.endpoint)+"</ServerUrl><SRS>EPSG:4326</SRS><CRS>EPSG:4326</CRS><BBoxOrder>"+(l.version=="1.3.0"?std::string("yxYX"):std::string("xyXY"))+"</BBoxOrder><Layers>"+SX(l.layer)+"</Layers><Styles>"+SX(l.style)+"</Styles><ImageFormat>"+SX(l.format)+"</ImageFormat><Transparent>TRUE</Transparent></Service><DataWindow><UpperLeftX>-180</UpperLeftX><UpperLeftY>90</UpperLeftY><LowerRightX>180</LowerRightX><LowerRightY>-90</LowerRightY><SizeX>268435456</SizeX><SizeY>134217728</SizeY></DataWindow><Projection>EPSG:4326</Projection><BandsCount>4</BandsCount><BlockSizeX>256</BlockSizeX><BlockSizeY>256</BlockSizeY><OverviewCount>20</OverviewCount><Timeout>8</Timeout><MaxConnections>2</MaxConnections></GDAL_WMS>";
+        return "<GDAL_WMS><Service name=\"WMS\"><Version>"+SX(l.version)+"</Version><ServerUrl>"+SX(l.endpoint)+"</ServerUrl><SRS>EPSG:4326</SRS><CRS>EPSG:4326</CRS><BBoxOrder>"+(l.version=="1.3.0"?std::string("yxYX"):std::string("xyXY"))+"</BBoxOrder><Layers>"+SX(l.layer)+"</Layers><Styles>"+SX(l.style)+"</Styles><ImageFormat>"+SX(l.format)+"</ImageFormat><Transparent>TRUE</Transparent></Service><DataWindow><UpperLeftX>-180</UpperLeftX><UpperLeftY>90</UpperLeftY><LowerRightX>180</LowerRightX><LowerRightY>-90</LowerRightY><SizeX>268435456</SizeX><SizeY>134217728</SizeY></DataWindow><Projection>EPSG:4326</Projection><BandsCount>4</BandsCount><BlockSizeX>256</BlockSizeX><BlockSizeY>256</BlockSizeY><OverviewCount>20</OverviewCount><Timeout>8</Timeout><MaxConnections>4</MaxConnections><Cache><Expires>3600</Expires><MaxSize>268435456</MaxSize></Cache></GDAL_WMS>";
     if(l.type=="WMTS")
-        return "<GDAL_WMTS><GetCapabilitiesUrl>"+SX(l.endpoint)+"</GetCapabilitiesUrl><Layer>"+SX(l.layer)+"</Layer><Style>"+SX(l.style)+"</Style><TileMatrixSet>"+SX(l.matrix)+"</TileMatrixSet></GDAL_WMTS>";
+        return "<GDAL_WMTS><GetCapabilitiesUrl>"+SX(l.endpoint)+"</GetCapabilitiesUrl><Layer>"+SX(l.layer)+"</Layer><Style>"+SX(l.style)+"</Style><TileMatrixSet>"+SX(l.matrix)+"</TileMatrixSet><Cache><Expires>3600</Expires><MaxSize>268435456</MaxSize></Cache></GDAL_WMTS>";
 #endif
     return l.path;
 }
@@ -235,6 +235,8 @@ struct CMapSources::Impl
     std::map<size_t,std::vector<XyzSet>> xyzIndexes;
     std::map<size_t,std::vector<RasterFile>> indexes;
     std::map<size_t,Dataset> remote;
+    // Owned exclusively by the render worker; never shared with identify requests.
+    std::map<std::string,Dataset> wfsConnections;
     std::map<std::string,std::unique_ptr<vtstyle::Style>> vectorStyles;
     void Note(const CString& s)
     {
@@ -478,7 +480,11 @@ struct CMapSources::Impl
     void Wfs(Tile& tile,const MapSourceLayer& source,unsigned rev)
     {
 #if C4MAP_ENABLE_OGC
-        auto ds=DS((GDALDataset*)GDALOpenEx(("WFS:"+source.endpoint).c_str(),GDAL_OF_VECTOR|GDAL_OF_READONLY,nullptr,nullptr,nullptr));
+        auto& ds = wfsConnections.try_emplace(source.endpoint, DS(nullptr)).first->second;
+        if (!ds)
+            ds = DS(static_cast<GDALDataset*>(GDALOpenEx(
+                ("WFS:" + source.endpoint).c_str(),
+                GDAL_OF_VECTOR | GDAL_OF_READONLY, nullptr, nullptr, nullptr)));
         if(!ds)
         {
             Note(_T("WFS 연결 실패: 서버/레이어 설정을 확인하세요."));
@@ -526,7 +532,8 @@ struct CMapSources::Impl
         for(int i=1;i<=4;++i)
             image->GetRasterBand(i)->Fill(0);
         int bands[4]={1,2,3,4};
-        double burn[4]={40,190,255,255};
+        std::vector<OGRGeometryH> geometries;
+        std::vector<double> burns;
         char* opts[]={(char*)"ALL_TOUCHED=TRUE",nullptr};
         int count=0;
         layer->ResetReading();
@@ -546,8 +553,8 @@ struct CMapSources::Impl
             auto copy=std::unique_ptr<OGRGeometry>(g->clone());
             if(copy->transform(forward)!=OGRERR_NONE)
                 continue;
-            OGRGeometryH h=copy.get();
-            GDALRasterizeGeometries(image.get(),4,bands,1,&h,nullptr,nullptr,burn,opts,nullptr,nullptr);
+            geometries.push_back(copy.get());
+            burns.insert(burns.end(), {40,190,255,255});
             VectorFeature hit;
             hit.geometry=std::shared_ptr<OGRGeometry>(copy.release());
             hit.title=source.name+" / "+source.layer;
@@ -560,8 +567,15 @@ struct CMapSources::Impl
         }
         OCTDestroyCoordinateTransformation(forward);
         OCTDestroyCoordinateTransformation(inverse);
-        if(!Cancel(rev))
-            Blend(tile,image.get());
+        if (!Cancel(rev) && !geometries.empty())
+        {
+            std::pair<Impl*,unsigned> callback{this, rev};
+            GDALRasterizeGeometries(image.get(), 4, bands,
+                static_cast<int>(geometries.size()), geometries.data(),
+                nullptr, nullptr, burns.data(), opts, Progress, &callback);
+        }
+        if (!Cancel(rev))
+            Blend(tile, image.get());
 #endif
     }
     std::shared_ptr<Tile> Render(size_t id,const MapSourceLayer& source,TileKey key,unsigned rev)
@@ -629,6 +643,7 @@ struct CMapSources::Impl
         CPLSetThreadLocalConfigOption("GDAL_HTTP_TIMEOUT","8");
         CPLSetThreadLocalConfigOption("GDAL_HTTP_CONNECTTIMEOUT","5");
         CPLSetThreadLocalConfigOption("GDAL_HTTP_MAX_RETRY","0");
+        CPLSetThreadLocalConfigOption("GDAL_MAX_CONNECTIONS","4");
         CPLSetThreadLocalConfigOption("OGR_WFS_PAGING_ALLOWED","ON");
         CPLSetThreadLocalConfigOption("OGR_WFS_PAGE_SIZE","1000");
         CPLPushErrorHandler(CPLQuietErrorHandler);
@@ -641,6 +656,13 @@ struct CMapSources::Impl
                 std::unique_lock<std::mutex> l(mutex);
                 cv.wait(l,[&]{return stop||pending;});
                 if(stop)
+                    break;
+                // Coalesce rapid pan/zoom updates before issuing network requests.
+                auto observed = ticket.load();
+                while (!stop && cv.wait_for(l, std::chrono::milliseconds(80),
+                    [&] { return stop || ticket.load() != observed; }))
+                    observed = ticket.load();
+                if (stop)
                     break;
                 pending=false;
                 busy=true;
@@ -656,18 +678,39 @@ struct CMapSources::Impl
                 vectorDatasets.clear();
                 indexes.clear();xyzIndexes.clear();vectorStyles.clear();
                 remote.clear();
+                wfsConnections.clear();
                 generation=dataRev;
             }
             if(r.styleScale > 0 && renderingStyleScale!=r.styleScale){for(auto it=cache.begin();it!=cache.end();){auto id=std::get<0>(it->first);if(id<sources.size()&&!sources[id].styleSld.empty())it=cache.erase(it);else ++it;}renderingStyleScale=r.styleScale;}
             const size_t imageCacheLimit = (std::min)(size_t(1024),
                 (std::max)(size_t(256), r.tiles.size() * r.sources.size()));
+            // Work from the center out without changing request identity/order.
+            auto orderedTiles = r.tiles;
+            if (!orderedTiles.empty())
+            {
+                auto center = orderedTiles[orderedTiles.size() / 2];
+                center.x = (orderedTiles.front().x + orderedTiles.back().x) / 2;
+                center.y = (orderedTiles.front().y + orderedTiles.back().y) / 2;
+                std::stable_sort(orderedTiles.begin(), orderedTiles.end(),
+                    [center](const TileKey& a, const TileKey& b)
+                    {
+                        auto distance = [center](const TileKey& key)
+                        {
+                            const double dx = double(key.x) - center.x;
+                            const double dy = double(key.y) - center.y;
+                            return dx * dx + dy * dy;
+                        };
+                        return distance(a) < distance(b);
+                    });
+            }
+            auto lastPublish = std::chrono::steady_clock::now();
             std::vector<std::shared_ptr<Tile>> result;
             std::set<size_t> completedSources;
             for(auto id:r.sources)
             {
                 if(id>=sources.size())
                     continue;
-                for(auto key:r.tiles)
+                for(auto key:orderedTiles)
                 {
                     if(Cancel(rev)) break;
                     auto k=std::make_tuple(id,key.z,key.x,key.y);
@@ -704,6 +747,37 @@ struct CMapSources::Impl
                         cache[k]=tile;
                     }
                     result.push_back(tile);
+                    const auto now = std::chrono::steady_clock::now();
+                    if (now - lastPublish >= std::chrono::milliseconds(100))
+                    {
+                        // Keep old coverage until its replacement is ready. Always
+                        // composite in layer order, even while a layer is incomplete.
+                        std::lock_guard<std::mutex> lock(mutex);
+                        if (!Cancel(rev) && request == r)
+                        {
+                            using Region = std::tuple<size_t,double,double,double,double>;
+                            auto region = [](const std::shared_ptr<Tile>& t)
+                            {
+                                return Region(t->sourceId,t->west,t->north,t->east,t->south);
+                            };
+                            std::set<Region> replaced;
+                            for (const auto& t : result)
+                                replaced.insert(region(t));
+                            std::vector<std::shared_ptr<Tile>> progressive;
+                            for (auto sourceId : r.sources)
+                            {
+                                for (const auto& t : ready)
+                                    if (t->sourceId == sourceId && !replaced.count(region(t)))
+                                        progressive.push_back(t);
+                                for (const auto& t : result)
+                                    if (t->sourceId == sourceId)
+                                        progressive.push_back(t);
+                            }
+                            ready.swap(progressive);
+                            changed = true;
+                        }
+                        lastPublish = now;
+                    }
                 }
                 if (Cancel(rev))
                     break;
@@ -742,6 +816,7 @@ struct CMapSources::Impl
             }
         }
         vectorDatasets.clear();
+        wfsConnections.clear();
         remote.clear();vectorStyles.clear();CPLPopErrorHandler();
     }
 };
