@@ -55,8 +55,7 @@ public:
 
 private:
 	//GDI+를 위한 변수 선언 
-	GdiplusStartupInput gdiplusStartupInput;
-	ULONG_PTR m_gdiplusToken;
+	ULONG_PTR m_gdiplusToken = 0;
 
 	//HANDLE m_hMutex;
 

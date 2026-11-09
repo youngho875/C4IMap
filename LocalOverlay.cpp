@@ -90,9 +90,7 @@ struct CLocalOverlay::Impl
     bool modified=false;
     CPoint start;
     COLORREF color=RGB(255,60,40);
-    ULONG_PTR token=0;
-    Impl(){ Gdiplus::GdiplusStartupInput in; Gdiplus::GdiplusStartup(&token,&in,NULL); }
-    ~Impl(){ if(token) Gdiplus::GdiplusShutdown(token); }
+    // The owning C4IMap application manages the GDI+ lifetime.
 };
 
 CLocalOverlay::CLocalOverlay():p(new Impl){}
@@ -361,8 +359,11 @@ bool CLocalOverlay::End(CPoint pt,CCoordMgr* c)
 
 void CLocalOverlay::Draw(CDC* dc,CCoordMgr* c)
 {
-    if(!dc||!c||!p->token)  return;
+    if (!dc || !c || !dc->GetSafeHdc())
+        return;
     Gdiplus::Graphics g(dc->GetSafeHdc());
+    if (g.GetLastStatus() != Gdiplus::Ok)
+        return;
     g.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     // C4IMap owns projection. Supply screen coordinates to SDK objects without
     // its global Point coordinate manager (which uses a different projection).
@@ -532,7 +533,8 @@ bool CLocalOverlay::Load(LPCTSTR path,CString& error)
     };
     if(!root||strcmp(CPLGetXMLValue(root,"coordinates",""),"GeoDC-world"))
         return fail();
-    std::string version=CPLGetXMLValue(root,"version","");if(version!="1"&&version!="2")
+    std::string version=CPLGetXMLValue(root,"version","");
+    if(version!="1"&&version!="2")
         return fail();
     std::vector<Impl::Item> items;std::vector<Impl::Layer> layers;
     int next=1,active=0;
@@ -551,13 +553,17 @@ bool CLocalOverlay::Load(LPCTSTR path,CString& error)
                 continue;
             if(strcmp(n->pszValue,"Object"))
                 return false;
-            Impl::Item i;i.layer=layer;
+            Impl::Item i;
+            i.layer=layer;
             double type,color;
             if(!number(n,"type",type)||type<Line||type>Ellipse||type!=floor(type)||
                !number(n,"color",color)||color<0||color>0xffffff||color!=floor(color)||
                !number(n,"x1",i.x1)||!number(n,"y1",i.y1)||!number(n,"x2",i.x2)||!number(n,"y2",i.y2))
                 return false;
-            i.type=(int)type;i.color=(COLORREF)color;items.push_back(i);
+
+            i.type=(int)type;
+            i.color=(COLORREF)color;
+            items.push_back(i);
             if(items.size()>10000)
                 return false;
         }
@@ -584,6 +590,7 @@ bool CLocalOverlay::Load(LPCTSTR path,CString& error)
             if(!number(n,"id",id)||id<1||id>1000000||id!=floor(id)||!ids.insert((int)id).second||
                 !number(n,"visible",visible)||(visible!=0&&visible!=1))
                 return fail();
+
             CA2W wide(CPLGetXMLValue(n,"name",""),CP_UTF8);
             CString name(wide);name.Trim();
             if(name.IsEmpty()||name.GetLength()>128)
@@ -631,7 +638,7 @@ int CLocalOverlay::AddLayer(const CString& requested)
 
 bool CLocalOverlay::SelectLayer(int id)
 {
-    for(const auto&layer:p->layers)
+    for(const auto& layer:p->layers)
         if(layer.id==id)
         {
             Cancel();
@@ -649,7 +656,7 @@ int CLocalOverlay::ActiveLayer() const
 
 bool CLocalOverlay::SetLayerVisible(int id,bool visible)
 {
-    for(auto&layer:p->layers)
+    for(auto& layer:p->layers)
         if(layer.id==id)
         {
             Cancel();
@@ -666,7 +673,7 @@ bool CLocalOverlay::RenameLayer(int id,const CString& requested)
     name.Trim();
     if(name.IsEmpty()||name.GetLength()>128)
         return false;
-    for(auto&layer:p->layers)
+    for(auto& layer:p->layers)
         if(layer.id==id)
         {
             layer.name=name;
@@ -682,7 +689,7 @@ std::vector<CLocalOverlay::LayerInfo> CLocalOverlay::Layers() const
     for(const auto&layer:p->layers)
     {
         size_t count=0;
-        for(const auto&i:p->items)
+        for(const auto& i:p->items)
             if(i.layer==layer.id)
                 ++count;
         result.push_back({layer.id,layer.name,count,layer.visible});
@@ -693,7 +700,7 @@ std::vector<CLocalOverlay::LayerInfo> CLocalOverlay::Layers() const
 size_t CLocalOverlay::ActiveCount() const
 {
     size_t count=0;
-    for(const auto&i:p->items)
+    for(const auto& i:p->items)
         if(i.layer==p->active)
             ++count;
 

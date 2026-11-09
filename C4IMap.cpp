@@ -100,6 +100,17 @@ BOOL CC4IMapApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
+	// Initialize before creating the main frame, view, and overlay objects.
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	const Gdiplus::Status gdiplusStatus = Gdiplus::GdiplusStartup(
+		&m_gdiplusToken, &gdiplusStartupInput, nullptr);
+	if (gdiplusStatus != Gdiplus::Ok)
+	{
+		m_gdiplusToken = 0;
+		AfxMessageBox(_T("GDI+ 초기화에 실패했습니다."));
+		return FALSE;
+	}
+
 
 	// OLE 라이브러리를 초기화합니다.
 	if (!AfxOleInit())
@@ -165,8 +176,6 @@ BOOL CC4IMapApp::InitInstance()
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
-	// Gdiplus start
-	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);  // SW_SHOWMAXIMIZED
@@ -185,7 +194,11 @@ int CC4IMapApp::ExitInstance()
 	AfxOleTerm(FALSE);
 
 	//GDI+ 종료
-	Gdiplus::GdiplusShutdown(m_gdiplusToken);
+	if (m_gdiplusToken != 0)
+	{
+		Gdiplus::GdiplusShutdown(m_gdiplusToken);
+		m_gdiplusToken = 0;
+	}
 	//ReleaseMutex(m_hMutex);
 
 /*
