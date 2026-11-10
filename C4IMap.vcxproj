@@ -235,6 +235,11 @@
     <ClInclude Include="PropertiesWnd.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ShapeT.h" />
+    <ClInclude Include="MapFrameCache.h" />
+    <ClInclude Include="RemoteMapIdentify.h" />
+    <ClInclude Include="ProjectedRaster.h" />
+    <ClInclude Include="VectorTileStyle.h" />
+    <ClInclude Include="DisplayProjection.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TmsMgr.h" />
     <ClInclude Include="TypeView.h" />
@@ -244,6 +249,42 @@
   <ItemGroup>
     <ClCompile Include="GPoint.cpp" />
     <ClCompile Include="MapSources.cpp" />
+    <ClCompile Include="BaseMapOptions.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="TerrainTileLayer.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="MapFrameCache.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="RemoteMapIdentify.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="TerrainLayer.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="ProjectedRaster.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="VectorTileStyle.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="MapDecoration.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="DisplayProjection.cpp">
+      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
     <ClCompile Include="LocalOverlay.cpp" />
     <ClCompile Include="C4IMap.cpp" />
     <ClCompile Include="C4IMapDoc.cpp" />
@@ -443,7 +484,9 @@
     <C4MapBuildMode Condition="'$(C4MapBuildMode)'==''">2</C4MapBuildMode>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <ClCompile><PreprocessorDefinitions>C4MAP_BUILD_MODE=$(C4MapBuildMode);%(PreprocessorDefinitions)</PreprocessorDefinitions></ClCompile>
+    <ClCompile>
+      <PreprocessorDefinitions>C4MAP_BUILD_MODE=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="BuildC4OverlaySDK" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
