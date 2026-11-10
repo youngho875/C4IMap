@@ -29,3 +29,7 @@ bool BaseMapVisible(int index);
 void SetBaseMapVisible(int index, bool visible);
 
 CString BaseMapPath(const char *key, const char *fallback);
+
+// User policy for scale selection; independent of individual layer checkboxes.
+bool MapAutoScaleEnabled();
+bool SetMapAutoScaleEnabled(bool enabled);

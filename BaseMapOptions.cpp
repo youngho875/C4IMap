@@ -132,3 +132,23 @@ CString BaseMapPath(const char *key, const char *fallback)
     CA2W wide(path.c_str(), CP_UTF8);
     return CString(CW2T(wide, CP_ACP));
 }
+
+
+bool MapAutoScaleEnabled()
+{
+    return BaseMapConfig().Flag("AutoScale", true);
+}
+
+bool SetMapAutoScaleEnabled(bool enabled)
+{
+    auto& config = BaseMapConfig();
+    auto root = CPLGetXMLNode(config.xml, "=BaseMap");
+    if (!root)
+        return false;
+    const std::string previous = config.Value("AutoScale", "true");
+    CPLSetXMLValue(root, "AutoScale", enabled ? "true" : "false");
+    if (CPLSerializeXMLTreeToFile(config.xml, config.file.c_str()))
+        return true;
+    CPLSetXMLValue(root, "AutoScale", previous.c_str());
+    return false;
+}

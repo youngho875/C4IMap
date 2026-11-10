@@ -1,4 +1,4 @@
-
+ï»¿
 #include "pch.h"
 #include "BaseMapOptions.h"
 #include "MapSources.h"
@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 
 /**
 * @struct TREEITEM_INFO
-* @brief  Æ®¸® ¾ÆÀÌÅÛ Á¤º¸
+* @brief  íŠ¸ë¦¬ ì•„ì´í…œ ì •ë³´
 *         only use in CViewOpTree class
 */
 struct MAPOBJVIEWTREE_INFO
@@ -34,14 +34,14 @@ struct MAPOBJVIEWTREE_INFO
 };
 
 /**
-* @brief  Æ®¸® ¾ÆÀÌÅÛ Å¸ÀÔ
+* @brief  íŠ¸ë¦¬ ì•„ì´í…œ íƒ€ì…
 */
 typedef enum
 {
-	MAPOBJVIEWTREE_TITLE		= 0, /**< Æ®¸® ·çÆ® */
-	MAPOBJVIEWTREE_CATEGORY		= 1, /**< ·¹ÀÌ¾î Á¾·ù */
-	MAPOBJVIEWTREE_LAYER		= 2, /**< ·¹ÀÌ¾î */
-	MAPOBJVIEWTREE_FEATURE		= 3  /**< ÇÇÃÄ */
+	MAPOBJVIEWTREE_TITLE		= 0, /**< íŠ¸ë¦¬ ë£¨íŠ¸ */
+	MAPOBJVIEWTREE_CATEGORY		= 1, /**< ë ˆì´ì–´ ì¢…ë¥˜ */
+	MAPOBJVIEWTREE_LAYER		= 2, /**< ë ˆì´ì–´ */
+	MAPOBJVIEWTREE_FEATURE		= 3  /**< í”¼ì³ */
 
 } MAPOBJVIEWTREE_TYPE;
 
@@ -50,7 +50,7 @@ typedef enum
 
 CMapObjectViewTree::CMapObjectViewTree()
 {
-	m_bAutoScale = TRUE;
+	m_bAutoScale = MapAutoScaleEnabled() ? TRUE : FALSE;
 	m_pMapCategoryName.RemoveAll();
 	m_pMapLayerName.RemoveAll();   
 	m_pMapFeatureName.RemoveAll(); 
@@ -81,7 +81,7 @@ BEGIN_MESSAGE_MAP(CMapObjectViewTree, CTreeCtrl)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CMapObjectViewTree ¸Ş½ÃÁö Ã³¸®±â
+// CMapObjectViewTree ë©”ì‹œì§€ ì²˜ë¦¬ê¸°
 
 void CMapObjectViewTree::OnDestroy()
 {
@@ -113,7 +113,7 @@ void CMapObjectViewTree::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 
 	switch(pCustomDraw->nmcd.dwDrawStage)
 	{
-	case CDDS_PREPAINT:// ¾ÆÀÌÅÛ ±×¸®±â Àü¿¡ ¾Ë·ÁÁÖ¼¼¿ä.
+	case CDDS_PREPAINT:// ì•„ì´í…œ ê·¸ë¦¬ê¸° ì „ì— ì•Œë ¤ì£¼ì„¸ìš”.
 		*pResult = CDRF_NOTIFYITEMDRAW;
 		break;
 
@@ -123,7 +123,7 @@ void CMapObjectViewTree::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 
 			HTREEITEM hSelectItem = GetSelectedItem();
 
-			// Æ÷Ä¿½º ¾øÀ» ¶§µµ Â£Àº ¼±ÅÃ »ö»ó À¯ÁöÇÏ·Á°í µÒ 
+			// í¬ì»¤ìŠ¤ ì—†ì„ ë•Œë„ ì§™ì€ ì„ íƒ ìƒ‰ìƒ ìœ ì§€í•˜ë ¤ê³  ë‘  
 			if(hItem == hSelectItem)
 			{
 				pCustomDraw->clrText = RGB(255,255,255); // white text
@@ -143,7 +143,7 @@ void CMapObjectViewTree::OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 }
 
-// ¸ğµç ¾ÆÀÌÅÛ »èÁ¦
+// ëª¨ë“  ì•„ì´í…œ ì‚­ì œ
 void CMapObjectViewTree::RemoveAllMapObjectViewItems(BOOL bInitTitle)
 {
     m_baseRoot=nullptr;m_baseItems.clear();m_localShapeItems.clear();m_localShapeRoot=nullptr;m_sourceRoots.clear();m_sourceItems.clear();
@@ -151,7 +151,7 @@ void CMapObjectViewTree::RemoveAllMapObjectViewItems(BOOL bInitTitle)
 	m_pMapLayerName.RemoveAll();   
 	m_pMapFeatureName.RemoveAll(); 
 
-	// Title Á¦¿Ü »èÁ¦
+	// Title ì œì™¸ ì‚­ì œ
 	HTREEITEM hItem = GetRootItem();
 
 	if(hItem)
@@ -170,11 +170,11 @@ void CMapObjectViewTree::RemoveAllMapObjectViewItems(BOOL bInitTitle)
 		DeleteItem(hItem);
 	}
 
-	// ¼Ò¸ê ½Ã¿¡´Â Å¸ÀÌÆ²À» Ãß°¡ÇÏÁö ¾Êµµ·Ï ÇÑ´Ù.
+	// ì†Œë©¸ ì‹œì—ëŠ” íƒ€ì´í‹€ì„ ì¶”ê°€í•˜ì§€ ì•Šë„ë¡ í•œë‹¤.
 	if(bInitTitle == TRUE){InsertMapObjectTitle();RefreshLocalShapeTree();}
 }
 
-// Æ®¸® ¾ÆÀÌÅÛ »èÁ¦
+// íŠ¸ë¦¬ ì•„ì´í…œ ì‚­ì œ
 void CMapObjectViewTree::RemoveTreeItem(HTREEITEM hItem, BOOL bRemoveNextSiblingItem)
 {
 	if(hItem)
@@ -202,7 +202,7 @@ void CMapObjectViewTree::RemoveTreeItem(HTREEITEM hItem, BOOL bRemoveNextSibling
 	}
 }
 
-// Æ®¸® ¾ÆÀÌÅÛ ¸Ê »èÁ¦
+// íŠ¸ë¦¬ ì•„ì´í…œ ë§µ ì‚­ì œ
 void CMapObjectViewTree::RemoveMapKey(int nItemType, CString strMyName, CString strParentName)
 {
 	switch(nItemType)
@@ -230,13 +230,13 @@ void CMapObjectViewTree::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 
     CTreeCtrl::OnKeyDown(nChar,nRepCnt,nFlags);
-	// Ã¼Å© ¹Ú½º¿¡ ¿µÇâÀ» ÁÖ¾î ÁÖ¼®Ã³¸®ÇÔ
+	// ì²´í¬ ë°•ìŠ¤ì— ì˜í–¥ì„ ì£¼ì–´ ì£¼ì„ì²˜ë¦¬í•¨
 	//CTreeCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void CMapObjectViewTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	// Ã¼Å© ¹Ú½º¿¡ ¿µÇâÀ» ÁÖ¾î ÁÖ¼®Ã³¸®ÇÔ
+	// ì²´í¬ ë°•ìŠ¤ì— ì˜í–¥ì„ ì£¼ì–´ ì£¼ì„ì²˜ë¦¬í•¨
 	//CTreeCtrl::OnLButtonDblClk(nFlags, point);
 }
 
@@ -245,13 +245,13 @@ void CMapObjectViewTree::OnLButtonDown(UINT nFlags, CPoint point)
 	UINT uFlags;
 	HTREEITEM hItem = HitTest(point, &uFlags);
 
-	// ¾ÆÀÌÅÛ ¼±ÅÃ »óÅÂ
+	// ì•„ì´í…œ ì„ íƒ ìƒíƒœ
 	if(hItem != NULL)
 	{
 		SelectItem(hItem);
 		SendMsgSelectItem(hItem);
 
-		// Ã¼Å© Å¬¸¯
+		// ì²´í¬ í´ë¦­
 		if(uFlags == TVHT_ONITEMSTATEICON)
 			SetCheckEventItem(hItem);
 
@@ -259,27 +259,27 @@ void CMapObjectViewTree::OnLButtonDown(UINT nFlags, CPoint point)
 		//	SelectItem(hItem);
 	}
 
-	// Ã¼Å© ¹Ú½º¿¡ ¿µÇâÀ» ÁÖ¾î ¿¹¿ÜÃ³¸®ÇÔ
+	// ì²´í¬ ë°•ìŠ¤ì— ì˜í–¥ì„ ì£¼ì–´ ì˜ˆì™¸ì²˜ë¦¬í•¨
 	if(uFlags != TVHT_ONITEMSTATEICON)
 		CTreeCtrl::OnLButtonDown(nFlags, point);
 }
 
 void CMapObjectViewTree::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	// Ã¼Å© ¹Ú½º¿¡ ¿µÇâÀ» ÁÖ¾î ÁÖ¼® Ã³¸®ÇÔ
+	// ì²´í¬ ë°•ìŠ¤ì— ì˜í–¥ì„ ì£¼ì–´ ì£¼ì„ ì²˜ë¦¬í•¨
 	//CTreeCtrl::OnRButtonDown(nFlags, point);
 }
 
-// Ã¼Å© ¹Ú½º ÀÌº¥Æ® Ã³¸®
+// ì²´í¬ ë°•ìŠ¤ ì´ë²¤íŠ¸ ì²˜ë¦¬
 void CMapObjectViewTree::SetCheckEventItem(HTREEITEM hItem)
 {
 	BeginWaitCursor();
 
 	if(hItem != NULL)
 	{
-		int nCheckOp = 0;	// ¹Ì»ç¿ë
+		int nCheckOp = 0;	// ë¯¸ì‚¬ìš©
 
-		// Å¬¸¯ ÀÌÀü »óÅÂ 
+		// í´ë¦­ ì´ì „ ìƒíƒœ 
 		UINT state  = GetItemState(hItem, TVIS_STATEIMAGEMASK);
 
 		state = state >> 12;
@@ -289,19 +289,19 @@ void CMapObjectViewTree::SetCheckEventItem(HTREEITEM hItem)
 		case TREE_MEMBER_HFCHECK:
 		case TREE_MEMBER_UNCHECK:
 			{
-				// ¹İÃ¼Å©, ¾ğÃ¼Å© -> Ã¼Å©·Î º¯°æ
+				// ë°˜ì²´í¬, ì–¸ì²´í¬ -> ì²´í¬ë¡œ ë³€ê²½
 				SetItemState(hItem, TREE_STATE_ALLCHECK, TVIS_STATEIMAGEMASK);
 				SendMsgSelectCheckItem(hItem, TRUE);
-				nCheckOp = 1;	// Ã¼Å© »ç¿ë
+				nCheckOp = 1;	// ì²´í¬ ì‚¬ìš©
 			}
 			break;
 
 		case TREE_MEMBER_ALLCHECK:
 			{
-				// Ã¼Å© -> ¾ğÃ¼Å©·Î º¯°æ
+				// ì²´í¬ -> ì–¸ì²´í¬ë¡œ ë³€ê²½
 				SetItemState(hItem, TREE_STATE_UNCHECK, TVIS_STATEIMAGEMASK);
 				SendMsgSelectCheckItem(hItem, FALSE);
-				nCheckOp = 2; // ¾ğÃ¼Å© »ç¿ë
+				nCheckOp = 2; // ì–¸ì²´í¬ ì‚¬ìš©
 			}
 			break;
 
@@ -312,7 +312,7 @@ void CMapObjectViewTree::SetCheckEventItem(HTREEITEM hItem)
 
 		if(nCheckOp)
 		{
-			// ÇÏÀ§ Ã¼Å© ¹İ¿µ
+			// í•˜ìœ„ ì²´í¬ ë°˜ì˜
 			if(ItemHasChildren(hItem))
 			{
 				HTREEITEM hSubItem = GetChildItem(hItem);
@@ -323,7 +323,7 @@ void CMapObjectViewTree::SetCheckEventItem(HTREEITEM hItem)
 					UpdateCheckEventChildItem(hSubItem, FALSE);
 			}
 
-			// »óÀ§ Ã¼Å© ¾÷µ¥ÀÌÆ®
+			// ìƒìœ„ ì²´í¬ ì—…ë°ì´íŠ¸
 			HTREEITEM hParentItem = GetParentItem(hItem);
 
 			if(hParentItem != NULL /*&& hParentItem != m_hRootItem*/)
@@ -336,7 +336,7 @@ void CMapObjectViewTree::SetCheckEventItem(HTREEITEM hItem)
 	EndWaitCursor();
 }
 
-// Ã¼Å© º¯°æ ½Ã ÇÏÀ§ ¾ÆÀÌÅÛ °»½Å
+// ì²´í¬ ë³€ê²½ ì‹œ í•˜ìœ„ ì•„ì´í…œ ê°±ì‹ 
 void CMapObjectViewTree::UpdateCheckEventChildItem(HTREEITEM hItem, BOOL bCheck)
 {
 	if(hItem)
@@ -360,7 +360,7 @@ void CMapObjectViewTree::UpdateCheckEventChildItem(HTREEITEM hItem, BOOL bCheck)
 	}
 }
 
-// Ã¼Å© º¯°æ ½Ã »óÀ§ ¾ÆÀÌÅÛ °»½Å
+// ì²´í¬ ë³€ê²½ ì‹œ ìƒìœ„ ì•„ì´í…œ ê°±ì‹ 
 void CMapObjectViewTree::UpdateCheckEventParentItem(HTREEITEM hItem)
 {
 	// Only aggregate groups. Leaf state comes from the layer definition.
@@ -440,28 +440,32 @@ void CMapObjectViewTree::UpdateCheckEventParentItem(HTREEITEM hItem)
 	}
 }
 
-// ÃàÃ´º° ÀÚµ¿ ¼³Á¤ off ½Ã Ã¼Å© disable, on ½Ã Ã¼Å© Enable
-void CMapObjectViewTree::SetMapAutoScale(BOOL bAutoSacle)
+// ì¶•ì²™ë³„ ìë™ ì„¤ì • off ì‹œ ì²´í¬ disable, on ì‹œ ì²´í¬ Enable
+void CMapObjectViewTree::SetMapAutoScale(BOOL enabled)
 {
-	m_bAutoScale = bAutoSacle;
-
-	HTREEITEM hItem = GetRootItem();
-
-	if(hItem)
-	{	
-		HTREEITEM hSubItem = GetChildItem(hItem);
-
-		if(hSubItem)
-			SetDisableCheck(hSubItem, bAutoSacle);
-
-		if(bAutoSacle /*|| hItem == m_hRootItem*/)
-			SetItemState(hItem, TREE_STATE_NONE, TVIS_STATEIMAGEMASK);
-		else
-			SetItemState(hItem, TREE_STATE_UNCHECK, TVIS_STATEIMAGEMASK);
-	}	
+    const bool automatic = enabled != FALSE;
+    if (MapAutoScaleEnabled() == automatic)
+        return;
+    if (!SetMapAutoScaleEnabled(automatic))
+    {
+        AfxMessageBox(_T("ìë™ ì¶•ì²™ ì„¤ì •ì„ ì €ì¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤. base-map.xmlì„ í™•ì¸í•˜ì„¸ìš”."));
+        return;
+    }
+    m_bAutoScale = automatic ? TRUE : FALSE;
+    MapSources().CancelIdentify();
+    MapSources().ResetCache();
+    auto frame = DYNAMIC_DOWNCAST(CMainFrame, AfxGetMainWnd());
+    auto view = frame ? DYNAMIC_DOWNCAST(CC4IMapView, frame->GetActiveView()) : nullptr;
+    if (view)
+    {
+        view->m_mapFrameCache.InvalidateFrom(CMapFrameCache::Sources);
+        view->Invalidate(FALSE);
+    }
+    // Keep all tree checkboxes intact in both modes.
+    Invalidate(FALSE);
 }
 
-// Ã¼Å© »ç¿ë ºÒ°¡·Î º¯°æ
+// ì²´í¬ ì‚¬ìš© ë¶ˆê°€ë¡œ ë³€ê²½
 void CMapObjectViewTree::SetDisableCheck(HTREEITEM hItem, BOOL bDisable)
 {
 	while(hItem)
@@ -482,7 +486,7 @@ void CMapObjectViewTree::SetDisableCheck(HTREEITEM hItem, BOOL bDisable)
 	}	
 }
 
-// Ã¼Å© º¯°æ ¸Ş½ÃÁö Àü´Ş
+// ì²´í¬ ë³€ê²½ ë©”ì‹œì§€ ì „ë‹¬
 void CMapObjectViewTree::SendMsgSelectCheckItem(HTREEITEM hItem, BOOL bChecked)
 {
 	MAPOBJVIEWTREE_INFO* pTreeSelectInfo = (MAPOBJVIEWTREE_INFO*)GetItemData(hItem);
@@ -496,7 +500,7 @@ void CMapObjectViewTree::SendMsgSelectCheckItem(HTREEITEM hItem, BOOL bChecked)
 
 			switch(pTreeSelectInfo->nItemType)
 			{
-			case MAPOBJVIEWTREE_TITLE: // Æ®¸® ·çÆ®
+			case MAPOBJVIEWTREE_TITLE: // íŠ¸ë¦¬ ë£¨íŠ¸
 				{
 					if(bChecked)
 						pView->SendMessage(MAP_OBJECT_VIEW_ALL_CHECK);
@@ -505,7 +509,7 @@ void CMapObjectViewTree::SendMsgSelectCheckItem(HTREEITEM hItem, BOOL bChecked)
 				}
 				break;
 
-			case MAPOBJVIEWTREE_CATEGORY: // ·¹ÀÌ¾î Á¾·ù
+			case MAPOBJVIEWTREE_CATEGORY: // ë ˆì´ì–´ ì¢…ë¥˜
 				{
 					if(bChecked)
 						pView->SendMessage(MAP_OBJECT_VIEW_CATEGORY_CHECK, (WPARAM)&pTreeSelectInfo->strMyName);
@@ -514,7 +518,7 @@ void CMapObjectViewTree::SendMsgSelectCheckItem(HTREEITEM hItem, BOOL bChecked)
 				}
 				break;
 
-			case MAPOBJVIEWTREE_LAYER: // ·¹ÀÌ¾î
+			case MAPOBJVIEWTREE_LAYER: // ë ˆì´ì–´
 				{
 					if(bChecked)
 						pView->SendMessage(MAP_OBJECT_VIEW_LAYER_CHECK, (WPARAM)pTreeSelectInfo->nMyIndex);
@@ -523,7 +527,7 @@ void CMapObjectViewTree::SendMsgSelectCheckItem(HTREEITEM hItem, BOOL bChecked)
 				}
 				break;
 
-			case MAPOBJVIEWTREE_FEATURE:// ÇÇÃÄ
+			case MAPOBJVIEWTREE_FEATURE:// í”¼ì³
 				{
 					if(bChecked)
 						pView->SendMessage(MAP_OBJECT_VIEW_FEATURE_CHECK, (WPARAM)pTreeSelectInfo->nParentIndex, (LPARAM)pTreeSelectInfo->nMyIndex);
@@ -536,7 +540,7 @@ void CMapObjectViewTree::SendMsgSelectCheckItem(HTREEITEM hItem, BOOL bChecked)
 	}
 }
 
-// ¼±ÅÃ ÀÌº¥Æ® ¹ß»ı ¸ŞÁö½Ã Àü´Ş
+// ì„ íƒ ì´ë²¤íŠ¸ ë°œìƒ ë©”ì§€ì‹œ ì „ë‹¬
 void CMapObjectViewTree::SendMsgSelectItem(HTREEITEM hItem)
 {
 	HINSTANCE hOrgInstance = AfxGetResourceHandle();
@@ -552,25 +556,25 @@ void CMapObjectViewTree::SendMsgSelectItem(HTREEITEM hItem)
 		{
 			switch(pTreeSelectInfo->nItemType)
 			{
-			case MAPOBJVIEWTREE_TITLE: // Æ®¸® ·çÆ®
+			case MAPOBJVIEWTREE_TITLE: // íŠ¸ë¦¬ ë£¨íŠ¸
 				{
 					pView->SendMessage(MAP_OBJECT_VIEW_ALL_SELECT);
 				}
 				break;
 
-			case MAPOBJVIEWTREE_CATEGORY: // ·¹ÀÌ¾î Á¾·ù
+			case MAPOBJVIEWTREE_CATEGORY: // ë ˆì´ì–´ ì¢…ë¥˜
 				{
 					pView->SendMessage(MAP_OBJECT_VIEW_CATEGORY_SELECT, (WPARAM)&pTreeSelectInfo->strMyName);
 				}
 				break;
 
-			case MAPOBJVIEWTREE_LAYER: // ·¹ÀÌ¾î
+			case MAPOBJVIEWTREE_LAYER: // ë ˆì´ì–´
 				{
 					pView->SendMessage(MAP_OBJECT_VIEW_LAYER_SELECT, (WPARAM)pTreeSelectInfo->nMyIndex);
 				}
 				break;
 
-			case MAPOBJVIEWTREE_FEATURE:// ÇÇÃÄ
+			case MAPOBJVIEWTREE_FEATURE:// í”¼ì³
 				{
 					pView->SendMessage(MAP_OBJECT_VIEW_FEATURE_SELECT, (WPARAM)pTreeSelectInfo->nParentIndex, (LPARAM)pTreeSelectInfo->nMyIndex);
 				}
@@ -582,7 +586,7 @@ void CMapObjectViewTree::SendMsgSelectItem(HTREEITEM hItem)
 	AfxSetResourceHandle(hOrgInstance);
 }
 
-// Áöµµ ·çÆ®¸í ÀÔ·Â
+// ì§€ë„ ë£¨íŠ¸ëª… ì…ë ¥
 HTREEITEM CMapObjectViewTree::InsertMapObjectTitle()
 {
 	HTREEITEM hRootItem = GetRootItem();
@@ -591,7 +595,7 @@ HTREEITEM CMapObjectViewTree::InsertMapObjectTitle()
 	{
 		MAPOBJVIEWTREE_INFO* pTreeTitleInfo = new MAPOBJVIEWTREE_INFO;
 
-		pTreeTitleInfo->nItemType = MAPOBJVIEWTREE_TITLE;	// Å¸ÀÌÆ²
+		pTreeTitleInfo->nItemType = MAPOBJVIEWTREE_TITLE;	// íƒ€ì´í‹€
 		pTreeTitleInfo->strMyName = DEF_DOCKPANE_TITLE_MAPVIEW_SUB1;
 		pTreeTitleInfo->strParentName = "";
 		pTreeTitleInfo->nImageIndex = 0;
@@ -611,7 +615,7 @@ HTREEITEM CMapObjectViewTree::InsertMapObjectTitle()
 	return m_hRootItem;
 }
 
-// Áöµµ ·¹ÀÌ¾î µ¥ÀÌÅÍ Ãß°¡
+// ì§€ë„ ë ˆì´ì–´ ë°ì´í„° ì¶”ê°€
 HTREEITEM CMapObjectViewTree::InsertMapObjectLayer(CString strCategory, CString strLayerName, MAP_PRIMITIVETYPE nStypeType, int nLayerIndex)
 {
 	HTREEITEM hCateItem = InsertMapObjectCategory(strCategory);
@@ -621,7 +625,7 @@ HTREEITEM CMapObjectViewTree::InsertMapObjectLayer(CString strCategory, CString 
 	{
 		MAPOBJVIEWTREE_INFO* pTreeLayerInfo = new MAPOBJVIEWTREE_INFO;
 
-		pTreeLayerInfo->nItemType = MAPOBJVIEWTREE_LAYER;	// Å¸ÀÌÆ²
+		pTreeLayerInfo->nItemType = MAPOBJVIEWTREE_LAYER;	// íƒ€ì´í‹€
 		pTreeLayerInfo->strMyName = strLayerName;
 		pTreeLayerInfo->strParentName = strCategory;
 		pTreeLayerInfo->nImageIndex = 0;
@@ -631,23 +635,23 @@ HTREEITEM CMapObjectViewTree::InsertMapObjectLayer(CString strCategory, CString 
 		
 		switch(nStypeType)
 		{
-		case MAP_PRIMITIVE_POINT://  Á¡
+		case MAP_PRIMITIVE_POINT://  ì 
 			pTreeLayerInfo->nImageIndex = 1;
 			break;
 
-		case MAP_PRIMITIVE_LINE: // ¼±
+		case MAP_PRIMITIVE_LINE: // ì„ 
 			pTreeLayerInfo->nImageIndex = 2;
 			break;
 
-		case MAP_PRIMITIVE_POLYGON:// ´Ù°¢Çü
+		case MAP_PRIMITIVE_POLYGON:// ë‹¤ê°í˜•
 			pTreeLayerInfo->nImageIndex = 3;
 			break;
 
-		case MAP_PRIMITIVE_RASTER: // Raster (CIB, JPG, CADRG µî )
+		case MAP_PRIMITIVE_RASTER: // Raster (CIB, JPG, CADRG ë“± )
 			pTreeLayerInfo->nImageIndex = 5;
 			break;
 
-		case MAP_PRIMITIVE_DEM: // DEM °íµµ µ¥ÀÌÅ¸ µî
+		case MAP_PRIMITIVE_DEM: // DEM ê³ ë„ ë°ì´íƒ€ ë“±
 			pTreeLayerInfo->nImageIndex = 6;
 			break;
 		}
@@ -663,7 +667,7 @@ HTREEITEM CMapObjectViewTree::InsertMapObjectLayer(CString strCategory, CString 
 	return hLayerItem;
 }
 
-// Áöµµ ·¹ÀÌ¾î º° ÇÇÃÄ µ¥ÀÌÅÍ Ãß°¡
+// ì§€ë„ ë ˆì´ì–´ ë³„ í”¼ì³ ë°ì´í„° ì¶”ê°€
 void CMapObjectViewTree::InsertMapObjectFeature(CString strLayerName, CString strElementName, int nFeatureIndex)
 {
 	HTREEITEM hLayerItem = FindMapObjectLayerItem(strLayerName);
@@ -677,7 +681,7 @@ void CMapObjectViewTree::InsertMapObjectFeature(CString strLayerName, CString st
 		{
 			MAPOBJVIEWTREE_INFO* pTreeFeatureInfo = new MAPOBJVIEWTREE_INFO;
 
-			pTreeFeatureInfo->nItemType = MAPOBJVIEWTREE_FEATURE;	// Å¸ÀÌÆ²
+			pTreeFeatureInfo->nItemType = MAPOBJVIEWTREE_FEATURE;	// íƒ€ì´í‹€
 			pTreeFeatureInfo->strMyName = strElementName;
 			pTreeFeatureInfo->strParentName = pTreeLayerInfo->strMyName;
 			pTreeFeatureInfo->nImageIndex = pTreeLayerInfo->nImageIndex;
@@ -685,20 +689,20 @@ void CMapObjectViewTree::InsertMapObjectFeature(CString strLayerName, CString st
 			pTreeFeatureInfo->nParentIndex = pTreeLayerInfo->nMyIndex;		
 			pTreeFeatureInfo->nLayerType = pTreeLayerInfo->nLayerType;
 
-			hFeatureItem = InsertItem(pTreeFeatureInfo->strMyName, pTreeFeatureInfo->nImageIndex, pTreeFeatureInfo->nImageIndex, hLayerItem);	// ±×·ìÇü
+			hFeatureItem = InsertItem(pTreeFeatureInfo->strMyName, pTreeFeatureInfo->nImageIndex, pTreeFeatureInfo->nImageIndex, hLayerItem);	// ê·¸ë£¹í˜•
 			m_pMapFeatureName.SetAt(pTreeFeatureInfo->strParentName + pTreeFeatureInfo->strMyName, (void*) hFeatureItem);
 
 			// set data to tree item
 			SetItemData(hFeatureItem,  (DWORD_PTR)pTreeFeatureInfo);
 			SetItemState(hFeatureItem, TREE_STATE_NONE, TVIS_STATEIMAGEMASK);
 
-			// ÇÏÀ§¸¦ °¡Áö´Â ·¹ÀÌ¾î ¾ÆÀÌÅÛÀ» ±×·ìÇü ÀÌ¹ÌÁö·Î º¯°æ
+			// í•˜ìœ„ë¥¼ ê°€ì§€ëŠ” ë ˆì´ì–´ ì•„ì´í…œì„ ê·¸ë£¹í˜• ì´ë¯¸ì§€ë¡œ ë³€ê²½
 			SetItemImage(hLayerItem, 0, 0);
 		}		
 	}
 }
 
-// Tree¿¡ Category¸¦ Ãß°¡ÇÑ´Ù
+// Treeì— Categoryë¥¼ ì¶”ê°€í•œë‹¤
 HTREEITEM CMapObjectViewTree::InsertMapObjectCategory(CString strCategoryName)
 {
 	HTREEITEM hCateItem = FindMapObjectCategoryItem(strCategoryName);
@@ -732,7 +736,7 @@ HTREEITEM CMapObjectViewTree::InsertMapObjectCategory(CString strCategoryName)
 	return hCateItem;
 }
 
-// Category ¾ÆÀÌÅÛÀ» Ã£´Â´Ù.
+// Category ì•„ì´í…œì„ ì°¾ëŠ”ë‹¤.
 HTREEITEM CMapObjectViewTree::FindMapObjectCategoryItem(CString strCategoryName)
 {
 	void * ptr = NULL;
@@ -744,7 +748,7 @@ HTREEITEM CMapObjectViewTree::FindMapObjectCategoryItem(CString strCategoryName)
 	return hCateItem;
 }
 
-// Layer ¾ÆÀÌÅÛÀ» Ã£´Â´Ù.
+// Layer ì•„ì´í…œì„ ì°¾ëŠ”ë‹¤.
 HTREEITEM CMapObjectViewTree::FindMapObjectLayerItem(CString strLayerName)
 {
 	void * ptr = NULL;
@@ -756,7 +760,7 @@ HTREEITEM CMapObjectViewTree::FindMapObjectLayerItem(CString strLayerName)
 	return hLayerItem;
 }
 
-// Feature ¾ÆÀÌÅÛÀ» Ã£´Â´Ù.
+// Feature ì•„ì´í…œì„ ì°¾ëŠ”ë‹¤.
 HTREEITEM CMapObjectViewTree::FindMapObjectFeatureItem(CString strLayerName, CString strFeatureName)
 {
 	void * ptr = NULL;
@@ -768,7 +772,7 @@ HTREEITEM CMapObjectViewTree::FindMapObjectFeatureItem(CString strLayerName, CSt
 	return hFeatureItem;
 }
 
-// Layer ¾ÆÀÌÅÛ Ã¼Å© »óÅÂ ¼³Á¤
+// Layer ì•„ì´í…œ ì²´í¬ ìƒíƒœ ì„¤ì •
 void CMapObjectViewTree::SetCheckMapObjectLayer(CString strLayerName, BOOL bVisible)
 {
 	HTREEITEM hLayerItem = FindMapObjectLayerItem(strLayerName);
@@ -787,7 +791,7 @@ void CMapObjectViewTree::SetCheckMapObjectLayer(CString strLayerName, BOOL bVisi
 	}
 }
 
-// Feature Ã¼Å© »óÅÂ ¼³Á¤ ¹× Layer »óÅÂ ¾÷µ¥ÀÌÆ®
+// Feature ì²´í¬ ìƒíƒœ ì„¤ì • ë° Layer ìƒíƒœ ì—…ë°ì´íŠ¸
 void CMapObjectViewTree::SetCheckMapObjectFeature(CString strLayerName, CString strElementName, BOOL bVisible)
 {
 	HTREEITEM hFeatureItem = FindMapObjectFeatureItem(strLayerName, strElementName);
@@ -806,7 +810,7 @@ void CMapObjectViewTree::SetCheckMapObjectFeature(CString strLayerName, CString 
 	}
 }
 
-// Catrgory ¹× Root »óÅÂ ¾÷µ¥ÀÌÆ®
+// Catrgory ë° Root ìƒíƒœ ì—…ë°ì´íŠ¸
 void CMapObjectViewTree::UpdateCheckMapObject()
 {
 	HTREEITEM hRootItem = GetRootItem();
@@ -825,7 +829,7 @@ void CMapObjectViewTree::UpdateCheckMapObject()
 	}	
 }
 
-// À§¼º¿µ»ó Ã¼Å© ¼³Á¤
+// ìœ„ì„±ì˜ìƒ ì²´í¬ ì„¤ì •
 void CMapObjectViewTree::SetCheckMapObjectCategoryRaster(BOOL bVisible)
 {
 	HTREEITEM hCategoryItem = FindMapObjectCategoryItem(MAP_OBJECT_RASTER_CATEGORY);
@@ -841,7 +845,7 @@ void CMapObjectViewTree::SetCheckMapObjectCategoryRaster(BOOL bVisible)
 	}
 }
 
-// À½¿µ±âº¹µµ Ã¼Å© ¼³Á¤
+// ìŒì˜ê¸°ë³µë„ ì²´í¬ ì„¤ì •
 void CMapObjectViewTree::SetCheckMapObjectCategoryDTED(BOOL bVisible)
 {
 	HTREEITEM hCategoryItem = FindMapObjectCategoryItem(MAP_OBJECT_DTED_CATEGORY);
@@ -857,7 +861,7 @@ void CMapObjectViewTree::SetCheckMapObjectCategoryDTED(BOOL bVisible)
 	}
 }
 
-// Á¾·ù¿¡ ÇØ´çÇÏ´Â ·¹ÀÌ¾î ÀÎµ¦½º ¸ñ·Ï ¹İÈ¯
+// ì¢…ë¥˜ì— í•´ë‹¹í•˜ëŠ” ë ˆì´ì–´ ì¸ë±ìŠ¤ ëª©ë¡ ë°˜í™˜
 BOOL CMapObjectViewTree::GetLayerIndexByCategory(CString strCategoryName, vector<int> &vLayerIndex)
 {
 	int nCount = 0;
@@ -885,10 +889,10 @@ BOOL CMapObjectViewTree::GetLayerIndexByCategory(CString strCategoryName, vector
 	return (BOOL)nCount;
 }
 
-// Áöµµ È­¸é À§¿¡¼­ ÈÙ ÀÌµ¿ ½Ã Æ÷Ä¿½º¸¦ ¹İÈ¯ÇÏ±â À§ÇÏ¿©
+// ì§€ë„ í™”ë©´ ìœ„ì—ì„œ íœ  ì´ë™ ì‹œ í¬ì»¤ìŠ¤ë¥¼ ë°˜í™˜í•˜ê¸° ìœ„í•˜ì—¬
 BOOL CMapObjectViewTree::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	// ¸¶¿ì½º ÈÙ ÀÌµ¿ ½Ã ¿µ¿ª ¿Ü ÀÏ °æ¿ì ¸ŞÀÎÀ¸·Î Æ÷Ä¿½º ÀÌµ¿
+	// ë§ˆìš°ìŠ¤ íœ  ì´ë™ ì‹œ ì˜ì—­ ì™¸ ì¼ ê²½ìš° ë©”ì¸ìœ¼ë¡œ í¬ì»¤ìŠ¤ ì´ë™
 	CRect rt;
 	GetClientRect(rt);
 	ClientToScreen(rt);
@@ -935,37 +939,23 @@ void CMapObjectViewTree::OnContextMenu(CWnd* pWnd, CPoint point)
 
 void CMapObjectViewTree::OnMapViewAutoOn()
 {
-	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
-
-	if(pFrame != NULL)
-	{
-		CC4IMapView* pView = (CC4IMapView*)pFrame->GetActiveView();
-		if(pView)
-			pView->SendMessage(MAP_OBJECT_VIEW_MAP_AUTO_ONOFF);
-	}
+    SetMapAutoScale(TRUE);
 }
 
 void CMapObjectViewTree::OnUpdateMapViewAutoOn(CCmdUI *pCmdUI)
 {
-	pCmdUI->SetCheck(m_bAutoScale);
+	pCmdUI->SetRadio(MapAutoScaleEnabled());
 }
 
-// ÀÚµ¿ Á¶Àı Off
+// ìë™ ì¡°ì ˆ Off
 void CMapObjectViewTree::OnMapViewAutoOff()
 {
-	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
-
-	if(pFrame != NULL)
-	{
-		CC4IMapView* pView = (CC4IMapView*)pFrame->GetActiveView();
-		if(pView)
-			pView->SendMessage(MAP_OBJECT_VIEW_MAP_AUTO_ONOFF);
-	}
+    SetMapAutoScale(FALSE);
 }
 
 void CMapObjectViewTree::OnUpdateMapViewAutoOff(CCmdUI *pCmdUI)
 {
-	pCmdUI->SetCheck(!m_bAutoScale);
+	pCmdUI->SetRadio(!MapAutoScaleEnabled());
 }
 
 void CMapObjectViewTree::RefreshLocalShapeTree(){
@@ -977,7 +967,7 @@ void CMapObjectViewTree::RefreshLocalShapeTree(){
     if(m_baseRoot)DeleteItem(m_baseRoot);m_baseRoot=nullptr;m_baseItems.clear();
 #if C4MAP_ENABLE_BASEMAP || C4MAP_ENABLE_LOCAL || C4MAP_ENABLE_TERRAIN_LOCAL || C4MAP_ENABLE_TERRAIN_SERVER
     if(!m_hRootItem)InsertMapObjectTitle();
-    const LPCTSTR titles[]={_T("¼ÒÃàÃ´ Áöµµ"),_T("¼¼°èÁöµµ"),_T("Natural Earth ¹è°æ¿µ»ó"),_T("Áö¸í"),_T("°íµµ µ¥ÀÌÅÍ (DTED/SRTM)"),_T("Terrain ÆÄÀÏ (·ÎÄÃ)"),_T("Terrain ¼­¹ö (Cesium)")};
+    const LPCTSTR titles[]={_T("ì†Œì¶•ì²™ ì§€ë„"),_T("ì„¸ê³„ì§€ë„"),_T("Natural Earth ë°°ê²½ì˜ìƒ"),_T("ì§€ëª…"),_T("ê³ ë„ ë°ì´í„° (DTED/SRTM)"),_T("Terrain íŒŒì¼ (ë¡œì»¬)"),_T("Terrain ì„œë²„ (Cesium)")};
     for (int i = 0; i < 7; ++i)
     {
         if ((i < 4 && !C4MAP_ENABLE_BASEMAP) ||
@@ -988,7 +978,7 @@ void CMapObjectViewTree::RefreshLocalShapeTree(){
             continue;
 
         if (!m_baseRoot)
-            m_baseRoot = InsertItem(_T("±âº»Áöµµ"), 0, 0, m_hRootItem);
+            m_baseRoot = InsertItem(_T("ê¸°ë³¸ì§€ë„"), 0, 0, m_hRootItem);
         auto item = InsertItem(titles[i], 0, 0, m_baseRoot);
         m_baseItems[item] = i;
         SetCheck(item, BaseMapVisible(i));
@@ -1005,7 +995,7 @@ void CMapObjectViewTree::RefreshLocalShapeTree(){
 #endif
     auto layers=frame->m_indexMap.LocalDisplayLayers();if(layers.empty())return;
     if(!m_hRootItem)InsertMapObjectTitle();
-    m_localShapeRoot=InsertItem(frame->m_indexMap.HasLocalCatalog()?_T("Áöµµ (ÀÚµ¿ ÃàÃ´)"):_T("·ÎÄÃ SHP"),0,0,m_hRootItem);
+    m_localShapeRoot=InsertItem(frame->m_indexMap.HasLocalCatalog()?_T("ì§€ë„ (ìë™ ì¶•ì²™)"):_T("ë¡œì»¬ SHP"),0,0,m_hRootItem);
     std::map<CString,HTREEITEM> groups;
     auto group=[&](const CString& key,const CString& label,HTREEITEM parent){auto it=groups.find(key);if(it!=groups.end())return it->second;auto item=InsertItem(label,0,0,parent);groups[key]=item;return item;};
     for(const auto& layer:layers){HTREEITEM parent=m_localShapeRoot;CString key;
@@ -1038,7 +1028,7 @@ void CMapObjectViewTree::RefreshSourceTree(){
     auto text=[](const std::string& s){int n=MultiByteToWideChar(CP_UTF8,0,s.c_str(),-1,nullptr,0);CStringW w;MultiByteToWideChar(CP_UTF8,0,s.c_str(),-1,w.GetBuffer(n),n);w.ReleaseBuffer();return CString(CW2T(w, CP_ACP));};
     for(size_t i=0;i<layers.size();++i){const auto& layer=layers[i];if(!CMapSources::Enabled(layer))continue;
         if(C4MAP_TILE_TREE_ONLY && layer.type!="VectorTile" && layer.tileScheme!="XYZ" && layer.type!="WMTS")continue;
-        CString type=text(layer.type);CString label=layer.type=="VectorTile"?_T("º¤ÅÍ Å¸ÀÏ"):layer.type=="Raster"?(layer.tileScheme=="XYZ"?_T("·¡½ºÅÍ Å¸ÀÏ"):_T("·¡½ºÅÍ")):type;
+        CString type=text(layer.type);CString label=layer.type=="VectorTile"?_T("ë²¡í„° íƒ€ì¼"):layer.type=="Raster"?(layer.tileScheme=="XYZ"?_T("ë˜ìŠ¤í„° íƒ€ì¼"):_T("ë˜ìŠ¤í„°")):type;
         auto root=group(type,label,m_hRootItem);auto parent=root;CString key=type;
         if(!layer.family.empty()){key+=_T("|")+text(layer.family);parent=group(key,text(layer.family),parent);}
         if(layer.scale>0){CString scale;scale.Format(_T("1:%.0f"),layer.scale);key+=_T("|")+scale;parent=group(key,scale,parent);}

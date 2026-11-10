@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "BaseMapOptions.h"
 #pragma pack(push, 8)
 #include "MapSources.h"
 #include "GeoDC/Coord.h"
@@ -196,6 +197,45 @@ bool Allowed(const MapSourceLayer &l)
     }
     return (C4MAP_ENABLE_LOCAL && (l.type == "Raster" || l.type == "CIB")) ||
            (C4MAP_ENABLE_OGC && (l.type == "WMS" || l.type == "WFS" || l.type == "WMTS"));
+}
+
+// Keep all layers at the chosen scale, not just one layer of a map family.
+std::vector<size_t> SelectMapScaleSources(const std::vector<MapSourceLayer>& layers,
+                                        double denominator, bool automatic)
+{
+    std::vector<size_t> eligible;
+    std::map<std::string, std::pair<double, double>> best;
+    auto groupKey = [](const MapSourceLayer& source)
+    {
+        return source.type + "|" + source.family + "|" + source.endpoint;
+    };
+    for (size_t index = 0; index < layers.size(); ++index)
+    {
+        const auto& source = layers[index];
+        if (!Allowed(source) || !source.visual)
+            continue;
+        if (automatic && ((source.minScale > 0 && denominator < source.minScale) ||
+                          (source.maxScale > 0 && denominator > source.maxScale)))
+            continue;
+        eligible.push_back(index);
+        if (automatic && source.scale > 0 && denominator > 0)
+        {
+            const auto key = groupKey(source);
+            const double score = fabs(log(denominator / source.scale));
+            if (!best.count(key) || score < best[key].first)
+                best[key] = {score, source.scale};
+        }
+    }
+    if (automatic)
+    {
+        eligible.erase(std::remove_if(eligible.begin(), eligible.end(), [&](size_t index)
+        {
+            const auto& source = layers[index];
+            const auto found = best.find(groupKey(source));
+            return source.scale > 0 && found != best.end() && source.scale != found->second.second;
+        }), eligible.end());
+    }
+    return eligible;
 }
 
 std::string Number(double v)
@@ -500,7 +540,7 @@ public:
             graphics->SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
         }
         double denominator =
-            renderingStyleScale > 0
+            renderingStyleScale < 0 ? 0 : renderingStyleScale > 0
                 ? renderingStyleScale
                 : 111320 * cos((tile.north + tile.south) * 0.5 * 3.141592653589793 / 180) *
                       (tile.east - tile.west) / 256 * 96 / 0.0254;
@@ -1010,7 +1050,7 @@ public:
                 wfsConnections.clear();
                 generation = dataRev;
             }
-            if (r.styleScale > 0 && renderingStyleScale != r.styleScale)
+            if (renderingStyleScale != r.styleScale)
             {
                 for (auto it = cache.begin(); it != cache.end();)
                 {
@@ -1601,34 +1641,15 @@ void CMapSources::Draw(CDC *dc, CCoordMgr *c)
     double latitude = (std::max)(-85.0, (std::min)(85.0, (lat0 + lat1) / 2));
     double denominator = 111320 * cos(latitude * 3.141592653589793 / 180) / (47.5 * c->m_fScale) *
                          dc->GetDeviceCaps(LOGPIXELSX) / 0.0254;
+    const bool automatic = MapAutoScaleEnabled();
     std::vector<std::shared_ptr<Tile>> ready;
     {
         std::lock_guard<std::mutex> l(p->mutex);
-        std::map<std::string, std::pair<double, size_t>> best;
-        for (size_t i = 0; i < p->layers.size(); ++i)
-        {
-            const auto &source = p->layers[i];
-            if (!Allowed(source) || !source.visual ||
-                (source.minScale && denominator < source.minScale) ||
-                (source.maxScale && denominator > source.maxScale))
-                continue;
-            if (source.type == "Raster" && source.scale > 0)
-            {
-                auto key = source.type + source.family;
-                double score = fabs(log(denominator / source.scale));
-                if (!best.count(key) || score < best[key].first)
-                    best[key] = {score, i};
-            }
-            else
-                r.sources.push_back(i);
-        }
-        for (const auto &v : best)
-            r.sources.push_back(v.second.second);
-        std::sort(r.sources.begin(), r.sources.end());
+        r.sources = SelectMapScaleSources(p->layers, denominator, automatic);
         for (auto id : r.sources)
             if (!p->layers[id].styleSld.empty())
             {
-                r.styleScale = std::round(denominator);
+                r.styleScale = automatic ? std::round(denominator) : -1;
                 break;
             }
         // Layer count must not reduce vector geometry or raster resolution.

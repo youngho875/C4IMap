@@ -521,7 +521,9 @@ size_t LocalChooseScale(const LocalScaleCatalog &catalog, const CString &family,
     for (size_t i = 0; i < catalog.entries.size(); ++i)
     {
         const auto &e = catalog.entries[i];
-        if (e.family != family || !e.available || e.denominator <= 0)
+        if (e.family != family || !e.available || e.denominator <= 0 ||
+            !std::any_of(e.layers.begin(), e.layers.end(),
+                         [](const LocalDisplayLayer& layer) { return layer.checked; }))
             continue;
         double upper = e.displayCeiling > 0 ? e.displayCeiling : e.denominator;
         if (upper > largest)
@@ -2039,11 +2041,24 @@ void CShapeT::DrawLocal(CDC *dc, float cx, float cy, float scale)
         double dx = (lon2 - lon1) * cos(lat1 * 3.141592653589793 / 180), dy = lat2 - lat1;
         double denominator =
             sqrt(dx * dx + dy * dy) * 111320 / 100 * dc->GetDeviceCaps(LOGPIXELSX) / 0.0254;
-        for (const CString &family : std::vector<CString>{_T("육도"), _T("공도"), _T("해도")})
+        std::vector<size_t> selected;
+        if (MapAutoScaleEnabled())
         {
-            size_t index = LocalChooseScale(*m_catalog, family, denominator);
-            if (index == (size_t)-1)
-                continue;
+            for (const CString& family : std::vector<CString>{_T("육도"), _T("공도"), _T("해도")})
+            {
+                const size_t index = LocalChooseScale(*m_catalog, family, denominator);
+                if (index != (size_t)-1)
+                    selected.push_back(index);
+            }
+        }
+        else
+        {
+            for (size_t index = 0; index < m_catalog->entries.size(); ++index)
+                if (m_catalog->entries[index].available)
+                    selected.push_back(index);
+        }
+        for (const size_t index : selected)
+        {
             auto &entry = m_catalog->entries[index];
             if (!std::any_of(entry.layers.begin(), entry.layers.end(),
                              [](const LocalDisplayLayer &l) { return l.checked; }))
@@ -2131,8 +2146,10 @@ void CShapeT::DrawLocal(CDC *dc, float cx, float cy, float scale)
             ds->Close();
             return;
         }
-        if (rule && (!rule->visible || (rule->minScale > 0 && state.scale < rule->minScale) ||
-                     (rule->maxScale > 0 && state.scale > rule->maxScale)))
+        if (rule && (!rule->visible ||
+                     (MapAutoScaleEnabled() &&
+                      ((rule->minScale > 0 && state.scale < rule->minScale) ||
+                       (rule->maxScale > 0 && state.scale > rule->maxScale)))))
             return;
         if (!LocalOpenDataset(state, *ds))
             return;

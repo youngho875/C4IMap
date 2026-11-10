@@ -23,6 +23,9 @@ public:
         bool visible; 
     };
 
+    CLocalOverlay();
+    ~CLocalOverlay();
+
     int AddLayer(const CString& name=CString());
     bool SelectLayer(int id);
     int ActiveLayer() const;
@@ -30,8 +33,7 @@ public:
     bool RenameLayer(int id,const CString& name);
     std::vector<LayerInfo> Layers() const;
     size_t ActiveCount() const;
-    CLocalOverlay();
-    ~CLocalOverlay();
+
     void SetTool(int tool);
     int GetTool() const;
     bool Begin(CPoint point, CCoordMgr* coord);
@@ -50,6 +52,7 @@ public:
     void SetColor(COLORREF color);
     bool Save(LPCTSTR path, CString& error) const;
     bool Load(LPCTSTR path, CString& error);
+
 private:
     struct Impl;
     Impl* p;

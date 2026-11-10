@@ -251,7 +251,7 @@ bool Style::Draw(Gdiplus::Graphics &graphics, OGRFeature *feature, OGRGeometry *
             }
             auto min = Num(Value(q, "MinScaleDenominator")),
                  max = Num(Value(q, "MaxScaleDenominator"));
-            if ((min && scale < min) || (max && scale > max) ||
+            if ((scale > 0 && ((min && scale < min) || (max && scale > max))) ||
                 !Filter(Child(q, "Filter"), feature))
                 continue;
             for (auto symbol = q->psChild; symbol; symbol = symbol->psNext)
