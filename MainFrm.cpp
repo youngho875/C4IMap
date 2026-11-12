@@ -55,8 +55,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_UPDATE_COMMAND_UI(ID_MENU_MAPMANAGER_ONOFF, &CMainFrame::OnUpdateMenuMapManagerOnOff)
 	ON_COMMAND(ID_MENU_MAPPROP_ONOFF, &CMainFrame::OnMenuMapPropOnOff)
 	ON_UPDATE_COMMAND_UI(ID_MENU_MAPPROP_ONOFF, &CMainFrame::OnUpdateMenuMapPropOnOff)
-	//ON_COMMAND(ID_MENU_OUTPUT_ONOFF, &CMainFrame::OnMenuOutputOnOff)
-	//ON_UPDATE_COMMAND_UI(ID_MENU_OUTPUT_ONOFF, &CMainFrame::OnUpdateMenuOutputOnOff)
+	ON_COMMAND(ID_MENU_OUTPUT_ONOFF, &CMainFrame::OnMenuOutputOnOff)
+    ON_COMMAND(ID_VIEW_OUTPUTWND, &CMainFrame::OnMenuOutputOnOff)
+    ON_UPDATE_COMMAND_UI(ID_VIEW_OUTPUTWND, &CMainFrame::OnUpdateMenuOutputOnOff)
+	ON_UPDATE_COMMAND_UI(ID_MENU_OUTPUT_ONOFF, &CMainFrame::OnUpdateMenuOutputOnOff)
 
 	ON_WM_SETTINGCHANGE()
 	ON_WM_CLOSE()
@@ -213,8 +215,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//m_wndCOPLayerView.AttachToTabWnd(&m_wndCOPTypeView, DM_SHOW, TRUE, &pTabbedBar);
 	//m_wndClassView.AttachToTabWnd(&m_wndCOPLayerView, DM_SHOW, TRUE, &pTabbedBar);
 	
-	//m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
-	//DockPane(&m_wndOutput);
+	m_wndOutput.EnableDocking(CBRS_ALIGN_ANY);
+	DockPane(&m_wndOutput);
 
 
 	m_wndMapObjectManager.EnableDocking(CBRS_ALIGN_ANY);
@@ -475,7 +477,7 @@ void CMainFrame::InitializeRibbon()
 	pPanel->Add(m_pRibbonMapMgrOnOff = new CMFCRibbonCheckBox(ID_MENU_MAPMANAGER_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD1));		// 지도레이어 관리
 	pPanel->Add(m_pRibbonMapPropertyOnOff = new CMFCRibbonCheckBox(ID_MENU_MAPPROP_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD3));		// "지도레이어 속성"
 	pPanel->Add(m_pRibbonIndexMapOnOff = new CMFCRibbonCheckBox(ID_MENU_INDEXMAP_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD5));		// "인덱스 지도"
-
+	pPanel->Add(m_pRibbonOutputOnOff = new CMFCRibbonCheckBox(ID_MENU_OUTPUT_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD6));
 
 	//////////////////////////////////////////////////////////////////////////
 	// 상황도 범주
@@ -591,7 +593,7 @@ void CMainFrame::InitializeRibbon()
 	// "투명도 레이어"
 	pPanel = pCategory->AddPanel(_T("레이어"));
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_NEW, DEF_RBAR_DRAW_PANEL1_CMD1, 0, 0));	// "생성"
-	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_SAVE, _T("저장"), 2, 2));
+	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_SAVE, DEF_RBAR_DRAW_PANEL1_CMD3));
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_OPEN, DEF_RBAR_DRAW_PANEL1_CMD2, 1, 1));	// "열기"
 	//pPanelShapeLayer->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_SAVE, DEF_RBAR_DRAW_PANEL1_CMD3, 2, 2));	// "저장"	// View에서 선택 저장
 	//pPanelShapeLayer->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_DELETE, DEF_RBAR_DRAW_PANEL1_CMD4, 3, 3));	// "삭제"	// View에서 선택 삭제
@@ -1172,7 +1174,7 @@ void CMainFrame::InitializeRibbon()
 
 	// 프로그램
 	pPanel = pCategory->AddPanel(_T("프로그램"), m_PanelImages.ExtractIcon(7));
-	//pPanel->Add(m_pRibbonOutputOnOff = new CMFCRibbonCheckBox(ID_MENU_OUTPUT_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD6));// "출력"
+	pPanel->Add(m_pRibbonOutputOnOff = new CMFCRibbonCheckBox(ID_MENU_OUTPUT_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD6));// "출력"
 	pPanel->Add(new CMFCRibbonCheckBox(ID_VIEW_STATUS_BAR, _T("상태바")));
 	pPanel->Add(new CMFCRibbonCheckBox(ID_VIEW_CAPTION_BAR, _T("알림바")));
 
@@ -1338,14 +1340,14 @@ BOOL CMainFrame::CreateDockingWindows()
 	}
 
 	// 출력 창을 만듭니다.
-	//CString strOutputWnd;
-	//bNameValid = strOutputWnd.LoadString(IDS_OUTPUT_WND);
-	//ASSERT(bNameValid);
-	//if (!m_wndOutput.Create(strOutputWnd, this, CRect(0, 0, 100, 100), TRUE, ID_VIEW_OUTPUTWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
-	//{
-	//	TRACE0("출력 창을 만들지 못했습니다.\n");
-	//	return FALSE; // 만들지 못했습니다.
-	//}
+	CString strOutputWnd;
+	bNameValid = strOutputWnd.LoadString(IDS_OUTPUT_WND);
+	ASSERT(bNameValid);
+	if (!m_wndOutput.Create(strOutputWnd, this, CRect(0, 0, 600, 180), TRUE, ID_VIEW_OUTPUTWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
+	{
+		TRACE0("출력 창을 만들지 못했습니다.\n");
+		return FALSE; // 만들지 못했습니다.
+	}
 
 	// 속성 창을 만듭니다.
 	if (!m_wndMapProperties.Create(DEF_DOCKPANE_TITLE_MAPPROP, this, CRect(0, 0, 200, 200), TRUE, ID_MAPROPERTIESWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_RIGHT | CBRS_FLOAT_MULTI))
@@ -1390,7 +1392,7 @@ BOOL CMainFrame::CreateDockingWindows()
 	//CString strOutputWnd;
 	//bNameValid = strOutputWnd.LoadString(IDS_OUTPUT_WND);
 	//ASSERT(bNameValid);
-	//if (!m_wndOutput.Create(strOutputWnd, this, CRect(0, 0, 100, 100), TRUE, ID_VIEW_OUTPUTWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
+	//if (!m_wndOutput.Create(strOutputWnd, this, CRect(0, 0, 600, 180), TRUE, ID_VIEW_OUTPUTWND, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | CBRS_BOTTOM | CBRS_FLOAT_MULTI))
 	//{
 	//	TRACE0("출력 창을 만들지 못했습니다.\n");
 	//	return FALSE; // 만들지 못했습니다.
@@ -1421,8 +1423,8 @@ void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 	HICON hCOPLayerViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_COPLAYER_VIEW_HC : IDI_COPLAYER_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndCOPLayerView.SetIcon(hCOPLayerViewIcon, FALSE);
 
-	//HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	//m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
+	HICON hOutputBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_OUTPUT_WND_HC : IDI_OUTPUT_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	m_wndOutput.SetIcon(hOutputBarIcon, FALSE);
 
 	HICON hMapObjectManageIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_FILE_VIEW_HC : IDI_FILE_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 	m_wndMapObjectManager.SetIcon(hMapObjectManageIcon, FALSE);
@@ -2037,34 +2039,34 @@ void CMainFrame::AddOverlayRentlyDrawItem(int nIdx)
 }
 
 // 보기 범주 - 출력 창 On/Off
-//void CMainFrame::OnMenuOutputOnOff()
-//{
-//	if (m_wndOutput.IsVisible() == TRUE)
-//	{
-//		ShowPane(&m_wndOutput, FALSE, FALSE, FALSE);
-//
-//		if (m_pRibbonOutputOnOff != NULL)
-//		{
-//			m_pRibbonOutputOnOff->SetImageIndex(20, FALSE);
-//			m_pRibbonOutputOnOff->SetImageIndex(20, TRUE);
-//		}
-//	}
-//	else
-//	{
-//		ShowPane(&m_wndOutput, TRUE, FALSE, TRUE);
-//
-//		if (m_pRibbonOutputOnOff != NULL)
-//		{
-//			m_pRibbonOutputOnOff->SetImageIndex(19, FALSE);
-//			m_pRibbonOutputOnOff->SetImageIndex(19, TRUE);
-//		}
-//	}
-//}
-//
-//void CMainFrame::OnUpdateMenuOutputOnOff(CCmdUI* pCmdUI)
-//{
-//	pCmdUI->SetCheck(m_wndOutput.IsVisible());
-//}
+void CMainFrame::OnMenuOutputOnOff()
+{
+	if (m_wndOutput.IsVisible() == TRUE)
+	{
+		ShowPane(&m_wndOutput, FALSE, FALSE, FALSE);
+
+		if (m_pRibbonOutputOnOff != NULL)
+		{
+			m_pRibbonOutputOnOff->SetImageIndex(20, FALSE);
+			m_pRibbonOutputOnOff->SetImageIndex(20, TRUE);
+		}
+	}
+	else
+	{
+		ShowPane(&m_wndOutput, TRUE, FALSE, TRUE);
+
+		if (m_pRibbonOutputOnOff != NULL)
+		{
+			m_pRibbonOutputOnOff->SetImageIndex(19, FALSE);
+			m_pRibbonOutputOnOff->SetImageIndex(19, TRUE);
+		}
+	}
+}
+
+void CMainFrame::OnUpdateMenuOutputOnOff(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_wndOutput.IsVisible());
+}
 
 // 상황도 - 레이어 창 On/Off
 void CMainFrame::OnLayerOnOff()

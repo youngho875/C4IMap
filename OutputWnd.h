@@ -53,8 +53,8 @@ protected:
 	CMFCTabCtrl	m_wndTabs;
 	COutputList m_wndOutputDebug;
 
-	//COutputList m_wndOutputBuild;
-	//COutputList m_wndOutputFind;
+	COutputList m_wndOutputBuild;
+	COutputList m_wndOutputFind;
 	COutputLogList m_wndOutputLog;
 
 	UINT m_nExtTabID;

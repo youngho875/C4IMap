@@ -86,6 +86,7 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // 만들지 못했습니다.
 	}
 	m_wndOutputLog.SetFont(&m_Font);
+    m_wndTabs.AddTab(&m_wndOutputLog, _T("로그"), (UINT)DEF_OUTPUTLIST_LOG);
 
 	// 출력 창을 만듭니다.
 	const DWORD dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
@@ -113,7 +114,10 @@ void COutputWnd::OnSize(UINT nType, int cx, int cy)
 	CDockablePane::OnSize(nType, cx, cy);
 
 	// Tab 컨트롤은 전체 클라이언트 영역을 처리해야 합니다.
-	m_wndTabs.SetWindowPos(NULL, -1, -1, cx, cy, SWP_NOMOVE | SWP_NOACTIVATE | SWP_NOZORDER);
+	if (m_wndTabs.GetSafeHwnd() != NULL && cx > 0 && cy > 0)
+    {
+        m_wndTabs.SetWindowPos(NULL, 0, 0, cx, cy, SWP_NOACTIVATE | SWP_NOZORDER);
+    }
 }
 
 void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)
@@ -137,9 +141,9 @@ void COutputWnd::AdjustHorzScroll(CListBox& wndListBox)
 
 void COutputWnd::FillBuildWindow()
 {
-	/*m_wndOutputBuild.AddString(_T("여기에 빌드 출력이 표시됩니다."));
+	m_wndOutputBuild.AddString(_T("여기에 빌드 출력이 표시됩니다."));
 	m_wndOutputBuild.AddString(_T("출력이 목록 뷰 행에 표시되지만"));
-	m_wndOutputBuild.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));*/
+	m_wndOutputBuild.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));
 }
 
 void COutputWnd::FillDebugWindow()
@@ -153,9 +157,9 @@ void COutputWnd::FillDebugWindow()
 
 void COutputWnd::FillFindWindow()
 {
-	/*m_wndOutputFind.AddString(_T("여기에 찾기 출력이 표시됩니다."));
+	m_wndOutputFind.AddString(_T("여기에 찾기 출력이 표시됩니다."));
 	m_wndOutputFind.AddString(_T("출력이 목록 뷰 행에 표시되지만"));
-	m_wndOutputFind.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));*/
+	m_wndOutputFind.AddString(_T("표시 방법을 원하는 대로 변경할 수 있습니다."));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -255,8 +259,8 @@ void COutputList::OnViewOutput()
 
 void COutputWnd::AddBuildWindow(CString& strMsg)
 {
-	/*int nret = m_wndOutputBuild.AddString(strMsg);
-	m_wndOutputBuild.SetCurSel(nret);*/
+	int nret = m_wndOutputBuild.AddString(strMsg);
+	m_wndOutputBuild.SetCurSel(nret);
 }
 
 void COutputWnd::AddDebugWindow(CString& strMsg)
@@ -271,13 +275,13 @@ void COutputWnd::AddDebugWindow(CString& strMsg)
 
 void COutputWnd::AddFindWindow(CString& strMsg)
 {
-	/*int nret = m_wndOutputFind.AddString(strMsg);
-	m_wndOutputFind.SetCurSel(nret);*/
+	int nret = m_wndOutputFind.AddString(strMsg);
+	m_wndOutputFind.SetCurSel(nret);
 }
 
 void COutputWnd::ClearBuildWindow()
 {
-	//m_wndOutputBuild.ResetContent();
+	m_wndOutputBuild.ResetContent();
 }
 
 void COutputWnd::ClearDebugWindow()
@@ -289,7 +293,7 @@ void COutputWnd::ClearDebugWindow()
 
 void COutputWnd::ClearFindWindow()
 {
-	//m_wndOutputFind.ResetContent();
+	m_wndOutputFind.ResetContent();
 }
 void COutputWnd::SetActiveTab(CString strLabel)
 {
@@ -320,7 +324,7 @@ void COutputWnd::ClearSearch()
 
 void COutputWnd::SetSearchScreen(CString strCategory, CString strLayer, vector<MAPSEARCH_LAYER_RESULT>& vResult)
 {
-	//if(vResult.size())
+	if(vResult.size())
 	{
 		ClearSearchList();
 		CString strTmp;
@@ -449,7 +453,7 @@ void COutputWnd::SetSearchCOPBegin()
 
 void COutputWnd::SetSearchCOP(CString strLayer, vector<MAPSEARCH_LAYER_RESULT>& vResult, SEARCHLIST_KIND emListType)
 {
-	//if(vResult.size())
+	if(vResult.size())
 	{
 		COutputSearchList* pwndOutputSearchResultEx = GetSearchList(strLayer);
 
@@ -476,8 +480,8 @@ void COutputWnd::SetSearchCOP(CString strLayer, vector<MAPSEARCH_LAYER_RESULT>& 
 
 LRESULT COutputWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	//if (message == OUTPUT_SEARCH_AREA_SELECT || message == OUTPUT_SEARCH_NAME_SELECT ||
-	//	message == OUTPUT_SEARCH_NAME_MOVE || message == OUTPUT_SEARCH_AREA_MOVE)
+	if (message == OUTPUT_SEARCH_AREA_SELECT || message == OUTPUT_SEARCH_NAME_SELECT ||
+		message == OUTPUT_SEARCH_NAME_MOVE || message == OUTPUT_SEARCH_AREA_MOVE)
 		GetParent()->SendMessage(message, wParam, lParam);
 
 	return CDockablePane::WindowProc(message, wParam, lParam);

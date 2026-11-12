@@ -18,7 +18,7 @@
 #include "ItemView.h"
 #include "TypeView.h"
 #include "IndexMapView.h"
-//#include "OutputWnd.h"
+#include "OutputWnd.h"
 #include "MapObjectManager.h"
 #include "MapPropertiesWnd.h"
 #include "ShapeT.h"
@@ -65,7 +65,7 @@ public:  // 컨트롤 모음이 포함된 멤버입니다.
 	//CComboBox		m_ctrlCombo;
 	//CComboBox		m_ctrlCombo1;
 
-	//COutputWnd			 m_wndOutput;
+	COutputWnd			m_wndOutput;
 	CTypeView			m_wndCOPTypeView;	// 상황도 유형 창
 	CItemView 			m_wndCOPItemView;	// 상황도 도시요소 창
 	CLayerView			m_wndCOPLayerView;	// 상황도 레이어 창
@@ -243,8 +243,8 @@ protected:
 	afx_msg void OnViewCaptionBar();
 	afx_msg void OnUpdateViewCaptionBar(CCmdUI* pCmdUI);
 
-	//afx_msg void OnMenuOutputOnOff();
-	//afx_msg void OnUpdateMenuOutputOnOff(CCmdUI* pCmdUI);
+	afx_msg void OnMenuOutputOnOff();
+	afx_msg void OnUpdateMenuOutputOnOff(CCmdUI* pCmdUI);
 	afx_msg void OnLayerOnOff();
 	afx_msg void OnUpdateLayerOnOff(CCmdUI* pCmdUI);
 	afx_msg void OnItemOnOff();
