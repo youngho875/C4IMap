@@ -177,7 +177,7 @@ LocalXml LocalReadXml(const CString &path)
 // Registered by mapMake; legacy styles remain the fallback for unregistered scales.
 bool LocalRegisteredStyle(
     CString name, CString &xml, CString &gss,
-    const CString &catalogPath = _T("D:/map/styles/mapmake-style-catalog.xml"))
+    const CString &catalogPath = _T("D:/mapdata/styles/mapmake-style-catalog.xml"))
 {
     name.Replace(_T("_unix.xml"), _T(".xml"));
     try
@@ -593,7 +593,7 @@ void CShapeT::SetBase()
     S_SHP_INFO tmp;
 
     filename = BaseMapPath("SmallScale.Path",
-                           "D:/map/small_scale_map/small_map.shp"); // D:/mapdata/worldmap/world.shp
+                           "D:/mapdata/smallmap/small_map.shp"); // D:/mapdata/worldmap/world.shp
     // filename = "D:/mapdata/worldmap/world.shp";
     poDS = static_cast<GDALDataset *>(
         GDALOpenEx(filename, GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL));
@@ -619,7 +619,7 @@ void CShapeT::SetBase()
     // else tmp.IsData = false;
     // mmap_ShpInfo[id] = tmp;  ++id;
 
-    filename = BaseMapPath("SmallScale.LabelPath", "D:/map/small_scale_map/name_map.shp");
+    filename = BaseMapPath("SmallScale.LabelPath", "D:/mapdata/smallmap/name_map.shp");
     poDS = static_cast<GDALDataset *>(
         GDALOpenEx(filename, GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL));
     if (poDS != NULL)
@@ -1048,31 +1048,6 @@ void CShapeT::IndexMapDraw(CDC *pDC, float fCenterX, float fCenterY, float fScal
     pPen = pDC->SelectObject(&pen);
     pDC->SelectStockObject(NULL_BRUSH);
 
-    /*
-        for (const auto& polygonLayer : PolygonLayer) {
-            for (const auto& feature : polygonLayer.PolygonsOfFeature) {
-                int ptCount = feature.Polygon.at(0).RingString.size();
-                std::vector<POINT> pPoints(ptCount);  // using vector instead of raw pointer
-
-                for (int k = 0; k < ptCount; k++) {
-                    CPoint ScreenXY;
-                    double geo_x = feature.Polygon.at(0).RingString.at(k).dX;
-                    double geo_y = feature.Polygon.at(0).RingString.at(k).dY;
-                    coord.degrees_lat_long_to_x_y(geo_y, geo_x, &geo_x, &geo_y);
-                    coord_mgr->WorldXY2ScreenXY(geo_x, geo_y, &ScreenXY.x, &ScreenXY.y, fCenterX,
-       fCenterY, fScale);
-
-                    pPoints[k].x = ScreenXY.x;
-                    pPoints[k].y = ScreenXY.y;
-                }
-                pDC->Polygon(pPoints.data(), ptCount);  // use data() for vector
-            }
-        }
-        pDC->SelectObject(pPen);
-    */
-
-    // int p = 0;
-    // POINT* pPoints = NULL;
     for (int i = 0; i < PolygonLayer.size(); i++)
     {
         // int p = 0;
@@ -1109,223 +1084,11 @@ void CShapeT::IndexMapDraw(CDC *pDC, float fCenterX, float fCenterY, float fScal
                 pPoints = nullptr;
             }
         }
-        // pDC->Polygon(pPoints, cnt);
-
-        // if (pPoints != NULL)
-        //	delete[] pPoints;
     }
     pDC->SelectObject(pPen);
 }
 
-void CShapeT::OpenDTEDFile(std::string filename)
-{
-    // CCoordMgr* coord_mgr = GP_COORDMGR;
-    // CCoord coord;
-    // coord.initialize_adaptation_data();
 
-    // CPoint point;
-    // GPoint		ptWorldPoint;
-    // double adfGeoTransform[6];
-    // float buffEleveationValue[1];
-    // int nSizeX, nSizeY;
-    // double noData = -9999;
-
-    // GDALAllRegister();
-
-    // Open the file
-    GDALDataset *dataset = (GDALDataset *)GDALOpen(filename.c_str(), GA_ReadOnly);
-    if (dataset == NULL)
-    {
-        std::cout << "Failed to open" << std::endl;
-        exit(1);
-    }
-
-    // Get image metadata
-    width = dataset->GetRasterXSize();
-    height = dataset->GetRasterYSize();
-
-    std::cout << "Image is " << width << " x " << height << " px" << std::endl;
-
-    // double originX, originY, pixelSizeX, pixelSizeY;
-
-    double geoTransform[6];
-    if (dataset->GetGeoTransform(geoTransform) == CE_None)
-    {
-        originX = geoTransform[0];
-        originY = geoTransform[3];
-        pixelSizeX = geoTransform[1];
-        pixelSizeY = geoTransform[5];
-    }
-    else
-    {
-        std::cout << "Failed read geotransform" << std::endl;
-        exit(1);
-    }
-
-    std::cout << "Origin: " << originX << ", " << originY << " degrees" << std::endl;
-    std::cout << "Pixel size: " << pixelSizeX << ", " << pixelSizeY << " degrees" << std::endl;
-
-    // pixelSizeY is negative because the origin of the image is the north-east corner and positive
-    // Y pixel coordinates go towards the south
-
-    // Get the raster band (DEM has one raster band representing elevation)
-    GDALRasterBand *elevationBand = dataset->GetRasterBand(1);
-
-    // Create an array of width*height 32-bit floats (~400MB memory)
-    // std::vector<float> data(width * height, 0.0f);
-
-    data.assign(width * height, 0.0f);
-    // Read the entire file into the array (you can change the options to read only a portion
-    // of the file, or even scale it down if you want)
-
-    std::cout << "Loading array..." << std::flush;
-    elevationBand->RasterIO(GF_Read, 0, 0, width, height, &data[0], width, height, GDT_Float32, 0,
-                            0);
-    std::cout << "done" << std::endl;
-
-    // Close the file
-    GDALClose(dataset);
-
-    /*
-        //GDALRasterBand* poBand;
-
-        GDALDataset* poDataset;
-        GDALAllRegister();
-        poDataset = (GDALDataset*)GDALOpen(filename.c_str(), GA_ReadOnly);
-
-        printf("Driver: %s/%s\n", poDataset->GetDriver()->GetDescription(),
-       poDataset->GetDriver()->GetMetadataItem(GDAL_DMD_LONGNAME)); printf("Size is %dx%dx%d\n",
-       poDataset->GetRasterXSize(), poDataset->GetRasterYSize(), poDataset->GetRasterCount());
-
-        if (poDataset->GetProjectionRef() != NULL)
-            printf("Projection is `%s'\n", poDataset->GetProjectionRef());
-        if (poDataset->GetGeoTransform(adfGeoTransform) == CE_None)
-        {
-            printf("Origin = (%.6f,%.6f)\n", adfGeoTransform[0], adfGeoTransform[3]);
-            printf("Pixel Size = (%.6f,%.6f)\n", adfGeoTransform[1], adfGeoTransform[5]);
-        }
-
-        poDataset->GetGeoTransform(adfGeoTransform);
-        band = poDataset->GetRasterBand(1);
-
-        nSizeX = band->GetXSize();
-        nSizeY = band->GetYSize();
-        noData = band->GetNoDataValue();
-
-        GDALInvGeoTransform(adfGeoTransform, inverseTransform);
-    */
-
-    // std::vector<float> buffElevation(nSizeY * nSizeX);
-    /*
-        double dLong, dLat;
-        //int col_x, col_y;
-        //for (int y = 0; y < nSizeY; y++)
-        //{
-        //	for (int x = 0; x < nSizeX; x++)
-        //	{
-                coord_mgr->ScreenXY2WorldXY(point.x, point.y, &ptWorldPoint.x, &ptWorldPoint.y,
-       coord_mgr->m_fCenterX, coord_mgr->m_fCenterY, coord_mgr->m_fScale);
-                coord.x_y_to_degrees_lat_long(ptWorldPoint.x, ptWorldPoint.y, &dLat, &dLong);
-
-                //col_x = (int)((dLong - adfGeoTransform[0]) / (adfGeoTransform[1] + 1));
-                //col_y = (int)((adfGeoTransform[0] - dLat) / (adfGeoTransform[1] + 1));
-
-                //poBand->RasterIO(GF_Read, 0, 0, columns, rows, buffElevation.data(), columns,
-       rows, GDT_Int16, 0, 0); // read the cell value
-        //	}
-        //}
-
-
-
-
-                int  height = valueAt(poBand, dLat, dLong);
-
-                //std::cout <<  "고도 : %d"  << height << std::endl;
-    */
-
-    /*
-
-        int col_x, col_y;
-
-        col_x = (int)((dLong - adfGeoTransform[0]) / (adfGeoTransform[1] + 1));
-        col_y = (int)((adfGeoTransform[0] - dLat) / (adfGeoTransform[1] + 1));
-
-
-        //col_x = (int)((geo_x - adfGeoTransform[0]) / adfGeoTransform[1]);
-        //col_y = (int)((adfGeoTransform[3] - geo_y) / -adfGeoTransform[5]);
-
-
-
-        poBand->RasterIO(GF_Read, 0, 0, columns, rows, buffElevation.data(), columns, rows,
-       GDT_Int16, 0, 0); // read the cell value
-    */
-}
-
-double CShapeT::valueAt(double pointLat, double pointLon)
-{
-    /*
-        int x = static_cast<int>(floor(inverseTransform[0] + inverseTransform[1] * lon +
-       inverseTransform[2] * lat)); int y = static_cast<int>(floor(inverseTransform[3] +
-       inverseTransform[4] * lon + inverseTransform[5] * lat));
-
-        int32_t pixelValue;
-        band->RasterIO(GF_Read, x, y, 1, 1, &pixelValue, 1, 1, GDT_Int32, 0, 0);
-
-        //band->GetColorTable()->GetColorEntry(pixelValue);
-        //int bSuccess;
-        //double dfOffset = GDALGetRasterOffset(band, &bSuccess);
-        //double dfScale = GDALGetRasterScale(band, &bSuccess);
-
-        //pixelValue = pixelValue * dfScale + dfOffset;
-        //height( lat,  lon);
-    */
-
-    double pixelX = (pointLon - originX) / pixelSizeX;
-    double pixelY = (pointLat - originY) / pixelSizeY;
-
-    std::cout << pointLat << "," << pointLon << " maps to pixel " << pixelX << "," << pixelY
-              << std::endl;
-
-    if (pixelX < 0 || pixelX > width || pixelY < 0 || pixelY > height)
-    {
-        std::cout << "Point out of bounds!" << std::endl;
-        exit(1);
-    }
-
-    double elev = data[int(pixelX) + int(pixelY) * width];
-
-    // std::cout << "Elevation there is " << elev << "m" << std::endl;
-
-    return elev;
-
-    // return pixelValue;
-}
-
-/*
-#include <../proj9/proj.h>
-#include <iostream>
-
-void CShapeT::height(double lat, double lon)
-{
-    auto proj_context = proj_context_create();
-    //double lat = 44;
-    //double lon = -78;
-    double alt = 200;
-
-    auto lla_to_ecef_proj = proj_create(proj_context, "+proj=latlong +ellps=WGS84 +datum=WGS84 "
-        "+to +proj=geocentric");
-
-    auto coord_4 = proj_trans(lla_to_ecef_proj, PJ_DIRECTION::PJ_FWD, PJ_COORD{ lat,lon, alt, 0 });
-
-    std::cout << coord_4.v[0] << std::endl;
-    std::cout << coord_4.v[1] << std::endl;
-    std::cout << coord_4.v[2] << std::endl;
-
-    proj_destroy(lla_to_ecef_proj);
-    proj_context_destroy(proj_context);
-
-}
-*/
 
 void CShapeT::ResolveLocalStyles(const CString &folder, CString &xml, CString &gss)
 {

@@ -81,8 +81,14 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    if(m_localOverlay.Begin(point,m_pCoordMgr)){SetFocus();SetCapture();Invalidate(FALSE);return;}
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	if (m_localOverlay.Begin(point, m_pCoordMgr))
+	{
+		SetFocus();
+		SetCapture();
+		Invalidate(FALSE);
+		return;
+	}
 	
 	m_bPanning = (nFlags & (MK_SHIFT | MK_CONTROL)) == 0;
 	
@@ -103,8 +109,6 @@ void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 		SetCapture();
 	}
 
-
-
 	CView::OnLButtonDown(nFlags, point);
 }
 
@@ -118,7 +122,9 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 		Invalidate(FALSE);
 		return;
 	}
-    const bool localClick=!m_bOnZoom && !(nFlags&(MK_SHIFT|MK_CONTROL)) && abs(point.x-m_ptMapMoveFirstPoint.x)<=3 && abs(point.y-m_ptMapMoveFirstPoint.y)<=3;
+    const bool localClick=!m_bOnZoom && !(nFlags&(MK_SHIFT|MK_CONTROL)) && 
+		abs(point.x-m_ptMapMoveFirstPoint.x)<=3 && abs(point.y-m_ptMapMoveFirstPoint.y)<=3;
+
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 
 	CView::OnLButtonUp(nFlags, point);

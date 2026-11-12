@@ -186,14 +186,14 @@ void COutputList::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
 	{
 		CMenu* pSumMenu = menu.GetSubMenu(0);
 
-		if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CMDIFrameWndEx)))
+		if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CFrameWndEx)))
 		{
 			CMFCPopupMenu* pPopupMenu = new CMFCPopupMenu;
 
 			if (!pPopupMenu->Create(this, point.x, point.y, (HMENU)pSumMenu->m_hMenu, FALSE, TRUE))
 				return;
 
-			((CMDIFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
+			((CFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
 			UpdateDialogControls(this, FALSE);
 		}
 
@@ -241,7 +241,7 @@ void COutputList::OnEditClear()
 void COutputList::OnViewOutput()
 {
 	CDockablePane* pParentBar = DYNAMIC_DOWNCAST(CDockablePane, GetOwner());
-	CMDIFrameWndEx* pMainFrame = DYNAMIC_DOWNCAST(CMDIFrameWndEx, GetTopLevelFrame());
+	CFrameWndEx* pMainFrame = DYNAMIC_DOWNCAST(CFrameWndEx, GetTopLevelFrame());
 
 	if (pMainFrame != NULL && pParentBar != NULL)
 	{

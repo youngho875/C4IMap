@@ -179,14 +179,14 @@ void CTypeView::OnContextMenu(CWnd* pWnd, CPoint point)
 	{
 		CMenu* pSumMenu = menu.GetSubMenu(0);
 
-		if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CMDIFrameWndEx)))
+		if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CFrameWndEx)))
 		{
 			CMFCPopupMenu* pPopupMenu = new CMFCPopupMenu;
 
 			if (!pPopupMenu->Create(this, point.x, point.y, (HMENU)pSumMenu->m_hMenu, FALSE, TRUE))
 				return;
 
-			((CMDIFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
+			((CFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
 			UpdateDialogControls(this, FALSE);
 		}
 	}

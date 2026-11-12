@@ -79,15 +79,15 @@ BEGIN_MESSAGE_MAP(CC4IMapView, CView)
 	ON_WM_MBUTTONUP()
 	//ON_COMMAND(IDC_COMBO, &CC4IMapView::OnComboChangeScale)
 	//ON_COMMAND(IDC_COMBO1, &CC4IMapView::OnComboCenterChange)
-	ON_COMMAND(IDC_CHECK_SATELLITE, &CC4IMapView::OnCheckSatellite)
-	ON_UPDATE_COMMAND_UI(IDC_CHECK_SATELLITE, &CC4IMapView::OnUpdateCheckSatellite)
-	ON_COMMAND(ID_BTN_MAPGENERATER, &CC4IMapView::OnBtnMapgenerater)
-	ON_COMMAND(IDC_CHECK_RASTER, &CC4IMapView::OnCheckRaster)
-	ON_COMMAND(IDC_CHECK_SHAPE, &CC4IMapView::OnCheckShape)
-	ON_UPDATE_COMMAND_UI(IDC_CHECK_RASTER, &CC4IMapView::OnUpdateCheckRaster)
-	ON_UPDATE_COMMAND_UI(IDC_CHECK_SHAPE, &CC4IMapView::OnUpdateCheckShape)
-	ON_COMMAND(IDC_CHECK_DTED, &CC4IMapView::OnCheckDted)
-	ON_UPDATE_COMMAND_UI(IDC_CHECK_DTED, &CC4IMapView::OnUpdateCheckDted)
+	//ON_COMMAND(IDC_CHECK_SATELLITE, &CC4IMapView::OnCheckSatellite)
+	//ON_UPDATE_COMMAND_UI(IDC_CHECK_SATELLITE, &CC4IMapView::OnUpdateCheckSatellite)
+	//ON_COMMAND(ID_BTN_MAPGENERATER, &CC4IMapView::OnBtnMapgenerater)
+	//ON_COMMAND(IDC_CHECK_RASTER, &CC4IMapView::OnCheckRaster)
+	//ON_COMMAND(IDC_CHECK_SHAPE, &CC4IMapView::OnCheckShape)
+	//ON_UPDATE_COMMAND_UI(IDC_CHECK_RASTER, &CC4IMapView::OnUpdateCheckRaster)
+	//ON_UPDATE_COMMAND_UI(IDC_CHECK_SHAPE, &CC4IMapView::OnUpdateCheckShape)
+	//ON_COMMAND(IDC_CHECK_DTED, &CC4IMapView::OnCheckDted)
+	//ON_UPDATE_COMMAND_UI(IDC_CHECK_DTED, &CC4IMapView::OnUpdateCheckDted)
 
 	// 지도 핸들링
 	ON_COMMAND(ID_MENU_MOUSE_BASE, &CC4IMapView::OnMenuMouseBase)
@@ -151,27 +151,10 @@ CC4IMapView::CC4IMapView()
 	m_bPanning = FALSE;
 	mb_moving = FALSE;
 	m_bOnZoom = FALSE;
+
 	m_bIsDrawSituationInProcess = FALSE;
-
-	//m_pMapConfigMgr = NULL;
-	//m_pMapDataMgr = NULL;
-	//m_pMapDisplayMgr = NULL;
-
-	// 투명도
-	m_pOverlayThread = NULL;
-	m_pDlgOverlayControler = NULL;
-	m_pDlgObjectList = NULL;
-	m_pDlgOverlayProperty = NULL;
-	m_pDlgOverlayTextEdit = NULL;
-	m_pDlgOverlayEditObject = NULL;
-	m_pDlgOverlayEditObjectPoint = NULL;
-
 	m_nOverlyaEditObjectPointX = 0;
 	m_nOverlyaEditObjectPointY = 0;
-
-	//m_TmsMgr = NULL;
-	mHeights = NULL;
-
 }
 
 CC4IMapView::~CC4IMapView()
@@ -427,9 +410,6 @@ BOOL CC4IMapView::HitTest(double fXCoord, double fYCoord, double fCenterX, doubl
 	//if (HitestSpecialPoint(fXCoord, fYCoord, fCenterX, fCenterY, fScale)) return TRUE;
 	//if (HitestTrack(fXCoord, fYCoord, fCenterX, fCenterY, fScale)) return TRUE;
 
-
-	m_nHookType = HOOKED_GROUND;
-
 	return FALSE;
 }
 
@@ -540,19 +520,6 @@ LRESULT CC4IMapView::OnOptionChange(WPARAM pText, LPARAM nFlag)
 	return 0;
 }
 
-void CC4IMapView::OnBtnMapgenerater()
-{
-	// TODO: 여기에 명령 처리기 코드를 추가합니다.
-	/*
-	m_generateDlg = new CMapGeneratorDlg(this);
-	if (m_generateDlg != NULL)
-	{
-		m_generateDlg->Create(IDD_MAP_GENERATOR, this);
-		m_generateDlg->ShowWindow(true);
-	}
-	*/
-}
-
 
 void CC4IMapView::OnLocalSettings()
 {
@@ -594,58 +561,10 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
     DrawSituation(TRUE,TRUE,TRUE,TRUE);
 }
 
-void CC4IMapView::OnLocalOverlayCommand(UINT id)
-{
-    m_localOverlay.Cancel();
-    if(GetCapture()==this)
-		ReleaseCapture();
-
-    m_bPanning=FALSE;
-	m_bMapMove=FALSE;
-	m_bOnZoom=FALSE;
-	mb_moving=FALSE;
-
-    if(id>=ID_C4OVER_PAN && id<=ID_C4OVER_ELLIPSE)
-		m_localOverlay.SetTool(id-ID_C4OVER_PAN);
-    else if(id==ID_C4OVER_COLOR)
-	{
-		CColorDialog dlg(m_localOverlay.Color(),CC_FULLOPEN,this);
-		if(dlg.DoModal()==IDOK)
-			m_localOverlay.SetColor(dlg.GetColor());
-	}
-    else if(id==ID_C4OVER_UNDO)
-		m_localOverlay.Undo();
-    else if(id==ID_C4OVER_REDO) 
-		m_localOverlay.Redo();
-    else if(id==ID_C4OVER_SAVE || id==ID_C4OVER_LOAD)
-	{
-        BOOL load=id==ID_C4OVER_LOAD;
-        CFileDialog dlg(load,_T("xml"),_T("overlay.xml"),OFN_HIDEREADONLY|(load?OFN_FILEMUSTEXIST:OFN_OVERWRITEPROMPT),_T("C4IMap Overlay XML (*.xml)|*.xml||"),this);
-        if(dlg.DoModal()==IDOK)
-		{
-            if(load && !m_localOverlay.Layers().empty() && AfxMessageBox(_T("현재 Overlay 도형을 선택한 파일로 교체하시겠습니까? \
-				저장하지 않은 도형은 사라집니다."),MB_YESNO|MB_ICONQUESTION)!=IDYES)
-				return;
-            CString error;
-			bool ok=load?m_localOverlay.Load(dlg.GetPathName(),error):m_localOverlay.Save(dlg.GetPathName(),error);
-            if(!ok)
-				AfxMessageBox(error,MB_ICONERROR);
-        }
-    }
-    RefreshOverlayLayers();
-    Invalidate(FALSE);
-}
-
-void CC4IMapView::OnUpdateLocalOverlay(CCmdUI* ui)
-{
-    ui->Enable(ui->m_nID==ID_C4OVER_REDO ? m_localOverlay.CanRedo() : (ui->m_nID!=ID_C4OVER_UNDO || m_localOverlay.ActiveCount()>0));
-    if(ui->m_nID<=ID_C4OVER_ELLIPSE)
-		ui->SetRadio(m_localOverlay.GetTool()==int(ui->m_nID-ID_C4OVER_PAN));
-}
 
 BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
 {
-    if(msg->message==WM_KEYDOWN && msg->wParam==VK_ESCAPE && (m_localOverlay.IsDrawing()||m_localOverlay.GetTool()!=CLocalOverlay::Pan))
+    if(msg->message==WM_KEYDOWN && msg->wParam==VK_ESCAPE && (m_localOverlay.IsDrawing() || m_localOverlay.GetTool()!=CLocalOverlay::Pan))
 	{
         m_localOverlay.SetTool(CLocalOverlay::Pan);
 		if(GetCapture()==this)
@@ -671,11 +590,14 @@ BOOL CC4IMapView::SaveLocalOverlayIfModified()
 {
     if(!m_localOverlay.IsModified())
 		return TRUE;
+
     int answer=AfxMessageBox(_T("Overlay 도형 변경 내용을 XML로 저장하시겠습니까?"),MB_YESNOCANCEL|MB_ICONQUESTION);
     if(answer==IDCANCEL)
 		return FALSE;
+
     if(answer==IDNO)
 		return TRUE;
+
     OnLocalOverlayCommand(ID_C4OVER_SAVE);
     return !m_localOverlay.IsModified();
 }
@@ -712,75 +634,13 @@ void CC4IMapView::OnTimer(UINT_PTR id)
 			UpdateStatusBar(cursor);
 		Invalidate(FALSE);
 	}
-	if(id==59200&&MapSources().Poll())
+	if(id==59200 && MapSources().Poll())
 	{
 		m_mapFrameCache.InvalidateFrom(CMapFrameCache::Sources);
         get_mainfrm()->SetMessageText(MapSources().Status());
 		Invalidate(FALSE);
 	}
 	CView::OnTimer(id);
-}
-
-void CC4IMapView::RefreshOverlayLayers()
-{
-    auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());
-	if(frame&&frame->m_wndCOPLayerView.GetSafeHwnd())
-		frame->m_wndCOPLayerView.RefreshMsgList();
-}
-void CC4IMapView::OnOverlayLayerNew()
-{
-    m_localOverlay.Cancel();
-	if(GetCapture()==this)
-		ReleaseCapture();
-    if(!m_localOverlay.AddLayer())
-	{
-		AfxMessageBox(_T("레이어를 추가할 수 없습니다."));
-		return;
-	}
-    RefreshOverlayLayers();
-	auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());
-    if(frame)
-		frame->m_wndCOPLayerView.ShowPane(TRUE,FALSE,TRUE);
-	Invalidate(FALSE);
-}
-
-void CC4IMapView::OnOverlayLayerOpen()
-{
-	OnLocalOverlayCommand(ID_C4OVER_LOAD);
-}
-
-void CC4IMapView::OnOverlayLayerSave()
-{
-	OnLocalOverlayCommand(ID_C4OVER_SAVE);
-}
-
-void CC4IMapView::OnOverlayDraw()
-{
-	 auto frame=get_mainfrm();
-	 if(!frame||!frame->m_pRibbonDrawGallery)
-		 return;
-
-	 int index=frame->m_pRibbonDrawGallery->GetSelectedItem();
-	 CString name=frame->GetOverlayDrawItem(index);
-	 UINT command=0;
-	 if(name==_T("직선"))
-		 command=ID_C4OVER_LINE;
-	 else if(name==_T("화살표 직선"))
-		 command=ID_C4OVER_ARROW;
-	 else if(name==_T("사각형"))
-		 command=ID_C4OVER_RECT;
-	 else if(name==_T("타원")||name==_T("원"))
-		 command=ID_C4OVER_ELLIPSE;
-	 if(command)
-	 {
-		 OnLocalOverlayCommand(command);
-		 frame->AddOverlayRentlyDrawItem(index);
-	 }
-	 else 
-	 {
-		 m_localOverlay.Cancel();
-		 AfxMessageBox(_T("이 도형은 아직 지원되지 않습니다. 도형그리기에서 선, 화살표, 사각형 또는 타원을 선택하세요."));
-	 }
 }
 
 void CC4IMapView::OnDisplayProjection(UINT id)
@@ -808,9 +668,15 @@ void CC4IMapView::OnUpdateDisplayProjection(CCmdUI* ui)
 		ui->SetRadio(int(ui->m_nID-ID_MENU_PROJECTION_GEO)==DisplayProjection().Kind());
 }
 
-void CC4IMapView::OnMapRotate(){
- m_localOverlay.Cancel();
- if(DisplayProjection().SetAngle(m_pCoordMgr,0))Invalidate(FALSE);
- get_mainfrm()->SetMessageText(_T("휠 버튼을 누르고 좌우로 드래그하면 회전합니다. 회전 버튼은 북쪽 위로 초기화합니다."));
+void CC4IMapView::OnMapRotate()
+{
+	m_localOverlay.Cancel();
+	if(DisplayProjection().SetAngle(m_pCoordMgr,0))
+		Invalidate(FALSE);
+	get_mainfrm()->SetMessageText(_T("휠 버튼을 누르고 좌우로 드래그하면 회전합니다. 회전 버튼은 북쪽 위로 초기화합니다."));
 }
-void CC4IMapView::OnUpdateMapRotate(CCmdUI* ui){ui->Enable(m_pCoordMgr!=nullptr);}
+
+void CC4IMapView::OnUpdateMapRotate(CCmdUI* ui)
+{
+	ui->Enable(m_pCoordMgr!=nullptr);
+}

@@ -219,14 +219,14 @@ void CLayerView::OnContextMenu(CWnd* pWnd, CPoint point)
 	{
 		CMenu* pSumMenu = menu.GetSubMenu(0);
 
-		if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CMDIFrameWndEx)))
+		if (AfxGetMainWnd()->IsKindOf(RUNTIME_CLASS(CFrameWndEx)))
 		{
 			CMFCPopupMenu* pPopupMenu = new CMFCPopupMenu;
 
 			if (!pPopupMenu->Create(this, point.x, point.y, (HMENU)pSumMenu->m_hMenu, FALSE, TRUE))
 				return;
 
-			((CMDIFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
+			((CFrameWndEx*)AfxGetMainWnd())->OnShowPopupMenu(pPopupMenu);
 			UpdateDialogControls(this, FALSE);
 		}
 	}
@@ -363,33 +363,77 @@ CListCtrl* CLayerView::GetView()
 //	m_pMsgBaseList = pMsgBaseList;
 //}
 
-void CLayerView::RefreshMsgList(){
-    if(!m_wndCOPView.GetSafeHwnd()||m_refreshingOverlay)return;
+void CLayerView::RefreshMsgList()
+{
+    if(!m_wndCOPView.GetSafeHwnd()||m_refreshingOverlay)
+		return;
     auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());
-    auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;if(!view)return;
-    m_refreshingOverlay=true;m_wndCOPView.SetRedraw(FALSE);m_wndCOPView.DeleteAllItems();
-    for(const auto& layer:view->OverlayLayers().Layers()){
-        int row=m_wndCOPView.InsertItem(m_wndCOPView.GetItemCount(),layer.name);CString count;count.Format(_T("%llu"),(unsigned long long)layer.count);
-        m_wndCOPView.SetItemText(row,COPLAYER_ITEMSIZE,count);m_wndCOPView.SetItemText(row,COPLAYER_TYPE,_T("투명도 (Overlay)"));
-        m_wndCOPView.SetItemData(row,(DWORD_PTR)layer.id);m_wndCOPView.SetCheck(row,layer.visible);
-        if(layer.id==view->OverlayLayers().ActiveLayer())m_wndCOPView.SetItemState(row,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
+    auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;
+	if(!view)
+		return;
+    m_refreshingOverlay=true;
+	m_wndCOPView.SetRedraw(FALSE);
+	m_wndCOPView.DeleteAllItems();
+    for(const auto& layer:view->OverlayLayers().Layers())
+	{
+        int row=m_wndCOPView.InsertItem(m_wndCOPView.GetItemCount(),layer.name);
+		CString count;count.Format(_T("%llu"),(unsigned long long)layer.count);
+        m_wndCOPView.SetItemText(row,COPLAYER_ITEMSIZE,count);
+		m_wndCOPView.SetItemText(row,COPLAYER_TYPE,_T("투명도 (Overlay)"));
+        m_wndCOPView.SetItemData(row,(DWORD_PTR)layer.id);
+		m_wndCOPView.SetCheck(row,layer.visible);
+        if(layer.id==view->OverlayLayers().ActiveLayer())
+			m_wndCOPView.SetItemState(row,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
     }
-    m_wndCOPView.SetRedraw(TRUE);m_wndCOPView.Invalidate();m_refreshingOverlay=false;
+    m_wndCOPView.SetRedraw(TRUE);
+	m_wndCOPView.Invalidate();
+	m_refreshingOverlay=false;
 }
-void CLayerView::OnLvnItemchangedCopLayer(NMHDR* header,LRESULT* result){
-    *result=0;if(m_refreshingOverlay)return;auto changed=(NMLISTVIEW*)header;if(changed->iItem<0)return;
-    auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;if(!view)return;
+
+void CLayerView::OnLvnItemchangedCopLayer(NMHDR* header,LRESULT* result)
+{
+    *result=0;
+	if(m_refreshingOverlay)
+		return;
+
+	auto changed=(NMLISTVIEW*)header;
+	if(changed->iItem<0)
+		return;
+
+    auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());
+	auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;
+	if(!view)
+		return;
+
     int id=(int)m_wndCOPView.GetItemData(changed->iItem);
-    if((changed->uNewState&LVIS_SELECTED)&&!(changed->uOldState&LVIS_SELECTED))view->OverlayLayers().SelectLayer(id);
-    UINT before=changed->uOldState&LVIS_STATEIMAGEMASK,after=changed->uNewState&LVIS_STATEIMAGEMASK;
-    if(before&&after&&before!=after)view->OverlayLayers().SetLayerVisible(id,m_wndCOPView.GetCheck(changed->iItem)!=FALSE);
-    view->Invalidate(FALSE);
+    if((changed->uNewState&LVIS_SELECTED) && !(changed->uOldState&LVIS_SELECTED))
+		view->OverlayLayers().SelectLayer(id);
+    UINT before = changed->uOldState&LVIS_STATEIMAGEMASK, after=changed->uNewState&LVIS_STATEIMAGEMASK;
+    if(before && after && before != after)
+		view->OverlayLayers().SetLayerVisible(id,m_wndCOPView.GetCheck(changed->iItem)!=FALSE);
+    
+	view->Invalidate(FALSE);
+} 
+
+void CLayerView::OnNMDblclkListDebugDlg(NMHDR* header,LRESULT* result)
+{
+	auto item=(NMITEMACTIVATE*)header;
+	if(item->iItem>=0)
+		m_wndCOPView.EditLabel(item->iItem);
+	
+	*result=0;
 }
-void CLayerView::OnNMDblclkListDebugDlg(NMHDR* header,LRESULT* result){auto item=(NMITEMACTIVATE*)header;if(item->iItem>=0)m_wndCOPView.EditLabel(item->iItem);*result=0;}
-void CLayerView::OnOverlayLabelEdited(NMHDR* header,LRESULT* result){
-    *result=FALSE;auto edit=(NMLVDISPINFO*)header;if(!edit->item.pszText||edit->item.iItem<0)return;
-    auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;
-    if(view)*result=view->OverlayLayers().RenameLayer((int)m_wndCOPView.GetItemData(edit->item.iItem),edit->item.pszText)?TRUE:FALSE;
+
+void CLayerView::OnOverlayLabelEdited(NMHDR* header,LRESULT* result)
+{
+    *result=FALSE;
+	auto edit=(NMLVDISPINFO*)header;
+	if(!edit->item.pszText || edit->item.iItem<0)
+		return;
+    auto frame=DYNAMIC_DOWNCAST(CMainFrame,AfxGetMainWnd());
+	auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;
+    if(view)
+		*result=view->OverlayLayers().RenameLayer((int)m_wndCOPView.GetItemData(edit->item.iItem),edit->item.pszText)?TRUE:FALSE;
 }
 
 void CLayerView::msgBaseListPatrol(BOOL bPatrol)
