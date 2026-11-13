@@ -287,6 +287,7 @@ public:
 
 	void InitializeDisplayParameter(CRect pClientRect);
 
+	void ZoomAtPoint(CPoint point, bool zoomIn);
 	void ZoomIn();
 	void ZoomOut();
 

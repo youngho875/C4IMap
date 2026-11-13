@@ -61,8 +61,11 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
                 if(!m_mapFrameCache.Restore(CMapFrameCache::Elevation,m_dcMainTemp))
 				{
                     m_dcMainTemp->FillSolidRect(0,0,(int)fWidth,(int)fHeight,RGB(10,10,10));
-                    DrawProjectedRaster(m_dcMainTemp,m_pCoordMgr,ClientRect,[](CDC* dc,CCoordMgr* c,CRect r){
-                        TerrainLayer().Draw(dc,c,r);TerrainLocalLayer().Draw(dc,c,r);TerrainServerLayer().Draw(dc,c,r);
+                    DrawProjectedRaster(m_dcMainTemp,m_pCoordMgr,ClientRect, [](CDC* dc,CCoordMgr* c,CRect r)
+					{
+                        TerrainLayer().Draw(dc,c,r);
+						TerrainLocalLayer().Draw(dc,c,r);
+						TerrainServerLayer().Draw(dc,c,r);
                     });
                     m_mapFrameCache.Store(CMapFrameCache::Elevation,m_dcMainTemp);
                 }

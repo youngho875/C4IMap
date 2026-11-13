@@ -1,8 +1,80 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "C4IMapViewHeader.h"
 
 
 
+
+void CC4IMapView::OnUpdateCheckSatellite(CCmdUI* pCmdUI)
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì—…ë°ì´íŠ¸ UI ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	pCmdUI->SetCheck(m_bsatellite);
+}
+
+void CC4IMapView::OnCheckSatellite()
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	m_bsatellite = !m_bsatellite;
+	Invalidate(false);
+/*
+	CButton* pCheck = (CButton*)GetDlgItem(IDC_CHECK_SATELLITE);
+	if (pCheck != nullptr)
+	{
+		BOOL bChecked = pCheck->GetCheck();
+		if (bChecked == TRUE)
+		{
+			m_bsatellite = TRUE;
+		}
+		else
+		{
+			m_bsatellite = FALSE;
+		}
+	}
+
+	Invalidate();
+*/
+}
+
+
+void CC4IMapView::OnCheckRaster()
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	m_bRaster = !m_bRaster;
+	Invalidate(false);
+}
+
+void CC4IMapView::OnUpdateCheckRaster(CCmdUI* pCmdUI)
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì—…ë°ì´íŠ¸ UI ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	pCmdUI->SetCheck(m_bRaster);
+
+}
+
+void CC4IMapView::OnCheckShape()
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	m_bShape = !m_bShape;
+	Invalidate(false);
+}
+
+void CC4IMapView::OnUpdateCheckShape(CCmdUI* pCmdUI)
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì—…ë°ì´íŠ¸ UI ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	pCmdUI->SetCheck(m_bShape);
+}
+
+void CC4IMapView::OnCheckDted()
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	m_bDted = !m_bDted;
+	Invalidate(false);
+}
+
+
+void CC4IMapView::OnUpdateCheckDted(CCmdUI* pCmdUI)
+{
+	// TODO: ì—¬ê¸°ì— ëª…ë ¹ ì—…ë°ì´íŠ¸ UI ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
+	pCmdUI->SetCheck(m_bDted);
+}
 
 
 void CC4IMapView::OnMenuMouseBase()
@@ -13,10 +85,10 @@ void CC4IMapView::OnMenuMouseBase()
 
 void CC4IMapView::OnUpdateMenuMouseBase(CCmdUI* pCmdUI)
 {
-	// Áöµµ Á¤»ó ·Îµå ½Ã able, ¾Æ´Ò °æ¿ì disable
+	// ì§€ë„ ì •ìƒ ë¡œë“œ ì‹œ able, ì•„ë‹ ê²½ìš° disable
 	//if (IsEnableMap())
 	//{
-	//	// ¸¶¿ì½º°¡ »óÈ²/Åõ¸íµµ/Áöµµ ±âº» »óÅÂ°¡ ¾Æ´Ò °æ¿ì able, »óÅÂ¶ó¸é disable
+	//	// ë§ˆìš°ìŠ¤ê°€ ìƒí™©/íˆ¬ëª…ë„/ì§€ë„ ê¸°ë³¸ ìƒíƒœê°€ ì•„ë‹ ê²½ìš° able, ìƒíƒœë¼ë©´ disable
 		if (GetMouseState() == MOUSE_DEFAULT || GetMouseState() == MOUSE_OVERLAY)
 			pCmdUI->Enable(FALSE);
 		else
@@ -25,49 +97,49 @@ void CC4IMapView::OnUpdateMenuMouseBase(CCmdUI* pCmdUI)
 	//else
 	//	pCmdUI->Enable(FALSE);
 }
-// È­¸é ¹üÁÖ - ¸¶¿ì½º È®´ë
+// í™”ë©´ ë²”ì£¼ - ë§ˆìš°ìŠ¤ í™•ëŒ€
 void CC4IMapView::OnMenuMouseZoomIn()
 {
-	SetMouseState(MOUSE_ZOOMIN);
+    if (!m_pCoordMgr || !m_bDCInitialized)
+        return;
+    if (m_analysis.Active())
+        m_analysis.Cancel();
+    m_localOverlay.SetTool(CLocalOverlay::Pan);
+    m_bPanning = m_bOnZoom = m_bMapMove = mb_moving = FALSE;
+    if (GetCapture() == this)
+        ReleaseCapture();
+    SetMouseState(MOUSE_ZOOMIN);
+    SetFocus();
 }
 
 void CC4IMapView::OnUpdateMenuMouseZoomIn(CCmdUI* pCmdUI)
 {
-	// Áöµµ Á¤»ó ·Îµå ½Ã able, ¾Æ´Ò °æ¿ì disable
-	//if (IsEnableMap())
-	//{
-	//	// ¸¶¿ì½º°¡ È®´ë »óÅÂ ÀÏ °æ¿ì disable, ¾Æ´Ò °æ¿ì enable
-		if (GetMouseState() == MOUSE_ZOOMIN)
-			pCmdUI->Enable(FALSE);
-		else
-			pCmdUI->Enable(TRUE);
-	//}
-	//else
-	//	pCmdUI->Enable(FALSE);
+    pCmdUI->Enable(m_pCoordMgr != nullptr && m_bDCInitialized);
+    pCmdUI->SetCheck(GetMouseState() == MOUSE_ZOOMIN);
 }
 
-// È­¸é ¹üÁÖ - ¸¶¿ì½º Ãà¼Ò
+// í™”ë©´ ë²”ì£¼ - ë§ˆìš°ìŠ¤ ì¶•ì†Œ
 void CC4IMapView::OnMenuMouseZoomOut()
 {
-	SetMouseState(MOUSE_ZOOMOUT);
+    if (!m_pCoordMgr || !m_bDCInitialized)
+        return;
+    if (m_analysis.Active())
+        m_analysis.Cancel();
+    m_localOverlay.SetTool(CLocalOverlay::Pan);
+    m_bPanning = m_bOnZoom = m_bMapMove = mb_moving = FALSE;
+    if (GetCapture() == this)
+        ReleaseCapture();
+    SetMouseState(MOUSE_ZOOMOUT);
+    SetFocus();
 }
 
 void CC4IMapView::OnUpdateMenuMouseZoomOut(CCmdUI* pCmdUI)
 {
-	// Áöµµ Á¤»ó ·Îµå ½Ã able, ¾Æ´Ò °æ¿ì disable
-	//if (IsEnableMap())
-	//{
-	//	// ¸¶¿ì½º°¡ Ãà¼Ò »óÅÂ ÀÏ °æ¿ì disable, ¾Æ´Ò °æ¿ì enable
-		if (GetMouseState() == MOUSE_ZOOMOUT)
-			pCmdUI->Enable(FALSE);
-		else
-			pCmdUI->Enable(TRUE);
-	//}
-	//else
-	//	pCmdUI->Enable(FALSE);
+    pCmdUI->Enable(m_pCoordMgr != nullptr && m_bDCInitialized);
+    pCmdUI->SetCheck(GetMouseState() == MOUSE_ZOOMOUT);
 }
 
-// È­¸é ¹üÁÖ - ¸¶¿ì½º ÀÌµ¿
+// í™”ë©´ ë²”ì£¼ - ë§ˆìš°ìŠ¤ ì´ë™
 void CC4IMapView::OnMenuMousePanning()
 {
 	SetMouseState(MOUSE_PANNING);
@@ -75,10 +147,10 @@ void CC4IMapView::OnMenuMousePanning()
 
 void CC4IMapView::OnUpdateMenuMousePanning(CCmdUI* pCmdUI)
 {
-	// Áöµµ Á¤»ó ·Îµå ½Ã able, ¾Æ´Ò °æ¿ì disable
+	// ì§€ë„ ì •ìƒ ë¡œë“œ ì‹œ able, ì•„ë‹ ê²½ìš° disable
 	//if (IsEnableMap())
 	//{
-	//	// ¸¶¿ì½º°¡ ÀÌµ¿ »óÅÂ ÀÏ °æ¿ì disable, ¾Æ´Ò °æ¿ì enable
+	//	// ë§ˆìš°ìŠ¤ê°€ ì´ë™ ìƒíƒœ ì¼ ê²½ìš° disable, ì•„ë‹ ê²½ìš° enable
 		if (GetMouseState() == MOUSE_PANNING)
 			pCmdUI->Enable(FALSE);
 		else

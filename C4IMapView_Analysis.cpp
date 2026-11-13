@@ -133,6 +133,7 @@ void CC4IMapView::OnAnalysisCommand(UINT id)
     bool input = id == ID_MENU_ANALYSIS_RADIUS_INPUT || id == ID_ANALYSIS_VISIBLE_INPUT;
     if (input && dialog.Show() != IDOK)
         return;
+    SetMouseState(MOUSE_DEFAULT);
     m_localOverlay.SetTool(CLocalOverlay::Pan);
     m_bPanning = FALSE;
     m_bOnZoom = FALSE;

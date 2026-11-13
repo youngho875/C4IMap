@@ -314,7 +314,7 @@ BOOL CC4IMapView::BeginView()
 #if C4MAP_ENABLE_BASEMAP
 	m_TmsMgr.Initalize();
 #endif
-    SetTimer(59200,150,nullptr);
+    SetTimer(ID_MAP_SOURCES_XML,150,nullptr);
 
 	return TRUE;
 }
@@ -449,35 +449,45 @@ CMainFrame* CC4IMapView::get_mainfrm()
 }
 
 
+void CC4IMapView::ZoomAtPoint(CPoint point, bool zoomIn)
+{
+    if (!m_pCoordMgr || !m_bDCInitialized)
+        return;
+    CRect client;
+    GetClientRect(&client);
+    if (client.IsRectEmpty() || !client.PtInRect(point))
+        return;
+
+    const double oldScale = m_pCoordMgr->m_fScale;
+    if (!(oldScale > 0.0) || oldScale > 1.0e12)
+        return;
+    double newScale = zoomIn ? oldScale * 1.5 : oldScale / 1.5;
+    newScale = (std::max)(0.000001, (std::min)(2500.0, newScale));
+    const double ratio = newScale / oldScale;
+    const CPoint center = client.CenterPoint();
+
+    // Screen = origin + projected coordinate * scale (also after rotation).
+    // Move the selected map point to the viewport center at the new scale.
+    m_fPrevScale = oldScale;
+    m_pCoordMgr->m_fCenterX = center.x - (point.x - m_pCoordMgr->m_fCenterX) * ratio;
+    m_pCoordMgr->m_fCenterY = center.y - (point.y - m_pCoordMgr->m_fCenterY) * ratio;
+    m_pCoordMgr->m_fScale = newScale;
+    Invalidate(FALSE);
+}
+
 void CC4IMapView::ZoomIn()
 {
-	FLOAT	fZoom, fScale;
-
-	//fScale = m_pDlgOverlayControler->m_piMapProj->GetMapScale();
-	//fZoom = m_pDlgOverlayControler->m_piMapProj->GetZoomFactor();
-	//fZoom = m_pCoordMgr->m_fScale;
-
-	////fZoom *= 1.2f;	//2.0;
-	//m_pDlgOverlayControler->m_piMapProj->SetZoomFactor(fZoom);
-	//m_pDlgOverlayControler->m_rMPW = fScale / fZoom;
-	//m_pDlgOverlayControler->m_piEditTool->SetMeterPerPixel(m_pDlgOverlayControler->m_rMPW);
-	Invalidate();
+    CRect client;
+    GetClientRect(&client);
+    ZoomAtPoint(client.CenterPoint(), true);
 }
 
 
 void CC4IMapView::ZoomOut()
 {
-	FLOAT	fZoom, fScale;
-
-	//fScale = m_pDlgOverlayControler->m_piMapProj->GetMapScale();
-	//fZoom = m_pDlgOverlayControler->m_piMapProj->GetZoomFactor();
-	//fZoom = m_pCoordMgr->m_fScale;
-	////fZoom /= 1.2f;	//2.0;
-
-	//m_pDlgOverlayControler->m_piMapProj->SetZoomFactor(fZoom);
-	//m_pDlgOverlayControler->m_rMPW = fScale / fZoom;
-	//m_pDlgOverlayControler->m_piEditTool->SetMeterPerPixel(m_pDlgOverlayControler->m_rMPW);
-	Invalidate();
+    CRect client;
+    GetClientRect(&client);
+    ZoomAtPoint(client.CenterPoint(), false);
 }
 
 void CC4IMapView::OnSize(UINT nType, int cx, int cy)
@@ -606,6 +616,7 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
 
 void CC4IMapView::OnLocalOverlayCommand(UINT id)
 {
+    SetMouseState(MOUSE_DEFAULT);
     m_analysis.Cancel();
     m_localOverlay.Cancel();
     if(GetCapture()==this)
@@ -690,7 +701,8 @@ BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
             return TRUE;
         }
     }
-    if(msg->message==WM_KEYDOWN && msg->wParam==VK_ESCAPE && (m_localOverlay.IsDrawing()||m_localOverlay.GetTool()!=CLocalOverlay::Pan))
+    if(msg->message==WM_KEYDOWN && msg->wParam==VK_ESCAPE && 
+		(m_localOverlay.IsDrawing()||m_localOverlay.GetTool()!=CLocalOverlay::Pan))
 	{
         m_localOverlay.SetTool(CLocalOverlay::Pan);
 		if(GetCapture()==this)
@@ -735,7 +747,7 @@ void CC4IMapView::OnMapSourcesXml()
 
 void CC4IMapView::OnTimer(UINT_PTR id)
 {
-    if (id == 59200)
+    if (id == ID_MAP_SOURCES_XML)
     {
         if (m_analysis.Poll())
             Invalidate(FALSE);
@@ -751,7 +763,7 @@ void CC4IMapView::OnTimer(UINT_PTR id)
             AfxMessageBox(error, MB_OK | MB_ICONEXCLAMATION);
         }
     }
-    if(id==59200)
+    if(id== ID_MAP_SOURCES_XML)
     {
         CString title;std::vector<CString> fields,values;
         if(MapSources().PollIdentify(title,fields,values))
@@ -762,7 +774,7 @@ void CC4IMapView::OnTimer(UINT_PTR id)
             frame->m_wndMapProperties.ShowPane(TRUE,FALSE,TRUE);
         }
     }
-    if(id==59200&&(TerrainLayer().Poll() | TerrainLocalLayer().Poll() | TerrainServerLayer().Poll()))
+    if(id== ID_MAP_SOURCES_XML && (TerrainLayer().Poll() | TerrainLocalLayer().Poll() | TerrainServerLayer().Poll()))
 	{
 		m_mapFrameCache.InvalidateFrom(CMapFrameCache::Elevation);
         CPoint cursor;GetCursorPos(&cursor);
@@ -773,7 +785,7 @@ void CC4IMapView::OnTimer(UINT_PTR id)
 			UpdateStatusBar(cursor);
 		Invalidate(FALSE);
 	}
-	if(id==59200&&MapSources().Poll())
+	if(id== ID_MAP_SOURCES_XML && MapSources().Poll())
 	{
 		m_mapFrameCache.InvalidateFrom(CMapFrameCache::Sources);
         get_mainfrm()->SetMessageText(MapSources().Status());

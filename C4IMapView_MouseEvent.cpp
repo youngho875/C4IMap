@@ -86,6 +86,12 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
+    if (GetMouseState() == MOUSE_ZOOMIN || GetMouseState() == MOUSE_ZOOMOUT)
+    {
+        SetFocus();
+        m_bPanning = m_bOnZoom = m_bMapMove = mb_moving = FALSE;
+        return;
+    }
     if (m_analysis.Active())
     {
         SetFocus();
@@ -121,6 +127,13 @@ void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+    if (GetMouseState() == MOUSE_ZOOMIN || GetMouseState() == MOUSE_ZOOMOUT)
+    {
+        if (GetCapture() == this)
+            ReleaseCapture();
+        ZoomAtPoint(point, GetMouseState() == MOUSE_ZOOMIN);
+        return;
+    }
     if (m_analysis.Click(point, m_pCoordMgr))
     {
         Invalidate(FALSE);
@@ -225,62 +238,15 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
-BOOL CC4IMapView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+BOOL CC4IMapView::OnMouseWheel(UINT, short zDelta, CPoint)
 {
-	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
-	if ((zDelta > 0 && m_pCoordMgr->m_fScale < -100.0) ||
-		(zDelta < 0 && m_pCoordMgr->m_fScale > 2500.0))
-		return FALSE;
-
-	if (zDelta == 0)
-		return FALSE;
-
-
-	double geo_min_x;
-	double geo_max_x;
-	double geo_min_y;
-	double geo_max_y;
-
-	double scr_min_x;
-	double scr_max_x;
-	double scr_min_y;
-	double scr_max_y;
-
-	GetClientRect(&rect);
-	m_pCoordMgr->ScreenXY2WorldXY(rect.left, rect.top, &geo_min_x, &geo_min_y);
-	m_pCoordMgr->ScreenXY2WorldXY(rect.right, rect.bottom, &geo_max_x, &geo_max_y);
-
-	m_fPrevScale = m_pCoordMgr->m_fScale;
-
-	double	fXCoord, fYCoord;
-	m_pCoordMgr->ScreenXY2WorldXY(m_pCoordMgr->m_nDisplayViewWidth / 2, m_pCoordMgr->m_nDisplayViewHeight / 2, &fXCoord, &fYCoord);
-
-	float	fZoomRatio = (zDelta / abs(zDelta) * (-1)) * m_pCoordMgr->m_fScale / 3.0;
-	m_pCoordMgr->m_fScale = m_pCoordMgr->m_fScale + fZoomRatio;
-	if (m_pCoordMgr->m_fScale > 2500)
-		m_pCoordMgr->m_fScale = 2500;
-
-	long nCenterX, nCenterY;
-	m_pCoordMgr->WorldXY2ScreenXY(fXCoord, fYCoord, &nCenterX, &nCenterY);
-	m_pCoordMgr->SetNewCenter(nCenterX, nCenterY);
-
-	m_pCoordMgr->WorldXY2ScreenXY(geo_min_x, geo_min_y, &scr_min_x, &scr_min_y, nCenterX, nCenterY, m_pCoordMgr->m_fScale);
-	m_pCoordMgr->WorldXY2ScreenXY(geo_max_x, geo_max_y, &scr_max_x, &scr_max_y, nCenterX, nCenterY, m_pCoordMgr->m_fScale);
-
-	CString strScale;
-	strScale.Format("%f", m_pCoordMgr->m_fScale);
-	//get_mainfrm()->m_wndStatusBar.SetPaneText(5, strScale);
-
-	if (zDelta < 0)
-	{
-		ZoomIn();
-	}
-	else
-	{
-		ZoomOut();
-	}
-
-	return CView::OnMouseWheel(nFlags, zDelta, pt);
+    if (!m_pCoordMgr || !m_bDCInitialized || zDelta == 0)
+        return FALSE;
+    if (zDelta > 0)
+        ZoomIn();
+    else
+        ZoomOut();
+    return TRUE;
 }
 
 void CC4IMapView::OnMButtonDown(UINT, CPoint point)
