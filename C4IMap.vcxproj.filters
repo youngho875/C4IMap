@@ -701,4 +701,57 @@
       <Filter>Source</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BaseMapOptions.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainTileLayer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapFrameCache.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteMapIdentify.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainLayer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectedRaster.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorTileStyle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapDecoration.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DisplayProjection.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VectorTileStyle.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteMapIdentify.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayProjection.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectedRaster.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="MapFrameCache.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MapAnalysis.cpp" />
+    <ClCompile Include="AnalysisLocationDialog.cpp" />
+    <ClCompile Include="C4IMapView_Analysis.cpp" />
+    <ClInclude Include="MapAnalysis.h" />
+    <ClInclude Include="AnalysisLocationDialog.h" />
+  </ItemGroup>
 </Project>

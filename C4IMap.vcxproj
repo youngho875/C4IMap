@@ -250,39 +250,48 @@
     <ClCompile Include="GPoint.cpp" />
     <ClCompile Include="MapSources.cpp" />
     <ClCompile Include="BaseMapOptions.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="TerrainTileLayer.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="MapFrameCache.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="RemoteMapIdentify.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="TerrainLayer.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="ProjectedRaster.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="VectorTileStyle.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="MapDecoration.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="DisplayProjection.cpp">
-      <LanguageStandard>stdcpp17</LanguageStandard><PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="LocalOverlay.cpp" />
@@ -535,4 +544,39 @@
   <Target Name="CopyTerrainTiles" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
     <Copy SourceFiles="$(TerrainSdkRoot)\bin\x64\$(Configuration)\TerrainTiles.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
+  <ItemGroup>
+    <ClCompile Include="MapAnalysis.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="AnalysisLocationDialog.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="C4IMapView_Analysis.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="MapAnalysis.h" />
+    <ClInclude Include="AnalysisLocationDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TerrainProfileDialog.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="TerrainProfileDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AnalysisWorkspace.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="AnalysisWorkspace.h" />
+  </ItemGroup>
 </Project>

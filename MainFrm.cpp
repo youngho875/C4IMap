@@ -593,23 +593,22 @@ void CMainFrame::InitializeRibbon()
 	// "투명도 레이어"
 	pPanel = pCategory->AddPanel(_T("레이어"));
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_NEW, DEF_RBAR_DRAW_PANEL1_CMD1, 0, 0));	// "생성"
-	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_SAVE, DEF_RBAR_DRAW_PANEL1_CMD3));
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_OPEN, DEF_RBAR_DRAW_PANEL1_CMD2, 1, 1));	// "열기"
+	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_SAVE, DEF_RBAR_DRAW_PANEL1_CMD3, 2, 2));
+	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_DELETE, DEF_RBAR_DRAW_PANEL1_CMD4, 3, 3));	// "삭제"
+
 	//pPanelShapeLayer->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_SAVE, DEF_RBAR_DRAW_PANEL1_CMD3, 2, 2));	// "저장"	// View에서 선택 저장
 	//pPanelShapeLayer->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_DELETE, DEF_RBAR_DRAW_PANEL1_CMD4, 3, 3));	// "삭제"	// View에서 선택 삭제
 
 	// 편집
 	pPanel = pCategory->AddPanel(_T("편집"));
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_OVERLAY_GRADATION, DEF_RBAR_DRAW_PANEL1_CMD5, 4, 4));	// "눈금 설정"
-/*	pPanel->AddSeparator();
-	pPanel->Add(new CMFCRibbonButton(OV_EDIT_UNDO, DEF_RBAR_DRAW_PANEL1_CMD6, 5, 5));		// Undo
-	pPanel->Add(new CMFCRibbonButton(OV_EDIT_REDO, DEF_RBAR_DRAW_PANEL1_CMD7, 6, 6));		// Redo
-*/
+	pPanel->AddSeparator();
+	pPanel->Add(new CMFCRibbonButton(ID_C4OVER_UNDO, DEF_RBAR_DRAW_PANEL1_CMD6, 5, 5));		// Undo
+	pPanel->Add(new CMFCRibbonButton(ID_C4OVER_REDO, DEF_RBAR_DRAW_PANEL1_CMD7, 6, 6));		// Redo
+
 	// "그리기"
 	pPanel = pCategory->AddPanel(_T("그리기"));
-
-    pPanel->Add(new CMFCRibbonButton(ID_C4OVER_UNDO,_T("Undo")));
-    pPanel->Add(new CMFCRibbonButton(ID_C4OVER_REDO,_T("Redo")));
 	m_pRibbonDrawGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_DRAW_GALLERY, _T("도형"), -1, 0);
 
 	CMFCToolBarImages mtbi_Recently;
@@ -1116,6 +1115,8 @@ void CMainFrame::InitializeRibbon()
 	pPanel->Add(m_pRibbonAnalysisVisibleHeight = new CMFCRibbonEdit(ID_MENU_ANALYSIS_VISIBLE_HEIGHT, 50, DEF_RBAR_ANALYSIS_PANEL3_CMD2));	// "관측 높이(m)"
 	pPanel->Add(m_pRibbonAnalysisVisibleColor = new CMFCRibbonColorButton(ID_MENU_ANALYSIS_VISIBLE_COLOR, DEF_RBAR_ANALYSIS_PANEL3_CMD3, 6));	// "결과 색상"
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_ANALYSIS_VISIBLE_SELECT, DEF_RBAR_ANALYSIS_PANEL3_CMD4, 6, 6));	// "관측지점 선택"
+
+	pPanel->Add(new CMFCRibbonButton(ID_ANALYSIS_VISIBLE_INPUT, _T("관측지점 입력"), 6, 6));
 
 	// "반경 표시"
 	pPanel = pCategory->AddPanel(DEF_RBAR_ANALYSIS_PANEL4);

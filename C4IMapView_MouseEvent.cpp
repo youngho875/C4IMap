@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "DisplayProjection.h"
 #include "C4IMapViewHeader.h"
 
@@ -12,6 +12,11 @@ char		globalLong[10] = CENTERLONG;
 
 void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 {
+    if (m_analysis.Move(point, m_pCoordMgr))
+    {
+        Invalidate(FALSE);
+        return;
+    }
     if(m_rotationDragging)
 	{
         DisplayProjection().SetAngle(m_pCoordMgr,m_rotationStartAngle+(point.x-m_rotationStart.x)*0.5);
@@ -25,7 +30,7 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	CView::OnMouseMove(nFlags, point);
 
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 
 	UpdateStatusBar(point);
 
@@ -36,7 +41,7 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 		if (m_ptPrevPoint == point)
 			return;
 
-		//CKB ¸ŞÀÎ DC¸¸ ±×¸®µµ·Ï ÇØ¼­ ¼º´É È®º¸  
+		//CKB ë©”ì¸ DCë§Œ ê·¸ë¦¬ë„ë¡ í•´ì„œ ì„±ëŠ¥ í™•ë³´  
 		m_ptPrevPoint.x = point.x - m_ptZoomWindowLT.x;
 		m_ptPrevPoint.y = point.y - m_ptZoomWindowLT.y;
 
@@ -52,13 +57,13 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 		GetClientRect(&rectClient);
 
 		/////////////////////////////////////////////////////////
-		// Zoom Rect¸¦ ±×¸®°í °è»êÇÑ´Ù. 
+		// Zoom Rectë¥¼ ê·¸ë¦¬ê³  ê³„ì‚°í•œë‹¤. 
 		/////////////////////////////////////////////////////////
 
-		//	1. ÀÌÀüÀÇ Rect¸¦ Áö¿î´Ù. 
+		//	1. ì´ì „ì˜ Rectë¥¼ ì§€ìš´ë‹¤. 
 		DrawZoomRect(m_dcMain, CRect(m_ptZoomStart, m_ptZoomEnd));
 
-		//	2. »õ·Î¿î Rect¸¦ °è»êÇÏ°í ¿¹¿ÜÃ³¸®¸¦ ÇÑ´Ù.  
+		//	2. ìƒˆë¡œìš´ Rectë¥¼ ê³„ì‚°í•˜ê³  ì˜ˆì™¸ì²˜ë¦¬ë¥¼ í•œë‹¤.  
 		m_ptZoomEnd = point;
 		if (!rectClient.PtInRect(m_ptZoomEnd))
 		{
@@ -72,7 +77,7 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 			else if (m_ptZoomEnd.y > rectClient.bottom)
 				m_ptZoomEnd.y = rectClient.bottom - 1;
 		}
-		//	3. »õ·Î¿î Rect¸¦ ±×¸°´Ù.  
+		//	3. ìƒˆë¡œìš´ Rectë¥¼ ê·¸ë¦°ë‹¤.  
 		DrawZoomRect(m_dcMain, CRect(m_ptZoomStart, m_ptZoomEnd));
 	}
 	//CView::OnMouseMove(nFlags, point);
@@ -81,14 +86,13 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
-	if (m_localOverlay.Begin(point, m_pCoordMgr))
-	{
-		SetFocus();
-		SetCapture();
-		Invalidate(FALSE);
-		return;
-	}
+    if (m_analysis.Active())
+    {
+        SetFocus();
+        return;
+    }
+    if(m_localOverlay.Begin(point,m_pCoordMgr)){SetFocus();SetCapture();Invalidate(FALSE);return;}
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	
 	m_bPanning = (nFlags & (MK_SHIFT | MK_CONTROL)) == 0;
 	
@@ -109,12 +113,19 @@ void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 		SetCapture();
 	}
 
+
+
 	CView::OnLButtonDown(nFlags, point);
 }
 
 
 void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+    if (m_analysis.Click(point, m_pCoordMgr))
+    {
+        Invalidate(FALSE);
+        return;
+    }
     if(m_localOverlay.End(point,m_pCoordMgr))
 	{
         RefreshOverlayLayers();
@@ -122,10 +133,8 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 		Invalidate(FALSE);
 		return;
 	}
-    const bool localClick=!m_bOnZoom && !(nFlags&(MK_SHIFT|MK_CONTROL)) && 
-		abs(point.x-m_ptMapMoveFirstPoint.x)<=3 && abs(point.y-m_ptMapMoveFirstPoint.y)<=3;
-
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+    const bool localClick=!m_bOnZoom && !(nFlags&(MK_SHIFT|MK_CONTROL)) && abs(point.x-m_ptMapMoveFirstPoint.x)<=3 && abs(point.y-m_ptMapMoveFirstPoint.y)<=3;
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 
 	CView::OnLButtonUp(nFlags, point);
 
@@ -164,7 +173,7 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 	m_Coord.x_y_to_degrees_lat_long_str(fWorldX, fWorldY, globalLat, globalLong);
 
 
-	// Á¡ ±×¸®±â
+	// ì  ê·¸ë¦¬ê¸°
 	CBrush pBrush, * pOldBrush;
 	pBrush.CreateSolidBrush(RGB(255, 0, 0));
 	pOldBrush = m_dcMain->SelectObject(&pBrush);
@@ -197,7 +206,7 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 			m_pCoordMgr->CalcNewCenterAndScale(rectZoom);
 
 		//CString sStatus;
-		//sStatus.Format("¹èÀ²:%f       ", m_pCoordMgr->m_fScale);
+		//sStatus.Format("ë°°ìœ¨:%f       ", m_pCoordMgr->m_fScale);
 		//CMainFrame* pFrame;
 		//pFrame = (CMainFrame*)AfxGetMainWnd();
 
@@ -218,7 +227,7 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 
 BOOL CC4IMapView::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	// TODO: ¿©±â¿¡ ¸Ş½ÃÁö Ã³¸®±â ÄÚµå¸¦ Ãß°¡ ¹×/¶Ç´Â ±âº»°ªÀ» È£ÃâÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— ë©”ì‹œì§€ ì²˜ë¦¬ê¸° ì½”ë“œë¥¼ ì¶”ê°€ ë°/ë˜ëŠ” ê¸°ë³¸ê°’ì„ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	if ((zDelta > 0 && m_pCoordMgr->m_fScale < -100.0) ||
 		(zDelta < 0 && m_pCoordMgr->m_fScale > 2500.0))
 		return FALSE;
@@ -299,6 +308,11 @@ void CC4IMapView::OnMButtonUp(UINT, CPoint point)
 
 void CC4IMapView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
+    if (m_analysis.Finish())
+    {
+        Invalidate(FALSE);
+        return;
+    }
 	if (m_localOverlay.IsDrawing())
 	{
 		m_localOverlay.Cancel();
@@ -321,12 +335,12 @@ void CC4IMapView::SetMouseState(MOUSE_STATE pState)
 
 	m_pMouseState = pState;
 
-	// ÁÂÇ¥ÃßÃâ ÀÌº¥Æ® Ã³¸® 2014-05-09
+	// ì¢Œí‘œì¶”ì¶œ ì´ë²¤íŠ¸ ì²˜ë¦¬ 2014-05-09
 	if (pState == MOUSE_COORD_INPUT && m_pMouseStateCoordOld != MOUSE_COORD_INPUT)
 	{
 		m_pMouseStateCoordOld = pState;
 #ifdef _DEBUG
-		TRACE("[ÁÂÇ¥ÃßÃâ ½ÃÀÛ]\n");
+		TRACE("[ì¢Œí‘œì¶”ì¶œ ì‹œì‘]\n");
 #endif // _DEBUG
 	}
 	else
@@ -340,7 +354,7 @@ void CC4IMapView::SetMouseState(MOUSE_STATE pState)
 		//	m_pMouseStateCoordOld = pState;
 
 #ifdef _DEBUG
-			TRACE("[ÁÂÇ¥ÃßÃâ Á¾·áº¯°æ]\n");
+			TRACE("[ì¢Œí‘œì¶”ì¶œ ì¢…ë£Œë³€ê²½]\n");
 #endif // _DEBUG
 		//}
 	}
@@ -368,40 +382,40 @@ BOOL CC4IMapView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	AfxSetResourceHandle(AfxGetInstanceHandle());
 	switch (m_pMouseState)
 	{
-	case MOUSE_DEFAULT:// ±âº»
+	case MOUSE_DEFAULT:// ê¸°ë³¸
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_DEFAULT));
 		break;
 
-	case MOUSE_ZOOMIN:// È®´ë
+	case MOUSE_ZOOMIN:// í™•ëŒ€
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_ZOOMIN));
 		break;
 
-	case MOUSE_ZOOMOUT:// Ãà¼Ò
+	case MOUSE_ZOOMOUT:// ì¶•ì†Œ
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_ZOOMOUT));
 		break;
-	case MOUSE_PANNING:// ÀÌµ¿
+	case MOUSE_PANNING:// ì´ë™
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_PANNING));
 		break;
-	case MOUSE_ROTATE:// È¸Àü
+	case MOUSE_ROTATE:// íšŒì „
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_ROTATE));
 		break;
-	case MOUSE_PRINT: // ÀÎ¼â ¿µ¿ª ¼±ÅÃ
+	case MOUSE_PRINT: // ì¸ì‡„ ì˜ì—­ ì„ íƒ
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_RECT));
 		break;
 
-	case MOUSE_SEARCH_POINT: // ¼Ó¼º Á¶È¸
+	case MOUSE_SEARCH_POINT: // ì†ì„± ì¡°íšŒ
 		SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_INFO));
 		break;
 
-	case MOUSE_SEARCH_CIRCLE: //°ø°£°Ë»ö ¿øÇü
+	case MOUSE_SEARCH_CIRCLE: //ê³µê°„ê²€ìƒ‰ ì›í˜•
 		SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_CIRCLE));
 		break;
 
-	case MOUSE_SEARCH_RECTANGLE: //°ø°£°Ë»ö »ç°¢Çü
+	case MOUSE_SEARCH_RECTANGLE: //ê³µê°„ê²€ìƒ‰ ì‚¬ê°í˜•
 		SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_RECT));
 		break;
 
-	case MOUSE_SEARCH:// ÁöÇü °Ë»ö (Á¡, ¿ø, »ç°¢Çü)
+	case MOUSE_SEARCH:// ì§€í˜• ê²€ìƒ‰ (ì , ì›, ì‚¬ê°í˜•)
 	{
 		switch (m_pSearchOption)
 		{
@@ -424,38 +438,38 @@ BOOL CC4IMapView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	}
 	break;
 
-	case MOUSE_DISTANCE:// °Å¸®ÃøÁ¤
+	case MOUSE_DISTANCE:// ê±°ë¦¬ì¸¡ì •
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_LENGTH));
 		break;
 
-	case MOUSE_AREA:// ¸éÀûÃøÁ¤
+	case MOUSE_AREA:// ë©´ì ì¸¡ì •
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_AREA));
 		break;
 
-	case MOUSE_SECTION:// ´Ü¸éµµÃøÁ¤
+	case MOUSE_SECTION:// ë‹¨ë©´ë„ì¸¡ì •
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_SECTION));
 		break;
 
-	case MOUSE_VISIBLE:// °¡½Ã±Ç ºĞ¼®
+	case MOUSE_VISIBLE:// ê°€ì‹œê¶Œ ë¶„ì„
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_VISIBLE));
 		break;
 
-	case MOUSE_RADIUS:// ¹İ°æ Ç¥½Ã
+	case MOUSE_RADIUS:// ë°˜ê²½ í‘œì‹œ
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_VISIBLE));
 		break;
-	case MOUSE_SPACEFILTER_CIRCLE:	// 08.22 °ø°£ÇÊÅÍ ¿ø Áß½É ¼³Á¤
+	case MOUSE_SPACEFILTER_CIRCLE:	// 08.22 ê³µê°„í•„í„° ì› ì¤‘ì‹¬ ì„¤ì •
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_VISIBLE));
 		break;
 
-	case MOUSE_TERRAIN:// ±âÅ¸ ¿µ¿ª ¼±ÅÃ ºĞ¼®
+	case MOUSE_TERRAIN:// ê¸°íƒ€ ì˜ì—­ ì„ íƒ ë¶„ì„
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_TERRAIN));
 		break;
 
-	case MOUSE_OVERLAY:// Åõ¸íµµ
+	case MOUSE_OVERLAY:// íˆ¬ëª…ë„
 		//SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_OVER));
 		break;
 
-	case MOUSE_COPLAY://»óÈ²µµ
+	case MOUSE_COPLAY://ìƒí™©ë„
 		//	SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_COP));
 		::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_DEFAULT));
 		break;

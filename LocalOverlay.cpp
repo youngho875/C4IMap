@@ -25,6 +25,18 @@
 
 namespace
 {
+// Stable clipboard payload; no pointers or STL objects cross the clipboard.
+struct OverlayClipboardObject
+{
+    unsigned int version;
+    int type;
+    double x1, y1, x2, y2;
+    unsigned int color;
+};
+UINT OverlayClipboardFormat()
+{
+    return RegisterClipboardFormat(_T("C4IMap.OverlayObject.GeoDCWorld.v1"));
+}
 struct OverlayCoordinateRestore
 {
 public:
@@ -69,6 +81,8 @@ public:
     std::vector<Item> undone;
     Item pending, original;
     int selected = -1, handle = -1;
+    DWORD clipboardSequence = 0;
+    unsigned int pasteCount = 0;
     bool editing = false;
 
     std::vector<Snapshot> history, future;
@@ -777,3 +791,133 @@ size_t CLocalOverlay::ActiveCount() const
     return count;
 }
 #pragma pack(pop)
+
+bool CLocalOverlay::HasSelection() const
+{
+    if (p->drawing || p->selected < 0 || p->selected >= static_cast<int>(p->items.size()))
+        return false;
+    const auto& item = p->items[p->selected];
+    for (const auto& layer : p->layers)
+        if (layer.id == item.layer && layer.id == p->active && layer.visible)
+            return true;
+    return false;
+}
+
+bool CLocalOverlay::DeleteSelected()
+{
+    if (!HasSelection())
+        return false;
+    p->Remember();
+    p->items.erase(p->items.begin() + p->selected);
+    p->selected = -1;
+    p->modified = true;
+    return true;
+}
+
+bool CLocalOverlay::CopySelected(HWND owner) const
+{
+    if (!HasSelection())
+        return false;
+    const auto& item = p->items[p->selected];
+    OverlayClipboardObject data{};
+    data.version = 1;
+    data.type = item.type;
+    data.x1 = item.x1; data.y1 = item.y1;
+    data.x2 = item.x2; data.y2 = item.y2;
+    data.color = item.color;
+    UINT format = OverlayClipboardFormat();
+    HGLOBAL memory = GlobalAlloc(GMEM_MOVEABLE, sizeof(data));
+    if (!memory)
+        return false;
+    void* bytes = GlobalLock(memory);
+    if (!bytes)
+    {
+        GlobalFree(memory);
+        return false;
+    }
+    memcpy(bytes, &data, sizeof(data));
+    GlobalUnlock(memory);
+    bool copied = false;
+    if (format && ::OpenClipboard(owner))
+    {
+        if (::EmptyClipboard())
+            copied = ::SetClipboardData(format, memory) != nullptr;
+        ::CloseClipboard();
+    }
+    if (!copied)
+        GlobalFree(memory);
+    return copied;
+}
+
+bool CLocalOverlay::CutSelected(HWND owner)
+{
+    // Do not remove the original if another application owns the clipboard.
+    return CopySelected(owner) && DeleteSelected();
+}
+
+bool CLocalOverlay::CanPaste()
+{
+    UINT format = OverlayClipboardFormat();
+    return format && IsClipboardFormatAvailable(format);
+}
+
+bool CLocalOverlay::Paste(HWND owner, CCoordMgr* coord)
+{
+    if (!coord || p->drawing || !CanPaste() || !::OpenClipboard(owner))
+        return false;
+    OverlayClipboardObject data{};
+    HANDLE memory = GetClipboardData(OverlayClipboardFormat());
+    bool valid = memory && GlobalSize(memory) == sizeof(data);
+    if (valid)
+    {
+        void* bytes = GlobalLock(memory);
+        valid = bytes != nullptr;
+        if (bytes)
+        {
+            memcpy(&data, bytes, sizeof(data));
+            GlobalUnlock(memory);
+        }
+    }
+    ::CloseClipboard();
+    if (!valid || data.version != 1 || data.type < Line || data.type > Ellipse ||
+        !std::isfinite(data.x1) || !std::isfinite(data.y1) ||
+        !std::isfinite(data.x2) || !std::isfinite(data.y2))
+        return false;
+    for (const auto& layer : p->layers)
+        if (layer.id == p->active && !layer.visible)
+            return false;
+    Impl::Item item;
+    item.type = data.type;
+    item.color = data.color;
+    item.x1 = data.x1; item.y1 = data.y1;
+    item.x2 = data.x2; item.y2 = data.y2;
+    double x1, y1, x2, y2;
+    if (!Impl::Screen(item, coord, x1, y1, x2, y2))
+        return false;
+    DWORD sequence = GetClipboardSequenceNumber();
+    unsigned int count = sequence == p->clipboardSequence ? p->pasteCount + 1 : 1;
+    double offset = 24.0 * (1 + (count - 1) % 10);
+    coord->ScreenXY2WorldXY(static_cast<int>(x1 + offset), static_cast<int>(y1 + offset), &item.x1, &item.y1);
+    coord->ScreenXY2WorldXY(static_cast<int>(x2 + offset), static_cast<int>(y2 + offset), &item.x2, &item.y2);
+    if (!std::isfinite(item.x1) || !std::isfinite(item.y1) || !std::isfinite(item.x2) || !std::isfinite(item.y2))
+        return false;
+    if (!p->active)
+        AddLayer();
+    item.layer = p->active;
+    p->Remember();
+    p->items.push_back(item);
+    p->clipboardSequence = sequence;
+    p->pasteCount = count;
+    p->selected = static_cast<int>(p->items.size()) - 1;
+    p->tool = Pan;
+    p->modified = true;
+    return true;
+}
+
+bool CLocalOverlay::CanUndo() const
+{
+    for (const auto& snapshot : p->history)
+        if (snapshot.layer == p->active)
+            return true;
+    return false;
+}

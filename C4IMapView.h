@@ -13,6 +13,7 @@
 //
 
 #pragma once
+#include "AnalysisWorkspace.h"
 #include "MapFrameCache.h"
 #include "MapSources.h"
 #include "LocalOverlay.h"
@@ -353,6 +354,13 @@ protected:
     afx_msg void OnLocalToggle();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	CLocalOverlay m_localOverlay;
+    CAnalysisWorkspace m_analysis;
+    afx_msg void OnAnalysisCommand(UINT id);
+    afx_msg BOOL OnAnalysisInputCommand(UINT id);
+    afx_msg void OnUpdateAnalysis(CCmdUI* ui);
+    afx_msg void OnOverlayEdit(UINT id);
+    afx_msg BOOL OnOverlayDeleteCommand(UINT id);
+    afx_msg void OnUpdateOverlayEdit(CCmdUI* ui);
     afx_msg void OnLocalOverlayCommand(UINT id);
     afx_msg void OnUpdateLocalOverlay(CCmdUI* ui);
     afx_msg void OnCaptureChanged(CWnd* wnd);

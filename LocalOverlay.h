@@ -42,6 +42,13 @@ public:
     void Cancel();
     bool IsDrawing() const;
     void Draw(CDC* dc, CCoordMgr* coord);
+    bool HasSelection() const;
+    bool DeleteSelected();
+    bool CopySelected(HWND owner) const;
+    bool CutSelected(HWND owner);
+    bool Paste(HWND owner, CCoordMgr* coord);
+    static bool CanPaste();
+    bool CanUndo() const;
     void Undo();
     void Redo();
     bool CanRedo() const;
