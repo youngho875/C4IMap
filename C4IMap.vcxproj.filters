@@ -133,6 +133,18 @@
     <ClInclude Include="TerrainTiles.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="AnalysisLocationDialog.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="AnalysisWorkspace.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="MapAnalysis.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainProfileDialog.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C4IMap.cpp">
@@ -226,6 +238,21 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="MapSources.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AnalysisLocationDialog.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AnalysisWorkspace.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C4IMapView_Analysis.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapAnalysis.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainProfileDialog.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -696,8 +723,10 @@
     <None Include="res\cursor\14_CoordCapture.cur">
       <Filter>Resource</Filter>
     </None>
-    <None Include="base-map.xml" />
     <None Include="BaseMapDetails.inc">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="base-map.xml">
       <Filter>Source</Filter>
     </None>
   </ItemGroup>
@@ -746,12 +775,5 @@
     <ClInclude Include="MapFrameCache.h">
       <Filter>Source</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="MapAnalysis.cpp" />
-    <ClCompile Include="AnalysisLocationDialog.cpp" />
-    <ClCompile Include="C4IMapView_Analysis.cpp" />
-    <ClInclude Include="MapAnalysis.h" />
-    <ClInclude Include="AnalysisLocationDialog.h" />
   </ItemGroup>
 </Project>
