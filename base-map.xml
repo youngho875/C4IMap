@@ -26,15 +26,28 @@
   <Compass>true</Compass>
   <Elevation>
     <Path>D:/map/strm</Path>
-    <visual>false</visual>
+    <visual>true</visual>
   </Elevation>
+  <!--
+  <Elevation>
+    <Path>D:/map/tiledata/height</Path>
+    <visual>true</visual>
+    <Format>TerrainRGB</Format>
+    <VerticalReference>source</VerticalReference>
+  </Elevation>
+  -->
   <TerrainLocal>
-    <LayerJson>D:/map/terrain/layer.json</LayerJson>
+    <LayerJson>D:/map/tileData/terrain/layer.json</LayerJson>
     <visual>false</visual>
   </TerrainLocal>
+  <!--
   <TerrainServer>
     <LayerJson />
     <visual>false</visual>
   </TerrainServer>
-  <AltitudeSource>auto</AltitudeSource>
+  -->
+  <AltitudeSource>dted</AltitudeSource>
+  <AutoScale>true</AutoScale>
 </BaseMap>
+
+<!-- DTED, TERRAIN-LOCAL, TERRAIN-SERVER -->
