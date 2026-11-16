@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "MapBuildOptions.h"
+#include "AppPaths.h"
 #include <string>
 
 namespace MapSourceConfig
@@ -20,10 +21,16 @@ namespace MapSourceConfig
     {
         if(!directory.empty()&&directory.back()!=L'/'&&directory.back()!=L'\\')
             directory+=L'/';
-        auto selected=directory+FileName();
+        #if C4MAP_BUILD_MODE == 1
+        auto selected=AppPathWide("LocalSourcesXml");
+#elif C4MAP_BUILD_MODE == 2
+        auto selected=AppPathWide("TileSourcesXml");
+#else
+        auto selected=AppPathWide("OgcSourcesXml");
+#endif
         // Never hide an invalid mode file by silently loading another config.
         if(exists(selected))return selected;
-        auto legacy=directory+L"map-sources.xml";
+        auto legacy=AppPathWide("LegacySourcesXml");
         if(exists(legacy))return legacy;
         return selected;
     }

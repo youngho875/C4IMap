@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #pragma pack(push, 8)
 #include "C4IMapViewHeader.h"
 #include "C4IMapView.h"
@@ -22,7 +23,7 @@ void SelectAnalysisElevation(AnalysisSettings &settings)
 {
     auto &config = BaseMapConfig();
     auto selection = config.Value("AltitudeSource", "auto");
-    settings.source = config.Value("Elevation.Path", "D:/map/strm");
+    settings.source = config.Value("Elevation.Path", AppPath("ElevationRoot").c_str());
     if (selection == "terrain-server")
     {
         settings.sourceKind = 2;

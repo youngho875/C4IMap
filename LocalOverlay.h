@@ -23,6 +23,26 @@ public:
         bool visible; 
     };
 
+    struct Style
+    {
+    public:
+        COLORREF lineColor = RGB(255, 60, 40);
+        COLORREF fillColor = RGB(255, 60, 40);
+        COLORREF patternColor = RGB(255,255,255);
+        double width = 3.0;
+        int lineAlpha = 255;
+        int fillAlpha = 255;
+        int dash = 0;
+        int fillType = 1;
+        int hatch = 0;
+        bool lineEnabled = true;
+        bool fillEnabled = false;
+    };
+
+    Style GetStyle() const;
+    bool SetStyle(const Style& style);
+    static bool ValidStyle(const Style& style);
+
     CLocalOverlay();
     ~CLocalOverlay();
 

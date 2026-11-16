@@ -583,4 +583,25 @@
     </ClCompile>
     <ClInclude Include="AnalysisWorkspace.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C4IMapView_OverlayStyle.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="OverlayStyleDialog.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="OverlayStyleDialog.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AppPaths.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="AppPaths.h" />
+  </ItemGroup>
 </Project>

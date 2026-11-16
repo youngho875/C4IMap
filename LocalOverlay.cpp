@@ -31,11 +31,11 @@ struct OverlayClipboardObject
     unsigned int version;
     int type;
     double x1, y1, x2, y2;
-    unsigned int color;
+    CLocalOverlay::Style style;
 };
 UINT OverlayClipboardFormat()
 {
-    return RegisterClipboardFormat(_T("C4IMap.OverlayObject.GeoDCWorld.v1"));
+    return RegisterClipboardFormat(_T("C4IMap.OverlayObject.GeoDCWorld.v2"));
 }
 struct OverlayCoordinateRestore
 {
@@ -57,7 +57,7 @@ public:
         int layer = 0;
         int type = Line;
         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
-        COLORREF color = RGB(255, 60, 40);
+        Style style;
     };
 
     struct Layer
@@ -131,7 +131,7 @@ public:
     bool drawing = false;
     bool modified = false;
     CPoint start;
-    COLORREF color = RGB(255, 60, 40);
+    Style style;
     // The owning C4IMap application manages the GDI+ lifetime.
 };
 
@@ -173,12 +173,15 @@ size_t CLocalOverlay::Count() const
 
 COLORREF CLocalOverlay::Color() const
 {
-    return p->color;
+    return GetStyle().lineColor;
 }
 
 void CLocalOverlay::SetColor(COLORREF c)
 {
-    p->color = c;
+    auto style = GetStyle();
+    style.lineColor = c;
+    style.lineEnabled = true;
+    SetStyle(style);
 }
 
 void CLocalOverlay::Undo()
@@ -338,7 +341,7 @@ bool CLocalOverlay::Begin(CPoint pt, CCoordMgr *c)
     p->pending = Impl::Item();
     p->pending.layer = p->active;
     p->pending.type = p->tool;
-    p->pending.color = p->color;
+    p->pending.style = p->style;
     c->ScreenXY2WorldXY(pt.x, pt.y, &p->pending.x1, &p->pending.y1);
     p->pending.x2 = p->pending.x1;
     p->pending.y2 = p->pending.y1;
@@ -469,18 +472,51 @@ void CLocalOverlay::Draw(CDC *dc, CCoordMgr *c)
         }
         object->pt[0].SetXY(x1, y1);
         object->pt[1].SetXY(x2, y2);
-        object->Property.LineColor =
-            Gdiplus::Color(255, GetRValue(item.color), GetGValue(item.color), GetBValue(item.color))
-                .GetValue();
-        object->Property.FillColor =
-            Gdiplus::Color(40, GetRValue(item.color), GetGValue(item.color), GetBValue(item.color))
-                .GetValue();
-        object->Property.dLineWidth = 3;
-        object->Property.bIsLine = TRUE;
+        const auto& style = item.style;
+        object->Property.LineColor = Gdiplus::Color((BYTE)style.lineAlpha,
+            GetRValue(style.lineColor), GetGValue(style.lineColor), GetBValue(style.lineColor)).GetValue();
+        object->Property.dLineWidth = style.width;
+        object->Property.eLineStyle = static_cast<decltype(object->Property.eLineStyle)>(style.dash);
+        object->Property.bIsLine = style.lineEnabled && style.width > 0;
         object->Property.bIsFill = FALSE;
+        if (style.fillEnabled && (item.type == Rectangle || item.type == Ellipse))
+        {
+            Gdiplus::GraphicsPath path;
+            Gdiplus::RectF box((float)x1, (float)y1, (float)(x2-x1), (float)(y2-y1));
+            if (box.Width > 0 && box.Height > 0)
+            {
+                if (item.type == Rectangle) path.AddRectangle(box);
+                else path.AddEllipse(box);
+                Gdiplus::Color fill((BYTE)style.fillAlpha, GetRValue(style.fillColor), GetGValue(style.fillColor), GetBValue(style.fillColor));
+                Gdiplus::Color other((BYTE)style.fillAlpha, GetRValue(style.patternColor), GetGValue(style.patternColor), GetBValue(style.patternColor));
+                if (style.fillType == 2)
+                {
+                    Gdiplus::HatchBrush brush((Gdiplus::HatchStyle)style.hatch, other, fill);
+                    g.FillPath(&brush, &path);
+                }
+                else if (style.fillType == 3)
+                {
+                    Gdiplus::PathGradientBrush brush(&path);
+                    brush.SetCenterColor(other); INT count = 1;
+                    brush.SetSurroundColors(&fill, &count);
+                    g.FillPath(&brush, &path);
+                }
+                else if (style.fillType == 4)
+                {
+                    Gdiplus::LinearGradientBrush brush(box, fill, other, Gdiplus::LinearGradientModeHorizontal);
+                    g.FillPath(&brush, &path);
+                }
+                else
+                {
+                    Gdiplus::SolidBrush brush(fill);
+                    g.FillPath(&brush, &path);
+                }
+            }
+        }
         if (item.type == Arrow)
             object->Property.nEndLineArrowStyle = 4;
-        renderer->Draw(object.get(), &g);
+        if (object->Property.bIsLine)
+            renderer->Draw(object.get(), &g);
     };
     for (const auto &layer : p->layers)
         if (layer.visible)
@@ -524,7 +560,7 @@ bool CLocalOverlay::Save(LPCTSTR path, CString &error) const
     std::ostringstream out;
     out.imbue(std::locale::classic());
     out << std::setprecision(17);
-    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<C4IMapOverlay version=\"2\" "
+    out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<C4IMapOverlay version=\"3\" "
            "coordinates=\"GeoDC-world\" active=\""
         << p->active << "\">\n";
     for (const auto &layer : p->layers)
@@ -538,7 +574,18 @@ bool CLocalOverlay::Save(LPCTSTR path, CString &error) const
         for (const auto &i : p->items)
             if (i.layer == layer.id)
                 out << "    <Object type=\"" << i.type << "\" x1=\"" << i.x1 << "\" y1=\"" << i.y1
-                    << "\" x2=\"" << i.x2 << "\" y2=\"" << i.y2 << "\" color=\"" << i.color
+                    << "\" x2=\"" << i.x2 << "\" y2=\"" << i.y2 << "\" color=\"" << i.style.lineColor
+                    << "\" lineColor=\"" << i.style.lineColor
+                    << "\" fillColor=\"" << i.style.fillColor
+                    << "\" patternColor=\"" << i.style.patternColor
+                    << "\" width=\"" << i.style.width
+                    << "\" lineAlpha=\"" << i.style.lineAlpha
+                    << "\" fillAlpha=\"" << i.style.fillAlpha
+                    << "\" dash=\"" << i.style.dash
+                    << "\" fillType=\"" << i.style.fillType
+                    << "\" hatch=\"" << i.style.hatch
+                    << "\" lineEnabled=\"" << i.style.lineEnabled
+                    << "\" fillEnabled=\"" << i.style.fillEnabled
                     << "\"/>\n";
         out << "  </Layer>\n";
     }
@@ -612,7 +659,7 @@ bool CLocalOverlay::Load(LPCTSTR path, CString &error)
     if (!root || strcmp(CPLGetXMLValue(root, "coordinates", ""), "GeoDC-world"))
         return fail();
     std::string version = CPLGetXMLValue(root, "version", "");
-    if (version != "1" && version != "2")
+    if (version != "1" && version != "2" && version != "3")
         return fail();
     std::vector<Impl::Item> items;
     std::vector<Impl::Layer> layers;
@@ -642,7 +689,45 @@ bool CLocalOverlay::Load(LPCTSTR path, CString &error)
                 return false;
 
             i.type = (int)type;
-            i.color = (COLORREF)color;
+            i.style.lineColor = (COLORREF)color;
+            i.style.fillColor = (COLORREF)color;
+            if (version == "3")
+            {
+                double lineColor;
+                if (!number(n, "lineColor", lineColor) || lineColor != floor(lineColor) || lineColor < 0 || lineColor > 16777215) return false;
+                i.style.lineColor = static_cast<COLORREF>(lineColor);
+                double fillColor;
+                if (!number(n, "fillColor", fillColor) || fillColor != floor(fillColor) || fillColor < 0 || fillColor > 16777215) return false;
+                i.style.fillColor = static_cast<COLORREF>(fillColor);
+                double patternColor;
+                if (!number(n, "patternColor", patternColor) || patternColor != floor(patternColor) || patternColor < 0 || patternColor > 16777215) return false;
+                i.style.patternColor = static_cast<COLORREF>(patternColor);
+                double width;
+                if (!number(n, "width", width)) return false;
+                i.style.width = static_cast<double>(width);
+                double lineAlpha;
+                if (!number(n, "lineAlpha", lineAlpha) || lineAlpha != floor(lineAlpha) || lineAlpha < 0 || lineAlpha > 255) return false;
+                i.style.lineAlpha = static_cast<int>(lineAlpha);
+                double fillAlpha;
+                if (!number(n, "fillAlpha", fillAlpha) || fillAlpha != floor(fillAlpha) || fillAlpha < 0 || fillAlpha > 255) return false;
+                i.style.fillAlpha = static_cast<int>(fillAlpha);
+                double dash;
+                if (!number(n, "dash", dash) || dash != floor(dash) || dash < 0 || dash > 4) return false;
+                i.style.dash = static_cast<int>(dash);
+                double fillType;
+                if (!number(n, "fillType", fillType) || fillType != floor(fillType) || fillType < 0 || fillType > 4) return false;
+                i.style.fillType = static_cast<int>(fillType);
+                double hatch;
+                if (!number(n, "hatch", hatch) || hatch != floor(hatch) || hatch < 0 || hatch > 52) return false;
+                i.style.hatch = static_cast<int>(hatch);
+                double lineEnabled;
+                if (!number(n, "lineEnabled", lineEnabled) || lineEnabled != floor(lineEnabled) || (lineEnabled != 0 && lineEnabled != 1)) return false;
+                i.style.lineEnabled = static_cast<bool>(lineEnabled);
+                double fillEnabled;
+                if (!number(n, "fillEnabled", fillEnabled) || fillEnabled != floor(fillEnabled) || (fillEnabled != 0 && fillEnabled != 1)) return false;
+                i.style.fillEnabled = static_cast<bool>(fillEnabled);
+                if (!ValidStyle(i.style)) return false;
+            }
             items.push_back(i);
             if (items.size() > 10000)
                 return false;
@@ -790,6 +875,35 @@ size_t CLocalOverlay::ActiveCount() const
 
     return count;
 }
+
+CLocalOverlay::Style CLocalOverlay::GetStyle() const
+{
+    return HasSelection() ? p->items[p->selected].style : p->style;
+}
+
+bool CLocalOverlay::ValidStyle(const Style& style)
+{
+    return style.lineColor <= 0xffffff && style.fillColor <= 0xffffff && style.patternColor <= 0xffffff &&
+        std::isfinite(style.width) && style.width >= 0 && style.width <= 100 &&
+        style.lineAlpha >= 0 && style.lineAlpha <= 255 && style.fillAlpha >= 0 && style.fillAlpha <= 255 &&
+        style.dash >= 0 && style.dash <= 4 && style.fillType >= 1 && style.fillType <= 4 &&
+        style.hatch >= 0 && style.hatch <= 52;
+}
+
+bool CLocalOverlay::SetStyle(const Style& style)
+{
+    if (!ValidStyle(style) || p->drawing)
+        return false;
+    if (HasSelection())
+    {
+        p->Remember();
+        p->items[p->selected].style = style;
+        p->modified = true;
+    }
+    p->style = style;
+    return true;
+}
+
 #pragma pack(pop)
 
 bool CLocalOverlay::HasSelection() const
@@ -820,11 +934,11 @@ bool CLocalOverlay::CopySelected(HWND owner) const
         return false;
     const auto& item = p->items[p->selected];
     OverlayClipboardObject data{};
-    data.version = 1;
+    data.version = 2;
     data.type = item.type;
     data.x1 = item.x1; data.y1 = item.y1;
     data.x2 = item.x2; data.y2 = item.y2;
-    data.color = item.color;
+    data.style = item.style;
     UINT format = OverlayClipboardFormat();
     HGLOBAL memory = GlobalAlloc(GMEM_MOVEABLE, sizeof(data));
     if (!memory)
@@ -879,7 +993,7 @@ bool CLocalOverlay::Paste(HWND owner, CCoordMgr* coord)
         }
     }
     ::CloseClipboard();
-    if (!valid || data.version != 1 || data.type < Line || data.type > Ellipse ||
+    if (!valid || data.version != 2 || data.type < Line || data.type > Ellipse ||
         !std::isfinite(data.x1) || !std::isfinite(data.y1) ||
         !std::isfinite(data.x2) || !std::isfinite(data.y2))
         return false;
@@ -888,7 +1002,9 @@ bool CLocalOverlay::Paste(HWND owner, CCoordMgr* coord)
             return false;
     Impl::Item item;
     item.type = data.type;
-    item.color = data.color;
+    if (!ValidStyle(data.style))
+        return false;
+    item.style = data.style;
     item.x1 = data.x1; item.y1 = data.y1;
     item.x2 = data.x2; item.y2 = data.y2;
     double x1, y1, x2, y2;

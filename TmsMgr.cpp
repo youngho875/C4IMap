@@ -1,4 +1,5 @@
-#include "pch.h"
+﻿#include "pch.h"
+#include "AppPaths.h"
 #include "TmsMgr.h"
 #include "BaseMapOptions.h"
 #include "GeoDC/Coord.h"
@@ -7,7 +8,7 @@
 #include <cmath>
 
 CTmsMgr::CTmsMgr(void)
-    : mCoordMgr(GP_COORDMGR), mDirectoryPath(_T("D:/webcop/NaturalEarthII"))
+    : mCoordMgr(GP_COORDMGR), mDirectoryPath(AppPathText("NaturalEarth"))
 {
     mCoord.initialize_adaptation_data();
 }
@@ -57,7 +58,7 @@ void CTmsMgr::Initalize()
     mCoordMgr = GP_COORDMGR;
     mCoord.initialize_adaptation_data();
     mAvailableLevels.clear();
-    CString configured=BaseMapPath("NaturalEarth.Path","D:/webcop/NaturalEarthII");
+    CString configured=BaseMapPath("NaturalEarth.Path",AppPath("NaturalEarth").c_str());
     const LPCTSTR directories[] = { configured.GetString() };
     for (LPCTSTR directory : directories)
     {
@@ -208,7 +209,9 @@ void CTmsMgr::Load(CRect rect)
             destination[0] = destination[1] = destination[2] = 10;
             destination[3] = 255;
             double longitude, latitude;
-            if (!ScreenToGeo(rect.left + x, rect.top + y, longitude, latitude)) continue;
+            if (!ScreenToGeo(rect.left + x, rect.top + y, longitude, latitude)) 
+                continue;
+
             const double tileX = (longitude + 180.0) * tilesPerDegree;
             const double tileY = (latitude + 90.0) * tilesPerDegree;
             const long indexX = std::min(columns - 1, static_cast<long>(std::floor(tileX)));
@@ -219,7 +222,9 @@ void CTmsMgr::Load(CRect rect)
                 previousX = indexX;
                 previousY = indexY;
             }
-            if (!tile) continue;
+            if (!tile) 
+                continue;
+
             const int sourceX = std::max(0, std::min(tile->GetWidth() - 1,
                 static_cast<int>((tileX - indexX) * tile->GetWidth())));
             // TMS rows grow northwards; decoded image rows grow southwards.
@@ -231,14 +236,16 @@ void CTmsMgr::Load(CRect rect)
             destination[2] = source[2];
         }
     }
-    for (auto& image : mImages) delete image.second;
+    for (auto& image : mImages) 
+        delete image.second;
     mImages.clear();
     mImages.swap(used);
 }
 
 void CTmsMgr::UnLoad()
 {
-    for (auto& image : mImages) delete image.second;
+    for (auto& image : mImages) 
+        delete image.second;
     mImages.clear();
     mRenderedImage.Destroy();
     mRenderedRect.SetRectEmpty();
@@ -250,6 +257,8 @@ void CTmsMgr::NeedLoad()
 
 void CTmsMgr::Draw(CDC* dc)
 {
-    if (!dc || !dc->GetSafeHdc() || mRenderedImage.IsNull()) return;
+    if (!dc || !dc->GetSafeHdc() || mRenderedImage.IsNull())
+        return;
+
     mRenderedImage.BitBlt(dc->GetSafeHdc(), mRenderedRect.left, mRenderedRect.top, SRCCOPY);
 }

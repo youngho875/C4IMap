@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #include "VectorTileStyle.h"
 #include "MapBuildOptions.h"
 
@@ -163,7 +164,7 @@ Gdiplus::Image *Style::Image(const CPLXMLNode *graphic)
             href = Text(a);
     if (href.empty())
         return nullptr;
-    auto path = href;
+    auto path = ResolveAppPath(href);
     if (path.find(':') == path.npos && path[0] != '/')
         path = root + "/" + path;
     auto it = images.find(path);

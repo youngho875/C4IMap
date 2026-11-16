@@ -13,6 +13,9 @@
 //
 
 #include "pch.h"
+#include "AppPaths.h"
+#include <stdexcept>
+#include <atlconv.h>
 #include "framework.h"
 #include "afxwinappex.h"
 #include "afxdialogex.h"
@@ -99,6 +102,13 @@ BOOL CC4IMapApp::InitInstance()
 	InitCommonControlsEx(&InitCtrls);
 
 	CWinAppEx::InitInstance();
+    try { AppPaths(); }
+    catch (const std::exception& error)
+    {
+        CA2W wide(error.what(), CP_UTF8);
+        AfxMessageBox(CString(wide), MB_OK | MB_ICONERROR);
+        return FALSE;
+    }
 
 	// Initialize before creating the main frame, view, and overlay objects.
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
@@ -179,7 +189,28 @@ BOOL CC4IMapApp::InitInstance()
 
 	// 창 하나만 초기화되었으므로 이를 표시하고 업데이트합니다.
 	m_pMainWnd->ShowWindow(SW_SHOW);  // SW_SHOWMAXIMIZED
-	m_pMainWnd->UpdateWindow();
+	// Restore the newly enabled output pane once, after MFC loads the saved layout.
+    // Later launches preserve the user's choice to close or move this pane.
+    if (GetInt(_T("OutputPaneLayoutVersion"), 0) < 1)
+    {
+        CMainFrame* frame = DYNAMIC_DOWNCAST(CMainFrame, m_pMainWnd);
+        if (frame != nullptr)
+        {
+            CDockablePane* pane = DYNAMIC_DOWNCAST(CDockablePane, frame->GetPane(ID_VIEW_OUTPUTWND));
+            if (pane != nullptr)
+            {
+                if (pane->IsAutoHideMode())
+                {
+                    pane->SetAutoHideMode(FALSE, CBRS_ALIGN_BOTTOM);
+                }
+                frame->DockPane(pane, AFX_IDW_DOCKBAR_BOTTOM);
+                frame->ShowPane(pane, TRUE, FALSE, TRUE);
+                frame->RecalcLayout();
+                WriteInt(_T("OutputPaneLayoutVersion"), 1);
+            }
+        }
+    }
+    m_pMainWnd->UpdateWindow();
 
 	//CString strTitle;
 	//strTitle.LoadString(IDS_PIMTITLE);

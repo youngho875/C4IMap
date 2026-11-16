@@ -1,4 +1,5 @@
-﻿#pragma pack(push,8)
+﻿#include "AppPaths.h"
+#pragma pack(push,8)
 struct BaseMapState 
 {
     struct Line 
@@ -176,11 +177,11 @@ void CShapeT::DrawBaseDetails(CDC* dc,float cx,float cy,float scale){
     if(!m_baseMap)
     {
         m_baseMap=std::make_unique<BaseMapState>();
-        m_baseMap->Load(BaseMapConfig().Value("World.Path","D:/map/world_map/Continents.shp").c_str(),1,false);
-        m_baseMap->Load(BaseMapConfig().Value("World.BoundaryPath","D:/map/world_map/national_boundary_polygon.shp").c_str(),1,false);
-        m_baseMap->Load(BaseMapConfig().Value("SmallScale.LabelPath","D:/map/small_scale_map/name_map.shp").c_str(),0,true);
-        m_baseMap->Load(BaseMapConfig().Value("World.LabelPath","D:/map/world_map/placenam.shp").c_str(),1,true);
-        m_baseMap->Load(BaseMapConfig().Value("World.CityPath","D:/map/world_map/World_city_pt.shp").c_str(),1,true);
+        m_baseMap->Load(BaseMapConfig().Value("World.Path",AppPath("WorldMap").c_str()).c_str(),1,false);
+        m_baseMap->Load(BaseMapConfig().Value("World.BoundaryPath",AppPath("WorldBoundary").c_str()).c_str(),1,false);
+        m_baseMap->Load(BaseMapConfig().Value("SmallScale.LabelPath",AppPath("SmallNames").c_str()).c_str(),0,true);
+        m_baseMap->Load(BaseMapConfig().Value("World.LabelPath",AppPath("WorldNames").c_str()).c_str(),1,true);
+        m_baseMap->Load(BaseMapConfig().Value("World.CityPath",AppPath("WorldCities").c_str()).c_str(),1,true);
     }
     auto mgr=GP_COORDMGR;
     CRect viewport(0,0,mgr->m_nDisplayViewWidth,mgr->m_nDisplayViewHeight);

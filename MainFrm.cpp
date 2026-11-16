@@ -13,6 +13,7 @@
 //
 
 #include "pch.h"
+#include "AppPaths.h"
 #include "MapSources.h"
 #include "MapSourceConfig.h"
 #include "framework.h"
@@ -240,9 +241,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 #endif
 #if C4MAP_ENABLE_LOCAL && C4MAP_SHAPE_MODE == 1
         CString localMessage;
-        CString style=_T("D:\\map\\styles\\cop_land_100_unix.xml");
+        CString style=AppPathText("StyleRoot") + _T("/cop_land_100_unix.xml");
         if(GetFileAttributes(style)==INVALID_FILE_ATTRIBUTES)style.Empty();
-        m_indexMap.LoadLocalCatalog(_T("D:/map/shp"),localMessage);
+        m_indexMap.LoadLocalCatalog(AppPathText("ShapeRoot"),localMessage);
         OutputDebugString(localMessage+_T("\n"));
 #endif
         TCHAR path[MAX_PATH]={0};
@@ -763,6 +764,7 @@ void CMainFrame::InitializeRibbon()
 
 	// "속성"
 	CMFCRibbonPanel* pPanelShapeProperty = pCategory->AddPanel(DEF_RBAR_DRAW_PANEL4);
+    pPanelShapeProperty->Add(new CMFCRibbonButton(IDM_POPOVERLAY_PROPERTY, _T("도형 속성"), 29));
 
 	// "선색상"
 	m_pRibbonDrawShapeLineColor = new CMFCRibbonColorButton(ID_MENU_OVERLAY_LINE_COLOR, DEF_RBAR_DRAW_PANEL4_CMD1, 27);

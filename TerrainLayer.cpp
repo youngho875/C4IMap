@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #include "TerrainLayer.h"
 #include "MapBuildOptions.h"
 void CTerrainLayer::Trace(const char *text)
@@ -20,10 +21,7 @@ void CTerrainLayer::Ensure()
     if (attempted)
         return;
     attempted = true;
-    WCHAR exe[32768] = {0};
-    GetModuleFileNameW(nullptr, exe, 32768);
-    CStringW path(exe);
-    path = path.Left(path.ReverseFind(L'\\') + 1) + L"TerrainElevation.dll";
+    CStringW path(AppPathWide("TerrainElevationDll").c_str());
     dll = LoadLibraryW(path);
     if (!dll)
     {
@@ -41,7 +39,7 @@ void CTerrainLayer::Ensure()
             TERRAIN_BIND(requestSample, "TerrainRequestSample")
                 TERRAIN_BIND(getSample, "TerrainGetSample")
 #undef TERRAIN_BIND
-                    handle = create(BaseMapConfig().Value("Elevation.Path", "D:/map/strm").c_str());
+                    handle = create(BaseMapConfig().Value("Elevation.Path", AppPath("ElevationRoot").c_str()).c_str());
     Trace(handle ? "create OK" : "create failed");
 #endif
 }

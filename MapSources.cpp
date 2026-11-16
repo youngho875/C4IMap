@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #include "BaseMapOptions.h"
 #pragma pack(push, 8)
 #include "MapSources.h"
@@ -76,7 +77,11 @@ CString ST(const std::string &s)
 
 std::string SV(CPLXMLNode *n, const char *key, const char *def = "")
 {
-    return CPLGetXMLValue(n, key, def);
+    std::string value = CPLGetXMLValue(n, key, def);
+    if (!strcmp(key,"Path") || !strcmp(key,"StyleSLD") || !strcmp(key,"LocalStyleXML") ||
+        !strcmp(key,"Endpoint") || !strcmp(key,"IdentifyEndpoint"))
+        return ResolveAppPath(value);
+    return value;
 }
 
 std::string SX(const std::string &s)
@@ -1446,7 +1451,11 @@ bool CMapSources::Save(const CString &xml, const std::vector<MapSourceLayer> &la
             s += "  <Layer id=\"" + SX(l.id) + "\" name=\"" + SX(l.name) + "\" type=\"" +
                  SX(l.type) + "\" family=\"" + SX(l.family) + "\">\n";
             auto add = [&](const char *n, const std::string &v)
-            { s += "    <" + std::string(n) + ">" + SX(v) + "</" + n + ">\n"; };
+            {
+                const bool path = !strcmp(n, "Path") || !strcmp(n, "StyleSLD") || !strcmp(n, "LocalStyleXML");
+                const auto value = path ? AppPaths().Reference(v) : v;
+                s += "    <" + std::string(n) + ">" + SX(value) + "</" + n + ">\n";
+            };
             add("visual", l.visual ? "true" : "false");
             add("Path", l.path);
             if (!l.tileScheme.empty())

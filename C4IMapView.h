@@ -410,6 +410,8 @@ public:
 	// 지도 핸들링
 	afx_msg void OnMenuMouseBase();
 	afx_msg void OnUpdateMenuMouseBase(CCmdUI* pCmdUI);
+	afx_msg BOOL OnOverlayStyleCommand(UINT id);
+    afx_msg void OnUpdateOverlayStyle(CCmdUI* ui);
 	afx_msg void OnMenuMouseZoomIn();
 	afx_msg void OnUpdateMenuMouseZoomIn(CCmdUI* pCmdUI);
 	afx_msg void OnMenuMouseZoomOut();

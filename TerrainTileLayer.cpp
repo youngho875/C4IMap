@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #include "TerrainTileLayer.h"
 #include "MapBuildOptions.h"
 void CTerrainTileLayer::Trace(const char *text)
@@ -25,10 +26,7 @@ void CTerrainTileLayer::Ensure()
     if (attempted)
         return;
     attempted = true;
-    WCHAR exe[32768] = {0};
-    GetModuleFileNameW(nullptr, exe, 32768);
-    CStringW path(exe);
-    path = path.Left(path.ReverseFind(L'\\') + 1) + L"TerrainTiles.dll";
+    CStringW path(AppPathWide("TerrainTilesDll").c_str());
     dll = LoadLibraryW(path);
     if (!dll)
     {

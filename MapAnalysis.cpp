@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #pragma pack(push, 8)
 #include "MapAnalysis.h"
 #include "GeoDC/Coord.h"
@@ -54,12 +55,8 @@ class ElevationSampler
 };
 ElevationSampler::ElevationSampler(const AnalysisSettings &settings)
 {
-    wchar_t exe[32768] = {};
-    GetModuleFileNameW(nullptr, exe, 32768);
-    std::wstring path(exe);
-    path.resize(path.find_last_of(L"\\/") + 1);
     bool terrain = settings.sourceKind != 0;
-    path += terrain ? L"TerrainTiles.dll" : L"TerrainElevation.dll";
+    std::wstring path = AppPathWide(terrain ? "TerrainTilesDll" : "TerrainElevationDll");
     dll = LoadLibraryW(path.c_str());
     if (!dll)
         throw std::runtime_error("Cannot load elevation DLL");

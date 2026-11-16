@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "AppPaths.h"
 #include "MapBuildOptions.h"
 #include "BaseMapOptions.h"
 // #include "C4IMap.h"
@@ -100,6 +101,8 @@ std::string LocalValue(const CPLXMLNode *n, const char *key, const char *fallbac
         return fallback;
     }
     const char *v = CPLGetXMLValue(n, key, nullptr);
+    if (key && (!strcmp(key,"xml") || !strcmp(key,"gss") || !strcmp(key,"StandardGssRoot")))
+        return ResolveAppPath(v ? v : fallback);
     return v ? v : fallback;
 }
 bool LocalYes(std::string v)
@@ -177,7 +180,7 @@ LocalXml LocalReadXml(const CString &path)
 // Registered by mapMake; legacy styles remain the fallback for unregistered scales.
 bool LocalRegisteredStyle(
     CString name, CString &xml, CString &gss,
-    const CString &catalogPath = _T("D:/map/styles/mapmake-style-catalog.xml"))
+    const CString &catalogPath = AppPathText("StyleCatalog"))
 {
     name.Replace(_T("_unix.xml"), _T(".xml"));
     try
@@ -554,8 +557,8 @@ CShapeT::CShapeT()
     CString base(executable);
     base = base.Left(base.ReverseFind('\\') + 1);
     for (const auto &candidate : std::vector<CString>{
-             _T("D:/map/styles/proj"), base + _T("../../gdal_sdk/bin/proj9/share"),
-             base + _T("proj9/share"), _T("D:/work/상황도/gdal_sdk/bin/proj9/share")})
+             AppPathText("ProjRoot"), base + _T("../../gdal_sdk/bin/proj9/share"),
+             base + _T("proj9/share")})
     {
         if (GetFileAttributes(candidate + _T("/proj.db")) != INVALID_FILE_ATTRIBUTES)
         {
@@ -593,7 +596,7 @@ void CShapeT::SetBase()
     S_SHP_INFO tmp;
 
     filename = BaseMapPath("SmallScale.Path",
-                           "D:/map/small_scale_map/small_map.shp"); // D:/mapdata/worldmap/world.shp
+                           AppPath("SmallMap").c_str()); // D:/mapdata/worldmap/world.shp
     // filename = "D:/mapdata/worldmap/world.shp";
     poDS = static_cast<GDALDataset *>(
         GDALOpenEx(filename, GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL));
@@ -619,7 +622,7 @@ void CShapeT::SetBase()
     // else tmp.IsData = false;
     // mmap_ShpInfo[id] = tmp;  ++id;
 
-    filename = BaseMapPath("SmallScale.LabelPath", "D:/map/small_scale_map/name_map.shp");
+    filename = BaseMapPath("SmallScale.LabelPath", AppPath("SmallNames").c_str());
     poDS = static_cast<GDALDataset *>(
         GDALOpenEx(filename, GDAL_OF_VECTOR | GDAL_OF_READONLY, NULL, NULL, NULL));
     if (poDS != NULL)
@@ -1366,7 +1369,7 @@ void CShapeT::ResolveLocalStyles(const CString &folder, CString &xml, CString &g
         if (p >= 0)
             dirs.push_back(parent.Left(p));
     }
-    dirs.push_back(_T("D:/map/styles"));
+    dirs.push_back(AppPathText("StyleRoot"));
     dirs.push_back(normalized);
     walk = normalized;
     for (int i = 0; i < 4; ++i)
@@ -2442,7 +2445,7 @@ private:
     void Refresh()
     {
         list_.DeleteAllItems();
-        auto layers = owner_.LocalLayerList();
+        auto layers = owner_.LocalLayerList(); 
         for (size_t i = 0; i < layers.size(); ++i)
         {
             int row = list_.InsertItem((int)i, layers[i].first);
@@ -2559,13 +2562,13 @@ void CShapeT::LocalSettings(CString &folder, CString &xml, CString &gss, int &ep
     {
         folder = m_catalog->root;
         xml.Empty();
-        gss = _T("D:/map/styles/symbols");
+        gss = AppPathText("SymbolRoot");
         epsg = 4326;
         return;
     }
-    folder = m_local ? m_local->folder : _T("D:\\map\\shp\\EAR_100M");
-    xml = m_local ? m_local->xmlPath : _T("D:\\map\\styles\\cop_land_100_unix.xml");
-    gss = m_local ? m_local->gssPath : _T("D:\\map\\styles\\symbols");
+    folder = m_local ? m_local->folder : AppPathText("ShapeRoot") + _T("/EAR_100M");
+    xml = m_local ? m_local->xmlPath : AppPathText("StyleRoot") + _T("/cop_land_100_unix.xml");
+    gss = m_local ? m_local->gssPath : AppPathText("SymbolRoot");
     epsg = m_local ? m_local->fallbackEpsg : 4326;
 }
 std::vector<std::pair<CString, bool>> CShapeT::LocalLayerList() const
@@ -2734,8 +2737,8 @@ bool CShapeT::LoadLocalCatalog(const CString &root, CString &message)
             entry.family = def.family;
             entry.title = def.title;
             entry.folder = root + _T("/") + def.folder;
-            entry.xml = _T("D:/map/styles/") + CString(def.xml);
-            entry.gss = _T("D:/map/styles/GSS");
+            entry.xml = AppPathText("StyleRoot") + _T("/") + CString(def.xml);
+            entry.gss = AppPathText("GssRoot");
             LocalRegisteredStyle(CString(def.xml), entry.xml, entry.gss);
             if (CString(def.folder) == _T("EAR_2_5M") &&
                 GetFileAttributes(entry.folder) == INVALID_FILE_ATTRIBUTES)
