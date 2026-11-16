@@ -396,7 +396,7 @@ void CMainFrame::InitializeRibbon()
 	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_LCC, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB4));	// "Lambert Conformal Conic"
 	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_STE, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB5));	// "StereoGraphic"
 	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_EQU, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB6));	// "EQUIDISTANTCYLINDRICAL"
-	//pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_TM, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB7));	// "TM"
+	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_TM, _T("TM")));	// "TM"
 	pPanel->Add(pButton);
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_COORDGRID_SET, DEF_RBAR_VIEW_PANEL1_CMD1, 0, 0));	// 그리드
 	pPanel->AddSeparator();

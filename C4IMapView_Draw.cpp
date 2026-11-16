@@ -20,7 +20,12 @@ void CC4IMapView::draw_maindc_only(CPoint ptNewPoint)
 	BufferDC.FillSolidRect(rect, RGB(15, 15, 15));
 	BufferDC.BitBlt(ptNewPoint.x, ptNewPoint.y, fWidth, fHeight, m_dcMainTemp, 0, 0, SRCCOPY);
 
-	DrawMapDecoration(&BufferDC,m_pCoordMgr,get_mainfrm(),rect);
+    const double oldX = m_pCoordMgr->m_fCenterX, oldY = m_pCoordMgr->m_fCenterY;
+    m_pCoordMgr->m_fCenterX += ptNewPoint.x;
+    m_pCoordMgr->m_fCenterY += ptNewPoint.y;
+    DrawMapDecoration(&BufferDC,m_pCoordMgr,get_mainfrm(),rect);
+    m_pCoordMgr->m_fCenterX = oldX;
+    m_pCoordMgr->m_fCenterY = oldY;
 	CClientDC screen(this);
     screen.BitBlt(0, 0, fWidth, fHeight, &BufferDC, 0, 0, SRCCOPY);
 }

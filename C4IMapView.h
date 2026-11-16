@@ -423,6 +423,8 @@ public:
 	// 투명도 
 	afx_msg void OnOverlayDraw();
     afx_msg void OnDisplayProjection(UINT id);
+    afx_msg void OnGridSettings();
+    afx_msg void OnUpdateGridSettings(CCmdUI* ui);
     afx_msg void OnMapRotate();
     afx_msg void OnUpdateMapRotate(CCmdUI* ui);
     bool m_rotationDragging=false;

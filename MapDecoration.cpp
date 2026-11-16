@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "MapGrid.h"
 #include "MapDecoration.h"
 #include "BaseMapOptions.h"
 #include "MainFrm.h"
@@ -139,6 +140,7 @@ double MapNiceDistance(double maximum)
 
 void DrawMapDecoration(CDC *dc, CCoordMgr *mgr, CMainFrame *frame, const CRect &viewport)
 {
+    DrawMapGrid(dc, mgr, viewport);
     if (!dc || !mgr || viewport.Width() < 220 || viewport.Height() < 120)
         return;
     double lon, lat, lon2, lat2;

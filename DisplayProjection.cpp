@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "DisplayProjection.h"
 #include "MapBuildOptions.h"
+#include "MapGrid.h"
 void CDisplayProjection::DeleteTransform::operator()(OGRCoordinateTransformation *p) const
 {
     if (p)
@@ -21,7 +22,7 @@ bool CDisplayProjection::Forward(void *context, double *x, double *y)
     p.coord.x_y_to_degrees_lat_long(*x, *y, &lat, &lon);
     if (!std::isfinite(lat) || !std::isfinite(lon) || fabs(lat) >= 89.999)
         return false;
-    if (p.kind == 1 &&
+    if ((p.kind == 1 || p.kind == 6) &&
         (lat < -80 || lat > 84 || fabs(std::remainder(lon - p.centralMeridian, 360.0)) > 45))
         return false;
     *x = lon;
@@ -95,9 +96,9 @@ bool CDisplayProjection::SetAngle(CCoordMgr *mgr, double degrees)
     return true;
 }
 
-bool CDisplayProjection::Set(CCoordMgr *mgr, int selected)
+bool CDisplayProjection::Set(CCoordMgr *mgr, int selected, int requestedTmEpsg)
 {
-    if (!mgr || selected < 0 || selected > 5)
+    if (!mgr || selected < 0 || selected > 6)
         return false;
     int cx = mgr->m_nDisplayViewWidth / 2, cy = mgr->m_nDisplayViewHeight / 2;
     double wx, wy, lat, lon;
@@ -105,46 +106,9 @@ bool CDisplayProjection::Set(CCoordMgr *mgr, int selected)
     coord.x_y_to_degrees_lat_long(wx, wy, &lat, &lon);
     if (!std::isfinite(lat) || !std::isfinite(lon))
         return false;
-    std::unique_ptr<OGRCoordinateTransformation, DeleteTransform> f, b;
-    if (selected)
-    {
-        OGRSpatialReference geo, dst;
-        geo.SetWellKnownGeogCS("WGS84");
-        geo.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-        dst.SetWellKnownGeogCS("WGS84");
-        if (selected == 1)
-        {
-            if (lat < -80 || lat > 84)
-                return false;
-            int zone = (std::max)(1, (std::min)(60, int(floor((lon + 180) / 6)) + 1));
-            dst.SetUTM(zone, lat >= 0);
-            centralMeridian = zone * 6 - 183;
-        }
-        if (selected == 2)
-        {
-            if (fabs(lat) > 85)
-                return false;
-            dst.SetMercator(0, 0, 1, 0, 0);
-        }
-        if (selected == 3)
-            dst.SetLCC(lat >= 0 ? 30 : -30, lat >= 0 ? 60 : -60, lat, lon, 0, 0);
-        if (selected == 4)
-            dst.SetStereographic(lat, lon, 1, 0, 0);
-        if (selected == 5)
-            dst.SetEquirectangular2(0, 0, 0, 0, 0);
-        dst.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
-        f.reset(OGRCreateCoordinateTransformation(&geo, &dst));
-        b.reset(OGRCreateCoordinateTransformation(&dst, &geo));
-        if (!f || !b)
-            return false;
-        double x = lon, y = lat;
-        if (!f->Transform(1, &x, &y) || !std::isfinite(x) || !std::isfinite(y))
-            return false;
-    }
+    if (!ConfigureCoordinates(selected, lat, lon, requestedTmEpsg))
+        return false;
     mgr->SetDisplayTransform(nullptr, nullptr, nullptr);
-    forward = std::move(f);
-    inverse = std::move(b);
-    kind = selected;
     mgr->m_bFlat = selected == 0 && fabs(angle) < 1e-9;
     if (!mgr->m_bFlat)
         mgr->SetDisplayTransform(Forward, Inverse, this);
@@ -159,4 +123,93 @@ CDisplayProjection &DisplayProjection()
 {
     static CDisplayProjection projection;
     return projection;
+}
+
+int CDisplayProjection::TmEpsg() const
+{
+    return tmEpsg;
+}
+
+bool CDisplayProjection::WorldToGrid(double wx, double wy, double &x, double &y)
+{
+    coord.x_y_to_degrees_lat_long(wx, wy, &y, &x);
+    if (!std::isfinite(x) || !std::isfinite(y) || fabs(y) >= 89.999)
+        return false;
+    if ((kind == 1 || kind == 6) &&
+        (y < -80 || y > 84 || fabs(std::remainder(x - centralMeridian, 360.0)) > 45))
+        return false;
+    return (!kind || (forward && forward->Transform(1, &x, &y))) && std::isfinite(x) &&
+           std::isfinite(y);
+}
+
+bool CDisplayProjection::GridToWorld(double x, double y, double &wx, double &wy)
+{
+    if (!std::isfinite(x) || !std::isfinite(y))
+        return false;
+    if (kind && (!inverse || !inverse->Transform(1, &x, &y)))
+        return false;
+    if (!std::isfinite(x) || !std::isfinite(y) || fabs(y) >= 89.999)
+        return false;
+    coord.degrees_lat_long_to_x_y(y, x, &wx, &wy);
+    return std::isfinite(wx) && std::isfinite(wy);
+}
+
+bool CDisplayProjection::ConfigureCoordinates(int selected, double lat, double lon,
+                                              int requestedTmEpsg)
+{
+    if (selected < 0 || selected > 6 || !std::isfinite(lat) || !std::isfinite(lon))
+        return false;
+    double nextMeridian = centralMeridian;
+    int nextTmEpsg = requestedTmEpsg ? requestedTmEpsg : MapGridSettings().tmEpsg;
+    std::unique_ptr<OGRCoordinateTransformation, DeleteTransform> f, b;
+    if (selected)
+    {
+        OGRSpatialReference geo, dst;
+        geo.SetWellKnownGeogCS("WGS84");
+        geo.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        dst.SetWellKnownGeogCS("WGS84");
+        if (selected == 1)
+        {
+            if (lat < -80 || lat > 84)
+                return false;
+            int zone = (std::max)(1, (std::min)(60, int(floor((lon + 180) / 6)) + 1));
+            dst.SetUTM(zone, lat >= 0);
+            nextMeridian = zone * 6 - 183;
+        }
+        if (selected == 2)
+        {
+            if (fabs(lat) > 85)
+                return false;
+            dst.SetMercator(0, 0, 1, 0, 0);
+        }
+        if (selected == 3)
+            dst.SetLCC(lat >= 0 ? 30 : -30, lat >= 0 ? 60 : -60, lat, lon, 0, 0);
+        if (selected == 4)
+            dst.SetStereographic(lat, lon, 1, 0, 0);
+        if (selected == 5)
+            dst.SetEquirectangular2(0, 0, 0, 0, 0);
+        if (selected == 6)
+        {
+            if (!IsSupportedTmEpsg(nextTmEpsg) || dst.importFromEPSG(nextTmEpsg) != OGRERR_NONE)
+                return false;
+            nextMeridian = dst.GetProjParm(SRS_PP_CENTRAL_MERIDIAN);
+            if (lat < -80 || lat > 84 || fabs(std::remainder(lon - nextMeridian, 360.0)) > 45)
+                return false;
+        }
+        dst.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+        f.reset(OGRCreateCoordinateTransformation(&geo, &dst));
+        b.reset(OGRCreateCoordinateTransformation(&dst, &geo));
+        if (!f || !b)
+            return false;
+        double x = lon, y = lat;
+        if (!f->Transform(1, &x, &y) || !std::isfinite(x) || !std::isfinite(y))
+            return false;
+    }
+    forward = std::move(f);
+    inverse = std::move(b);
+    kind = selected;
+    centralMeridian = nextMeridian;
+    if (selected == 6)
+        tmEpsg = nextTmEpsg;
+    return true;
 }

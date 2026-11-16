@@ -604,4 +604,19 @@
     </ClCompile>
     <ClInclude Include="AppPaths.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MapGrid.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="GridSettingsDialog.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="GridSettingsDialog.h" />
+    <ClInclude Include="MapGrid.h" />
+  </ItemGroup>
+  <ItemGroup />
 </Project>

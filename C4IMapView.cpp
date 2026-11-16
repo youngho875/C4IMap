@@ -14,6 +14,7 @@
 
 #include "pch.h"
 #include "DisplayProjection.h"
+#include "GridSettingsDialog.h"
 #include "TerrainProfileDialog.h"
 #include "TerrainLayer.h"
 #include "TerrainTileLayer.h"
@@ -84,6 +85,10 @@ BEGIN_MESSAGE_MAP(CC4IMapView, CView)
     ON_UPDATE_COMMAND_UI(ID_MENU_MAP_ROTATE, &CC4IMapView::OnUpdateMapRotate)
     ON_WM_ERASEBKGND()
     ON_UPDATE_COMMAND_UI(ID_MENU_PROJECTION, &CC4IMapView::OnUpdateDisplayProjection)
+    ON_COMMAND_RANGE(ID_MENU_PROJECTION_TM, ID_MENU_PROJECTION_TM, &CC4IMapView::OnDisplayProjection)
+    ON_UPDATE_COMMAND_UI(ID_MENU_PROJECTION_TM, &CC4IMapView::OnUpdateDisplayProjection)
+    ON_COMMAND(ID_MENU_COORDGRID_SET, &CC4IMapView::OnGridSettings)
+    ON_UPDATE_COMMAND_UI(ID_MENU_COORDGRID_SET, &CC4IMapView::OnUpdateGridSettings)
     ON_COMMAND_RANGE(ID_MENU_PROJECTION_GEO, ID_MENU_PROJECTION_EQU, &CC4IMapView::OnDisplayProjection)
     ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_PROJECTION_GEO, ID_MENU_PROJECTION_EQU, &CC4IMapView::OnUpdateDisplayProjection)
     ON_COMMAND(ID_MAP_SOURCES_XML, &CC4IMapView::OnMapSourcesXml)
@@ -886,15 +891,16 @@ void CC4IMapView::OnOverlayDraw()
 
 void CC4IMapView::OnDisplayProjection(UINT id)
 {
-	 if(int(id-ID_MENU_PROJECTION_GEO)==DisplayProjection().Kind())
+	 const int selected = id == ID_MENU_PROJECTION_TM ? 6 : int(id-ID_MENU_PROJECTION_GEO);
+	 if(selected==DisplayProjection().Kind())
 		 return;
 
 	 m_localOverlay.Cancel();
 	 if(GetCapture()==this)
 		 ReleaseCapture();
-	 if(!DisplayProjection().Set(m_pCoordMgr,int(id-ID_MENU_PROJECTION_GEO)))
+	 if(!DisplayProjection().Set(m_pCoordMgr,selected))
 	 {
-		 AfxMessageBox(_T("현재 지도 중심에서 이 투영을 적용할 수 없습니다. UTM은 남위 80~북위 84도, \
+		 AfxMessageBox(_T("현재 지도 중심에서 이 투영을 적용할 수 없습니다. UTM/TM은 남위 80~북위 84도, \
 				Mercator는 남북위 85도 안에서 선택하세요."));
 		 return;
 	 }
@@ -906,7 +912,7 @@ void CC4IMapView::OnUpdateDisplayProjection(CCmdUI* ui)
 {
 	ui->Enable(m_pCoordMgr!=nullptr);
 	if(ui->m_nID!=ID_MENU_PROJECTION)
-		ui->SetRadio(int(ui->m_nID-ID_MENU_PROJECTION_GEO)==DisplayProjection().Kind());
+		ui->SetRadio((ui->m_nID == ID_MENU_PROJECTION_TM ? 6 : int(ui->m_nID-ID_MENU_PROJECTION_GEO))==DisplayProjection().Kind());
 }
 
 void CC4IMapView::OnMapRotate(){
@@ -915,3 +921,29 @@ void CC4IMapView::OnMapRotate(){
  get_mainfrm()->SetMessageText(_T("휠 버튼을 누르고 좌우로 드래그하면 회전합니다. 회전 버튼은 북쪽 위로 초기화합니다."));
 }
 void CC4IMapView::OnUpdateMapRotate(CCmdUI* ui){ui->Enable(m_pCoordMgr!=nullptr);}
+
+void CC4IMapView::OnGridSettings()
+{
+    if (!m_pCoordMgr) return;
+    CGridSettingsDialog dialog(MapGridSettings(), this);
+    if (dialog.Show() != IDOK) return;
+    const auto value = dialog.Settings();
+    if (DisplayProjection().Kind() == 6 && value.tmEpsg != DisplayProjection().TmEpsg())
+    {
+        if (!DisplayProjection().Set(m_pCoordMgr, 6, value.tmEpsg))
+        {
+            AfxMessageBox(_T("현재 지도 중심에서 선택한 TM 좌표계를 적용할 수 없습니다."));
+            return;
+        }
+        m_mapFrameCache.InvalidateFrom();
+    }
+    MapGridSettings() = value;
+    if (!MapGridSettings().Save())
+        AfxMessageBox(_T("그리드는 적용했지만 base-map.xml을 저장하지 못했습니다. 파일 경로와 쓰기 권한을 확인하세요."));
+    Invalidate(FALSE);
+}
+
+void CC4IMapView::OnUpdateGridSettings(CCmdUI* ui)
+{
+    ui->Enable(m_pCoordMgr != nullptr);
+}
