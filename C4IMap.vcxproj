@@ -93,6 +93,7 @@
     <OutDir>D:\work\상황도\Release\Bin\</OutDir>
     <IntDir>./Release/</IntDir>
   </PropertyGroup>
+  <Import Project="$(ProjectDir)OverlaySdkPaths.props" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -100,6 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;_CRT_SECURE_NO_WARNINGS;GDIPLUS_USE_GDIPLUS_MEM;_AFX_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>c:/gdal_sdk/include;C:/gdal_sdk/include/geos;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;c:/gdal_sdk/include;C:/gdal_sdk/include/geos;%(AdditionalIncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ProgramDataBaseFileName>D:/work/상황도/Debug/Bin/C4IMap.pdb</ProgramDataBaseFileName>
       <DisableSpecificWarnings>4251;4244;4267;4430;4819;4096;4091;4311;4302;4312;4927;4018</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -130,8 +132,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>d:/work/상황도/Debug/Lib;c:/gdal_sdk/lib;D:\work\상황도\Debug\Lib\ICOPS2010V11520</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GeoDC.lib;GeoTrans.lib;CIDataMgr.lib;Loadshp_rtree.lib;geotiff.lib;tiff.lib;BMGlib.lib;BMGLibJPEG.lib;BMGLibPNG.lib;BMGGeoTIFF.lib;Overlay.lib;AltitudeMgr.lib;gdal_i.lib;rpcrt4.lib;ICOPS_Framework_2010.lib;ICOPS_LogManager_2010.lib;ICOPS_WarSym_2010.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration);d:/work/상황도/Debug/Lib;c:/gdal_sdk/lib;D:\work\상황도\Debug\Lib\ICOPS2010V11520</AdditionalLibraryDirectories>
+      <AdditionalDependencies>GeoDC.lib;GeoTrans.lib;CIDataMgr.lib;Loadshp_rtree.lib;geotiff.lib;tiff.lib;BMGlib.lib;BMGLibJPEG.lib;BMGLibPNG.lib;BMGGeoTIFF.lib;$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration)\C4Overlay.lib;AltitudeMgr.lib;gdal_i.lib;rpcrt4.lib;ICOPS_Framework_2010.lib;ICOPS_LogManager_2010.lib;ICOPS_WarSym_2010.lib</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <Midl>
@@ -154,6 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -180,7 +183,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NOMINMAX;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;D:\work\상황도\LibSDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
       <DisableSpecificWarnings>4244;4251;4267;4430;4819</DisableSpecificWarnings>
@@ -191,8 +194,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>$(ProjectDir)OverlaySDK\bin\x64\Release\C4Overlay.lib;GeoDC.lib;GeoTrans.lib;geotiff.lib;tiff.lib;gdal_i.lib;AltitudeMgr.lib;rpcrt4.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\LibSrc\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSrc\lib;$(ProjectDir)..\gdal_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration)\C4Overlay.lib;GeoDC.lib;GeoTrans.lib;geotiff.lib;tiff.lib;gdal_i.lib;AltitudeMgr.lib;rpcrt4.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSDK\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSDK\lib;$(ProjectDir)..\gdal_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <Midl>
@@ -252,47 +255,47 @@
     <ClCompile Include="BaseMapOptions.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="TerrainTileLayer.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="MapFrameCache.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="RemoteMapIdentify.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="TerrainLayer.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="ProjectedRaster.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="VectorTileStyle.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="MapDecoration.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="DisplayProjection.cpp">
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="LocalOverlay.cpp" />
     <ClCompile Include="C4IMap.cpp" />
@@ -495,15 +498,10 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>C4MAP_BUILD_MODE=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <Target Name="BuildC4OverlaySDK" BeforeTargets="PrepareForBuild" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <MSBuild Projects="$(ProjectDir)OverlaySDK\LibSrc\Overlay\Overlay.vcxproj" Targets="Build" Properties="Configuration=Release;Platform=x64" />
-  </Target>
-  <Target Name="CopyC4OverlaySDK" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Copy SourceFiles="$(ProjectDir)OverlaySDK\bin\x64\Release\C4Overlay.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
-  </Target>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="CopyMapSourcesCatalog" AfterTargets="Build" Condition="!Exists('$(TargetDir)map-sources.xml')">
@@ -548,17 +546,17 @@
     <ClCompile Include="MapAnalysis.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="AnalysisLocationDialog.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="C4IMapView_Analysis.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="MapAnalysis.h" />
     <ClInclude Include="AnalysisLocationDialog.h" />
@@ -567,7 +565,7 @@
     <ClCompile Include="TerrainProfileDialog.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="TerrainProfileDialog.h" />
   </ItemGroup>
@@ -575,20 +573,26 @@
     <ClCompile Include="AnalysisWorkspace.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="AnalysisWorkspace.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OverlayRibbonRender.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClInclude Include="OverlayRibbonRender.h" />
     <ClCompile Include="C4IMapView_OverlayStyle.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="OverlayStyleDialog.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="OverlayStyleDialog.h" />
   </ItemGroup>
@@ -596,7 +600,7 @@
     <ClCompile Include="AppPaths.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="AppPaths.h" />
   </ItemGroup>
@@ -604,15 +608,18 @@
     <ClCompile Include="MapGrid.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="GridSettingsDialog.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OverlaySdkRoot)\include;../gdal_sdk/include;../LibSrc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClInclude Include="GridSettingsDialog.h" />
     <ClInclude Include="MapGrid.h" />
   </ItemGroup>
   <ItemGroup />
+  <Target Name="CopyC4OverlaySDK" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
+    <Copy SourceFiles="$(OverlaySdkRoot)\bin\$(Platform)\$(Configuration)\C4Overlay.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

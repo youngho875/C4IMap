@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../LIBSrc/Overlay/Object.h"
-#include "../LIBSrc/Overlay/ObjectGroupInfo.h"
+#include "Overlay/Object.h"
+#include "Overlay/ObjectGroupInfo.h"
 #include "memory.h"
 #include "ItemList.h"
 #include <list>

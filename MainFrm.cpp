@@ -372,7 +372,7 @@ void CMainFrame::InitializeRibbon()
 	// "축척" (단일 창을 쓸 경우 사용)
 	//CMFCRibbonButton* pRibbonMapScale = new CMFCRibbonButton(ID_MENU_MAP_SCALE, DEF_RBAR_SCREEN_PANEL2_CMD2, 9, 9);
 	//pPanelMapSetting->Add(pRibbonMapScale);
-	std::auto_ptr<CMFCRibbonButtonsGroup> apScaleGroup(new CMFCRibbonButtonsGroup);
+	std::unique_ptr<CMFCRibbonButtonsGroup> apScaleGroup(new CMFCRibbonButtonsGroup);
 	CMFCRibbonLabel* pBtnMapScaleInfoLabel = new CMFCRibbonLabel(_T("축 적  범 위"));
 	apScaleGroup->AddButton(pBtnMapScaleInfoLabel);
 	m_pRibbonMapMinScale = new CMFCRibbonEdit(ID_MENU_MAP_SCALE_MIN, 40);
@@ -396,7 +396,7 @@ void CMainFrame::InitializeRibbon()
 	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_LCC, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB4));	// "Lambert Conformal Conic"
 	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_STE, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB5));	// "StereoGraphic"
 	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_EQU, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB6));	// "EQUIDISTANTCYLINDRICAL"
-	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_TM, _T("TM")));	// "TM"
+	pButton->AddSubItem(new CMFCRibbonButton(ID_MENU_PROJECTION_TM, DEF_RBAR_SCREEN_PANEL2_CMD4_SUB7));		// "TM"
 	pPanel->Add(pButton);
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_COORDGRID_SET, DEF_RBAR_VIEW_PANEL1_CMD1, 0, 0));	// 그리드
 	pPanel->AddSeparator();
@@ -624,6 +624,9 @@ void CMainFrame::InitializeRibbon()
 	m_mtbi_default.Load(IDB_OVERLAY_DRAW_DEFAULT);
 	m_mtbi_default.SetImageSize(CSize(24, 24), FALSE);
 	m_mtbi_default.SetTransparentColor(RGB(220, 233, 250));
+    // Military symbol commands are excluded from this build.
+    for(int n=0;n<2 && m_mtbi_default.GetCount()>0;++n)
+        m_mtbi_default.DeleteImage(m_mtbi_default.GetCount()-1);
 
 	int nIconRow = 3;
 	int nIcon = m_nRibbonDrawGalleryRecently;
@@ -661,27 +664,43 @@ void CMainFrame::InitializeRibbon()
     m_pRibbonDrawGallery->AddSubItem(drawMenu);
     pPanel->Add(m_pRibbonDrawGallery);
 
-	//m_pRibbonSortGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_SORT_GALLERY, _T("정렬"), 3, 3, IDB_OVERLAY_DRAW_QUICKSTYLE, 64);
-	//m_pRibbonSortGallery->AddGroup(_T("개체순서"), -1);
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(1, _T("맨 앞으로 가져오기")));
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(2, _T("맨 뒤로 보내기")));
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(3, _T("앞으로 가져오기")));
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(4, _T("뒤로 보내기")));
-	//m_pRibbonSortGallery->AddGroup(_T("개체그룹"), -1);
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(5, _T("그룹")));
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(6, _T("그룹 해제")));
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(7, _T("재그룹")));
-	//m_pRibbonSortGallery->AddGroup(_T("개체위치"), -1);
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(8, _T("맟춤")));
-	//m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(9, _T("회전")));
-	//m_pRibbonSortGallery->SetButtonMode();
-	//m_pRibbonSortGallery->EnableMenuResize(FALSE);
-	//pPanel->Add(m_pRibbonSortGallery);
+	m_pRibbonSortGallery = new CMFCRibbonButton(ID_RIBBON_OVERLAY_SORT_GALLERY, _T("정렬"), 0, -1);
+    m_pRibbonSortGallery->SetDefaultCommand(FALSE);
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61000, _T("맨 앞으로 가져오기")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61001, _T("맨 뒤로 보내기")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61002, _T("앞으로 가져오기")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61003, _T("뒤로 보내기")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61007, _T("그룹")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61008, _T("그룹 해제")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61009, _T("재그룹")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61004, _T("좌우 뒤집기")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61006, _T("90도 회전")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61005, _T("상하 뒤집기")));
+	m_pRibbonSortGallery->AddSubItem(new CMFCRibbonButton(61010, _T("현재 레이어 모두 선택")));
+    auto alignMenu=new CMFCRibbonButton(0,_T("맞춤"));
+    alignMenu->AddSubItem(new CMFCRibbonButton(61011,_T("왼쪽")));
+    alignMenu->AddSubItem(new CMFCRibbonButton(61012,_T("가로 가운데")));
+    alignMenu->AddSubItem(new CMFCRibbonButton(61013,_T("오른쪽")));
+    alignMenu->AddSubItem(new CMFCRibbonButton(61014,_T("위쪽")));
+    alignMenu->AddSubItem(new CMFCRibbonButton(61015,_T("세로 가운데")));
+    alignMenu->AddSubItem(new CMFCRibbonButton(61016,_T("아래쪽")));
+    m_pRibbonSortGallery->AddSubItem(alignMenu);
+	pPanel->Add(m_pRibbonSortGallery);
 
-	m_pRibbonStyleGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_QUICKSTYLE_GALLERY, _T("빠른 스타일"), 3, 3, IDB_OVERLAY_DRAW_QUICKSTYLE, 64);
-	m_pRibbonStyleGallery->SetButtonMode();
-	m_pRibbonStyleGallery->SetIconsInRow(4);
-	m_pRibbonStyleGallery->EnableMenuResize(TRUE);
+	m_pRibbonStyleGallery = new CMFCRibbonButton(ID_RIBBON_OVERLAY_QUICKSTYLE_GALLERY, _T("빠른 스타일"), 0, -1);
+    m_pRibbonStyleGallery->SetDefaultCommand(FALSE);
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61030,_T("파랑 윤곽선")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61031,_T("빨강 윤곽선")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61032,_T("초록 윤곽선")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61033,_T("보라 윤곽선")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61034,_T("파랑 반투명 채움")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61035,_T("빨강 반투명 채움")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61036,_T("초록 반투명 채움")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61037,_T("보라 반투명 채움")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61038,_T("파랑 그라데이션")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61039,_T("빨강 그라데이션")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61040,_T("초록 그라데이션")));
+    m_pRibbonStyleGallery->AddSubItem(new CMFCRibbonButton(61041,_T("보라 그라데이션")));
 	pPanel->Add(m_pRibbonStyleGallery);
 
 	pPanel->Add(m_pRibbonDrawShapeFillColor = new CMFCRibbonColorButton(ID_MENU_OVERLAY_FILL_COLOR, _T("도형 채우기"), 30));
@@ -694,23 +713,72 @@ void CMainFrame::InitializeRibbon()
 	m_pRibbonDrawShapeFillColor->AddColorsGroup(_T("표준 색"), m_lstStandardColors);
 	m_pRibbonDrawShapeFillColor->EnableAutomaticButton(_T("채우기 없음(&N)"), (COLORREF)-1, TRUE, NULL, FALSE);
 	m_pRibbonDrawShapeFillColor->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_FILL_IMAGE, _T("그림(&P)")));
-	m_pRibbonGradationGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_GRADATION_GALLERY, _T("그라데이션(&G)"), 0, -1);
-	m_pRibbonGradationGallery->SetButtonMode();
-	m_pRibbonGradationGallery->SetIconsInRow(5);
-	m_pRibbonGradationGallery->EnableMenuResize(TRUE);
-	m_pRibbonGradationGallery->AddGroup(_T("그라데이션 없음"), mtbi_Recently);
-	m_pRibbonGradationGallery->AddGroup(_T("밝은 그라데이션"), m_mtbi_Line);
-	m_pRibbonGradationGallery->AddGroup(_T("어두운 그라데이션"), m_mtbi_Rect);
+	m_pRibbonGradationGallery = new CMFCRibbonButton(ID_RIBBON_OVERLAY_GRADATION_GALLERY, _T("그라데이션(&G)"), 0, -1);
+    m_pRibbonGradationGallery->SetDefaultCommand(FALSE);
+    m_pRibbonGradationGallery->AddSubItem(new CMFCRibbonButton(61017,_T("그라데이션 없음")));
+    m_pRibbonGradationGallery->AddSubItem(new CMFCRibbonButton(61018,_T("가로")));
+    m_pRibbonGradationGallery->AddSubItem(new CMFCRibbonButton(61019,_T("세로")));
+    m_pRibbonGradationGallery->AddSubItem(new CMFCRibbonButton(61020,_T("오른쪽 아래 대각선")));
+    m_pRibbonGradationGallery->AddSubItem(new CMFCRibbonButton(61021,_T("오른쪽 위 대각선")));
 	m_pRibbonGradationGallery->AddSubItem(new CMFCRibbonButton(ID_RIBBON_OVERLAY_GRADATION_ETC_GALLERY, _T("기타 그라데이션(&M)")));
-	m_pRibbonTextureGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_TEXTURE_GALLERY, _T("질감(&T)"), 3, 3, IDB_OVERLAY_DRAW_QUICKSTYLE, 64);
-	m_pRibbonTextureGallery->SetButtonMode();
-	m_pRibbonTextureGallery->SetIconsInRow(4);
-	m_pRibbonTextureGallery->EnableMenuResize(TRUE);
+	m_pRibbonTextureGallery = new CMFCRibbonButton(ID_RIBBON_OVERLAY_TEXTURE_GALLERY, _T("질감(&T)"), 0, -1);
+    m_pRibbonTextureGallery->SetDefaultCommand(FALSE);
 	m_pRibbonTextureGallery->AddSubItem(new CMFCRibbonButton(ID_RIBBON_OVERLAY_TEXTURE_ETC_GALLERY, _T("기타 질감(&M)")));
-	m_pRibbonPatternGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_PATTERN_GALLERY, _T("패턴"), 3, 3, IDB_OVERLAY_DRAW_QUICKSTYLE, 64);
-	m_pRibbonPatternGallery->SetButtonMode();
-	m_pRibbonPatternGallery->SetIconsInRow(4);
-	m_pRibbonPatternGallery->EnableMenuResize(TRUE);
+	m_pRibbonPatternGallery = new CMFCRibbonButton(ID_RIBBON_OVERLAY_PATTERN_GALLERY, _T("패턴"), 0, -1);
+    m_pRibbonPatternGallery->SetDefaultCommand(FALSE);
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_0,DEF_PROPERTY_HATCHSTYLE_0));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_1,DEF_PROPERTY_HATCHSTYLE_1));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_2,DEF_PROPERTY_HATCHSTYLE_2));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_3,DEF_PROPERTY_HATCHSTYLE_3));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_4,DEF_PROPERTY_HATCHSTYLE_4));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_5,DEF_PROPERTY_HATCHSTYLE_5));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_6,DEF_PROPERTY_HATCHSTYLE_6));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_7,DEF_PROPERTY_HATCHSTYLE_7));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_8,DEF_PROPERTY_HATCHSTYLE_8));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_9,DEF_PROPERTY_HATCHSTYLE_9));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_10,DEF_PROPERTY_HATCHSTYLE_10));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_11,DEF_PROPERTY_HATCHSTYLE_11));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_12,DEF_PROPERTY_HATCHSTYLE_12));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_13,DEF_PROPERTY_HATCHSTYLE_13));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_14,DEF_PROPERTY_HATCHSTYLE_14));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_15,DEF_PROPERTY_HATCHSTYLE_15));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_16,DEF_PROPERTY_HATCHSTYLE_16));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_17,DEF_PROPERTY_HATCHSTYLE_17));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_18,DEF_PROPERTY_HATCHSTYLE_18));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_19,DEF_PROPERTY_HATCHSTYLE_19));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_20,DEF_PROPERTY_HATCHSTYLE_20));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_21,DEF_PROPERTY_HATCHSTYLE_21));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_22,DEF_PROPERTY_HATCHSTYLE_22));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_23,DEF_PROPERTY_HATCHSTYLE_23));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_24,DEF_PROPERTY_HATCHSTYLE_24));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_25,DEF_PROPERTY_HATCHSTYLE_25));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_26,DEF_PROPERTY_HATCHSTYLE_26));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_27,DEF_PROPERTY_HATCHSTYLE_27));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_28,DEF_PROPERTY_HATCHSTYLE_28));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_29,DEF_PROPERTY_HATCHSTYLE_29));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_30,DEF_PROPERTY_HATCHSTYLE_30));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_31,DEF_PROPERTY_HATCHSTYLE_31));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_32,DEF_PROPERTY_HATCHSTYLE_32));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_33,DEF_PROPERTY_HATCHSTYLE_33));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_34,DEF_PROPERTY_HATCHSTYLE_34));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_35,DEF_PROPERTY_HATCHSTYLE_35));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_36,DEF_PROPERTY_HATCHSTYLE_36));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_37,DEF_PROPERTY_HATCHSTYLE_37));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_38,DEF_PROPERTY_HATCHSTYLE_38));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_39,DEF_PROPERTY_HATCHSTYLE_39));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_40,DEF_PROPERTY_HATCHSTYLE_40));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_41,DEF_PROPERTY_HATCHSTYLE_41));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_42,DEF_PROPERTY_HATCHSTYLE_42));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_43,DEF_PROPERTY_HATCHSTYLE_43));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_44,DEF_PROPERTY_HATCHSTYLE_44));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_45,DEF_PROPERTY_HATCHSTYLE_45));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_46,DEF_PROPERTY_HATCHSTYLE_46));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_47,DEF_PROPERTY_HATCHSTYLE_47));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_48,DEF_PROPERTY_HATCHSTYLE_48));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_49,DEF_PROPERTY_HATCHSTYLE_49));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_50,DEF_PROPERTY_HATCHSTYLE_50));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_51,DEF_PROPERTY_HATCHSTYLE_51));
+    m_pRibbonPatternGallery->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_HATCH_STYLE_52,DEF_PROPERTY_HATCHSTYLE_52));
 	m_pRibbonDrawShapeFillColor->AddSubItem(m_pRibbonGradationGallery);
 	m_pRibbonDrawShapeFillColor->AddSubItem(m_pRibbonTextureGallery);
 	m_pRibbonDrawShapeFillColor->AddSubItem(m_pRibbonPatternGallery);
@@ -747,16 +815,84 @@ void CMainFrame::InitializeRibbon()
 	m_pRibbonDrawShapeLineDesh->SetPalette(mtbi_Recently);
 	m_pRibbonDrawShapeLineDesh->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_LINE_DESH_ETC_COLOR, _T("다른 선(&L)")));
 
-	m_pRibbonDrawShapeLineBow = new CMFCRibbonGallery(ID_MENU_OVERLAY_LINE_BOW_COLOR, _T("화살표(&R)"), 0, -1);
-	m_pRibbonDrawShapeLineBow->SetButtonMode();
-	m_pRibbonDrawShapeLineBow->SetIconsInRow(1);
-	m_pRibbonDrawShapeLineBow->EnableMenuResize(TRUE);
-	m_pRibbonDrawShapeLineBow->SetAlwaysLargeImage(FALSE);
-	mtbi_Recently.Clear();
-	mtbi_Recently.Load(IDB_OVERLAY_DRAW_LINEBOW);
-	mtbi_Recently.SetImageSize(CSize(155, 24), FALSE);
-	m_pRibbonDrawShapeLineBow->SetPalette(mtbi_Recently);
-	m_pRibbonDrawShapeLineBow->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_LINE_BOW_ETC_COLOR, _T("다른 화살표(&M)")));
+	m_pRibbonDrawShapeLineBow = new CMFCRibbonButton(ID_MENU_OVERLAY_LINE_BOW_COLOR, _T("화살표(&R)"), 0, -1);
+    m_pRibbonDrawShapeLineBow->SetDefaultCommand(FALSE);
+    auto startArrowMenu=new CMFCRibbonButton(0,_T("시작 화살표"));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_0,DEF_PROPERTY_LINECAP_NONE));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_1,DEF_PROPERTY_LINECAP_ARROW));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_2,DEF_PROPERTY_LINECAP_ARROW_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_3,DEF_PROPERTY_LINECAP_ARROW_R));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_4,DEF_PROPERTY_LINECAP_TAIL));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_5,DEF_PROPERTY_LINECAP_TAIL_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_6,DEF_PROPERTY_LINECAP_TAIL_R));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_7,DEF_PROPERTY_LINECAP_TAIL_F));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_8,DEF_PROPERTY_LINECAP_TAIL_LF));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_9,DEF_PROPERTY_LINECAP_TAIL_RF));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_10,DEF_PROPERTY_LINECAP_TENT_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_11,DEF_PROPERTY_LINECAP_TENT_R));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_12,DEF_PROPERTY_LINECAP_TENT_LF));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_13,DEF_PROPERTY_LINECAP_TENT_RF));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_14,DEF_PROPERTY_LINECAP_SLASH_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_15,DEF_PROPERTY_LINECAP_SLASH_R));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_16,DEF_PROPERTY_LINECAP_CROSS));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_17,DEF_PROPERTY_LINECAP_TRI));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_18,DEF_PROPERTY_LINECAP_TRI_F));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_19,DEF_PROPERTY_LINECAP_TRI_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_20,DEF_PROPERTY_LINECAP_TRI_LF));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_21,DEF_PROPERTY_LINECAP_TRI_R));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_22,DEF_PROPERTY_LINECAP_TRI_RF));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_23,DEF_PROPERTY_LINECAP_RECT));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_24,DEF_PROPERTY_LINECAP_RECT_F));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_25,DEF_PROPERTY_LINECAP_CIRCLE));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_26,DEF_PROPERTY_LINECAP_CIRCLE_F));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_27,DEF_PROPERTY_LINECAP_DIA));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_28,DEF_PROPERTY_LINECAP_DIA_F));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_29,DEF_PROPERTY_LINECAP_THICK));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_30,DEF_PROPERTY_LINECAP_DBLARROW));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_31,DEF_PROPERTY_LINECAP_DBLARROW_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_32,DEF_PROPERTY_LINECAP_DBLARROW_R));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_33,DEF_PROPERTY_LINECAP_DBLTAIL));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_34,DEF_PROPERTY_LINECAP_DBLTAIL_L));
+    startArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ARROW_STYLE_35,DEF_PROPERTY_LINECAP_DBLTAIL_R));
+    m_pRibbonDrawShapeLineBow->AddSubItem(startArrowMenu);
+    auto endArrowMenu=new CMFCRibbonButton(0,_T("끝 화살표"));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_0,DEF_PROPERTY_LINECAP_NONE));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_1,DEF_PROPERTY_LINECAP_ARROW));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_2,DEF_PROPERTY_LINECAP_ARROW_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_3,DEF_PROPERTY_LINECAP_ARROW_R));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_4,DEF_PROPERTY_LINECAP_TAIL));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_5,DEF_PROPERTY_LINECAP_TAIL_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_6,DEF_PROPERTY_LINECAP_TAIL_R));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_7,DEF_PROPERTY_LINECAP_TAIL_F));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_8,DEF_PROPERTY_LINECAP_TAIL_LF));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_9,DEF_PROPERTY_LINECAP_TAIL_RF));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_10,DEF_PROPERTY_LINECAP_TENT_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_11,DEF_PROPERTY_LINECAP_TENT_R));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_12,DEF_PROPERTY_LINECAP_TENT_LF));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_13,DEF_PROPERTY_LINECAP_TENT_RF));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_14,DEF_PROPERTY_LINECAP_SLASH_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_15,DEF_PROPERTY_LINECAP_SLASH_R));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_16,DEF_PROPERTY_LINECAP_CROSS));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_17,DEF_PROPERTY_LINECAP_TRI));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_18,DEF_PROPERTY_LINECAP_TRI_F));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_19,DEF_PROPERTY_LINECAP_TRI_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_20,DEF_PROPERTY_LINECAP_TRI_LF));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_21,DEF_PROPERTY_LINECAP_TRI_R));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_22,DEF_PROPERTY_LINECAP_TRI_RF));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_23,DEF_PROPERTY_LINECAP_RECT));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_24,DEF_PROPERTY_LINECAP_RECT_F));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_25,DEF_PROPERTY_LINECAP_CIRCLE));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_26,DEF_PROPERTY_LINECAP_CIRCLE_F));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_27,DEF_PROPERTY_LINECAP_DIA));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_28,DEF_PROPERTY_LINECAP_DIA_F));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_29,DEF_PROPERTY_LINECAP_THICK));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_30,DEF_PROPERTY_LINECAP_DBLARROW));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_31,DEF_PROPERTY_LINECAP_DBLARROW_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_32,DEF_PROPERTY_LINECAP_DBLARROW_R));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_33,DEF_PROPERTY_LINECAP_DBLTAIL));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_34,DEF_PROPERTY_LINECAP_DBLTAIL_L));
+    endArrowMenu->AddSubItem(new CMFCRibbonButton(ID_MENU_OVERLAY_ENDARROW_STYLE_35,DEF_PROPERTY_LINECAP_DBLTAIL_R));
+    m_pRibbonDrawShapeLineBow->AddSubItem(endArrowMenu);
 
 	m_pRibbonDrawShapeLineColor->AddSubItem(m_pRibbonDrawShapeLineWidth);
 	m_pRibbonDrawShapeLineColor->AddSubItem(m_pRibbonDrawShapeLineDesh);
@@ -1008,7 +1144,9 @@ void CMainFrame::InitializeRibbon()
 	pPanelShapeProperty->Add(m_pRibbonDrawShapeGradientColor);
 
 	//그라데이션 위치
-	CMFCRibbonButton* pRibbonGraphicFillGradientPos = new CMFCRibbonButton(ID_MENU_OVERLAY_GARDIENT_BLENDPOS, "그라데이션위치", 31);
+	auto pRibbonGraphicFillGradientPos = new CMFCRibbonEdit(ID_MENU_OVERLAY_GARDIENT_BLENDPOS, 40, _T("그라데이션위치"));
+    pRibbonGraphicFillGradientPos->EnableSpinButtons(1,99);
+    pRibbonGraphicFillGradientPos->SetEditText(_T("50"));
 	pPanelShapeProperty->Add(pRibbonGraphicFillGradientPos);
 
 	//그라데이션 방향
@@ -1062,7 +1200,7 @@ void CMainFrame::InitializeRibbon()
 
 	// 줄간격
 	pPanelTextProperty->Add(m_pRibbonDrawShapeTextLineInterval = new CMFCRibbonEdit(ID_MENU_OVERLAY_TEXT_LINEINTERVAL, 50, _T("줄간격")));
-	m_pRibbonDrawShapeTextLineInterval->EnableSpinButtons(-1000, 1000);
+	m_pRibbonDrawShapeTextLineInterval->EnableSpinButtons(10, 1000);
 	m_pRibbonDrawShapeTextLineInterval->SetEditText(_T("100"));
 
 	//#define DEF_RBAR_DRAW_PANEL5_CMD3				"글색상"
@@ -1894,7 +2032,7 @@ void CMainFrame::SetOverlayRecentlyDefDrawItem(CMFCToolBarImages& mtbi_Src, UINT
 	AddOverlayRentlyDrawItem(nGalleryImageID - 1);
 	*/
 
-	galleryInfo.nGalleryID = 3;	galleryInfo.nGalleryGrpImageID = nGalleryGrpImageID++; 	galleryInfo.nGalleryImageID = nGalleryImageID++;	galleryInfo.strGalleryImageStr = _T("OLE");
+	galleryInfo.nGalleryID = 3;	galleryInfo.nGalleryGrpImageID = nGalleryGrpImageID++; 	galleryInfo.nGalleryImageID = nGalleryImageID++;	galleryInfo.strGalleryImageStr = _T("OLE 미리보기");
 	m_mRibbonDrawGallery.insert(std::pair<int, IMX_REP_Gallery>(galleryInfo.nGalleryImageID, galleryInfo));
 	AddOverlayRentlyDrawItem(nGalleryImageID - 1);
 
@@ -1923,14 +2061,6 @@ void CMainFrame::SetOverlayRecentlyDefDrawItem(CMFCToolBarImages& mtbi_Src, UINT
 	AddOverlayRentlyDrawItem(nGalleryImageID - 1);
 
 	galleryInfo.nGalleryID = 3;	galleryInfo.nGalleryGrpImageID = nGalleryGrpImageID++; 	galleryInfo.nGalleryImageID = nGalleryImageID++;	galleryInfo.strGalleryImageStr = _T("현");
-	m_mRibbonDrawGallery.insert(std::pair<int, IMX_REP_Gallery>(galleryInfo.nGalleryImageID, galleryInfo));
-	AddOverlayRentlyDrawItem(nGalleryImageID - 1);
-
-	galleryInfo.nGalleryID = 3;	galleryInfo.nGalleryGrpImageID = nGalleryGrpImageID++; 	galleryInfo.nGalleryImageID = nGalleryImageID++;	galleryInfo.strGalleryImageStr = _T("표준군대부호(군대부호->부호선택");
-	m_mRibbonDrawGallery.insert(std::pair<int, IMX_REP_Gallery>(galleryInfo.nGalleryImageID, galleryInfo));
-	AddOverlayRentlyDrawItem(nGalleryImageID - 1);
-
-	galleryInfo.nGalleryID = 3;	galleryInfo.nGalleryGrpImageID = nGalleryGrpImageID++; 	galleryInfo.nGalleryImageID = nGalleryImageID++;	galleryInfo.strGalleryImageStr = _T("표준군대부호코드로 작성");
 	m_mRibbonDrawGallery.insert(std::pair<int, IMX_REP_Gallery>(galleryInfo.nGalleryImageID, galleryInfo));
 	AddOverlayRentlyDrawItem(nGalleryImageID - 1);
 

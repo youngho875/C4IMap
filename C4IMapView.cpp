@@ -44,6 +44,75 @@
 IMPLEMENT_DYNCREATE(CC4IMapView, CView)
 
 BEGIN_MESSAGE_MAP(CC4IMapView, CView)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINE_BOW_COLOR, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_SORT_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_ARROW_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_ENDARROW_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINECAP_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINESTRIPE_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINEJOIN_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINE_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINE_WIDTH, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINEALIGNMENT_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_FILL_TYPE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_PATTERN_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_GARDIENT_LINERMODE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_GARDIENT_COLOR, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_GARDIENT_COLOR, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_GARDIENT_BLENDPOS, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_GARDIENT_BLENDPOS, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_STRING, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_STRING, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_KIND, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_KIND, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_SIZE, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_SIZE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_LINEINTERVAL, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_LINEINTERVAL, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_COLOR, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_COLOR, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_VERTICAL, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_VERTICAL, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_RIGHTTOLEFT, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_RIGHTTOLEFT, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_TEXT_AUTOBOX, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_TEXT_AUTOBOX, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_MENU_OVERLAY_FILL_IMAGE, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_FILL_IMAGE, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_RIBBON_OVERLAY_QUICKSTYLE_GALLERY, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_QUICKSTYLE_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_RIBBON_OVERLAY_PATTERN_GALLERY, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_PATTERN_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_RIBBON_OVERLAY_TEXTURE_GALLERY, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_TEXTURE_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_RIBBON_OVERLAY_TEXTURE_ETC_GALLERY, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_TEXTURE_ETC_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_RIBBON_OVERLAY_GRADATION_GALLERY, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_GRADATION_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX(ID_RIBBON_OVERLAY_GRADATION_ETC_GALLERY, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_GRADATION_ETC_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_ARROW_STYLE_0, ID_MENU_OVERLAY_ARROW_STYLE_35, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_ARROW_STYLE_0, ID_MENU_OVERLAY_ARROW_STYLE_35, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_ENDARROW_STYLE_0, ID_MENU_OVERLAY_ENDARROW_STYLE_35, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_ENDARROW_STYLE_0, ID_MENU_OVERLAY_ENDARROW_STYLE_35, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_LINECAP_STYLE_0, ID_MENU_OVERLAY_LINECAP_STYLE_2, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_LINECAP_STYLE_0, ID_MENU_OVERLAY_LINECAP_STYLE_2, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_LINEJOIN_STYLE_0, ID_MENU_OVERLAY_LINEJOIN_STYLE_3, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_LINEJOIN_STYLE_0, ID_MENU_OVERLAY_LINEJOIN_STYLE_3, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_LINEALIGNMENT_STYLE_0, ID_MENU_OVERLAY_LINEALIGNMENT_STYLE_1, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_LINEALIGNMENT_STYLE_0, ID_MENU_OVERLAY_LINEALIGNMENT_STYLE_1, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_LINESTRIPE_STYLE_0, ID_MENU_OVERLAY_LINESTRIPE_STYLE_4, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_LINESTRIPE_STYLE_0, ID_MENU_OVERLAY_LINESTRIPE_STYLE_4, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_GARDIENT_LINERMODE_0, ID_MENU_OVERLAY_GARDIENT_LINERMODE_3, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_GARDIENT_LINERMODE_0, ID_MENU_OVERLAY_GARDIENT_LINERMODE_3, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(61030, 61041, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(61030, 61041, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(61000, 61021, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(61000, 61021, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_TEXT_BOLD, ID_MENU_OVERLAY_TEXT_ALIGNRIGHT, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_TEXT_BOLD, ID_MENU_OVERLAY_TEXT_ALIGNRIGHT, &CC4IMapView::OnUpdateOverlayStyle)
+    ON_COMMAND_EX_RANGE(ID_MENU_OVERLAY_TEXT_ALIGNTOP, ID_MENU_OVERLAY_TEXT_ALIGNBOTTOM, &CC4IMapView::OnOverlayStyleCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_TEXT_ALIGNTOP, ID_MENU_OVERLAY_TEXT_ALIGNBOTTOM, &CC4IMapView::OnUpdateOverlayStyle)
     ON_COMMAND_EX(ID_MENU_OVERLAY_FILL_COLOR, &CC4IMapView::OnOverlayStyleCommand)
     ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_FILL_COLOR, &CC4IMapView::OnUpdateOverlayStyle)
     ON_COMMAND_EX(ID_MENU_OVERLAY_LINE_COLOR, &CC4IMapView::OnOverlayStyleCommand)
@@ -80,6 +149,25 @@ BEGIN_MESSAGE_MAP(CC4IMapView, CView)
     ON_COMMAND_EX(ID_MENU_OVERLAY_DELETE, &CC4IMapView::OnOverlayDeleteCommand)
     ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_DELETE, &CC4IMapView::OnUpdateOverlayEdit)
     ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_OVERLAY_PASTE, ID_MENU_OVERLAY_COPY, &CC4IMapView::OnUpdateOverlayEdit)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     ON_COMMAND(ID_MENU_MAP_ROTATE, &CC4IMapView::OnMapRotate)
     ON_UPDATE_COMMAND_UI(ID_MENU_MAP_ROTATE, &CC4IMapView::OnUpdateMapRotate)
@@ -201,19 +289,8 @@ CC4IMapView::CC4IMapView()
 	//m_pMapDisplayMgr = NULL;
 
 	// 투명도
-	m_pOverlayThread = NULL;
-	m_pDlgOverlayControler = NULL;
-	m_pDlgObjectList = NULL;
-	m_pDlgOverlayProperty = NULL;
-	m_pDlgOverlayTextEdit = NULL;
-	m_pDlgOverlayEditObject = NULL;
-	m_pDlgOverlayEditObjectPoint = NULL;
-
 	m_nOverlyaEditObjectPointX = 0;
 	m_nOverlyaEditObjectPointY = 0;
-
-	//m_TmsMgr = NULL;
-	mHeights = NULL;
 
 }
 
@@ -877,6 +954,47 @@ void CC4IMapView::OnOverlayDraw()
 		 command=ID_C4OVER_RECT;
 	 else if(name==_T("타원")||name==_T("원"))
 		 command=ID_C4OVER_ELLIPSE;
+     if(name==_T("OLE 미리보기")){OnLocalOverlayCommand(ID_C4OVER_RECT);OnOverlayStyleCommand(61050);return;}
+     if(name==_T("이미지") || name==_T("그림파일"))
+     {
+         OnLocalOverlayCommand(ID_C4OVER_RECT);
+         OnOverlayStyleCommand(ID_MENU_OVERLAY_FILL_IMAGE);
+         return;
+     }
+     int tool=0;
+     if(name==_T("폴리라인") || name==_T("좌표열폴리라인"))tool=CLocalOverlay::Polyline;
+     if(name==_T("폴리곤"))tool=CLocalOverlay::Polygon;
+     if(name==_T("스플라인/곡선"))tool=CLocalOverlay::Spline;
+     if(name==_T("폐곡선스플라인/닫힌곡선"))tool=CLocalOverlay::ClosedSpline;
+     if(name==_T("둥근사각형")) tool=CLocalOverlay::RoundRect;
+     if(name==_T("이등변 삼각형")) tool=CLocalOverlay::Triangle;
+     if(name==_T("직각 삼각형")) tool=CLocalOverlay::RightTriangle;
+     if(name==_T("평행 사변형")) tool=CLocalOverlay::Parallelogram;
+     if(name==_T("사다리꼴")) tool=CLocalOverlay::Trapezoid;
+     if(name==_T("마름모")) tool=CLocalOverlay::Diamond;
+     if(name==_T("오각형")) tool=CLocalOverlay::Pentagon;
+     if(name==_T("육각형")) tool=CLocalOverlay::Hexagon;
+     if(name==_T("호")) tool=CLocalOverlay::Arc;
+     if(name==_T("부채꼴")) tool=CLocalOverlay::Pie;
+     if(name==_T("현")) tool=CLocalOverlay::Chord;
+     if(name==_T("텍스트")) tool=CLocalOverlay::TextBox;
+     if(name==_T("글상자")) tool=CLocalOverlay::TextBox;
+     if(name==_T("세로텍스트")) tool=CLocalOverlay::TextBox;
+     if(name.Find(_T("꺾인"))>=0) tool=CLocalOverlay::Elbow;
+     if(name.Find(_T("구부러진"))>=0) tool=CLocalOverlay::Curve;
+     if(name==_T("양쪽 화살표 직선")) tool=CLocalOverlay::Line;
+     if(tool)
+     {
+         OnLocalOverlayCommand(ID_C4OVER_PAN);
+         m_localOverlay.SetTool(tool);
+         auto style=m_localOverlay.GetStyle();
+         style.startArrow=name.Find(_T("양쪽"))>=0?1:0;
+         style.endArrow=name.Find(_T("화살표"))>=0?1:0;
+         if(tool==CLocalOverlay::TextBox){style.lineEnabled=false;style.fillEnabled=false;style.vertical=name==_T("세로텍스트");if(!style.text[0])wcscpy_s(style.text,L"텍스트");}
+         m_localOverlay.SetStyle(style);
+         frame->AddOverlayRentlyDrawItem(index);
+         return;
+     }
 	 if(command)
 	 {
 		 OnLocalOverlayCommand(command);
@@ -947,3 +1065,24 @@ void CC4IMapView::OnUpdateGridSettings(CCmdUI* ui)
 {
     ui->Enable(m_pCoordMgr != nullptr);
 }
+
+
+void CC4IMapView::OnOverlayStartArrowStyle() {};
+void CC4IMapView::OnOverlayEndArrowStyle() {};
+void CC4IMapView::OnOverlayLineCapStyle() {};
+void CC4IMapView::OnOverlayLinestripeStyle() {};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};
+//void CC4IMapView::OnOverlayLinestripeStyle(){};

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <map>
-#include "../LIBSrc/Overlay/Object.h"
+#include "Overlay/Object.h"
 #include "ItemList.h"
 #include "LayerStructure.h"
 

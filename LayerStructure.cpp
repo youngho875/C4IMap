@@ -1,11 +1,11 @@
 #include "pch.h"
-#include "../LIBSrc/Overlay/object.h"
-#include "../LIBSrc/Overlay/ObjectArc.h"
-#include "../LIBSrc/Overlay/ObjectPie.h"
-#include "../LIBSrc/Overlay/ObjectLinkedLine.h"
-#include "../LIBSrc/Overlay/ObjectLinkedMultiLine.h"
-#include "../LIBSrc/Overlay/ObjectLinkedCurve.h"
-#include "../LIBSrc/Overlay/ObjectLinkedMultiCurve.h"
+#include "Overlay/object.h"
+#include "Overlay/ObjectArc.h"
+#include "Overlay/ObjectPie.h"
+#include "Overlay/ObjectLinkedLine.h"
+#include "Overlay/ObjectLinkedMultiLine.h"
+#include "Overlay/ObjectLinkedCurve.h"
+#include "Overlay/ObjectLinkedMultiCurve.h"
 #include "LayerStructure.h"
 
 #ifdef _DEBUG

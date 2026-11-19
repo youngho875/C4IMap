@@ -171,17 +171,29 @@ public:
 	CTmsMgr m_TmsMgr;
 
 public:
-	COverlayThread* m_pOverlayThread;
-
-	CDlgOverlayControler* m_pDlgOverlayControler;
-	CDlgObjectList* m_pDlgObjectList;
-	CDlgOverlayProperty* m_pDlgOverlayProperty;
-	CDlgOverlayTextEdit* m_pDlgOverlayTextEdit;
-	CDlgOverlayEditObject* m_pDlgOverlayEditObject;
-	CDlgOverlayEditObjectPoint* m_pDlgOverlayEditObjectPoint;
-
+	
 	int m_nOverlyaEditObjectPointX;
 	int m_nOverlyaEditObjectPointY;
+
+	void OnOverlayStartArrowStyle() ;
+	void OnOverlayEndArrowStyle() ;
+	void OnOverlayLineCapStyle() ;
+	void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
+	//void OnOverlayLinestripeStyle();
 
 	Gdiplus::Bitmap* m_pDoubleBuffer;	// 더블버퍼링용 이미지
 
@@ -311,6 +323,8 @@ public:
 
 	MOUSE_STATE GetMouseState();
 	void SetMouseState(MOUSE_STATE pState);
+	BOOL SaveLocalOverlayIfModified();
+	void ResetLocalOverlay() { m_localOverlay.Clear(); RefreshOverlayLayers(); Invalidate(FALSE); }
 
 // 재정의입니다.
 public:
@@ -330,32 +344,22 @@ public:
 #endif
 
 protected:
-	//임시로 만듬
-	//std::vector<GPoint> mvecPts;
-	//void gdalshapeDraw(CDC* pDC, float fCenterX, float fCenterY, float fScale);
-	//void shapeDraw(CDC* pDC, float fCenterX, float fCenterY, float fScale);
-	//void LoadShp();
-	//void OpenShapeFile(/*string filename*/);
-
-	//CGDtedMgr* m_dted;
-	//IAltitude* sp_Height;
-
-	CAltitude* mHeights;
+	CLocalOverlay m_localOverlay;
+	CAnalysisWorkspace m_analysis;
 
 	BOOL BeginView();
+	CPoint m_localClick;
+	void ShowLocalFeature(CPoint point);
 
 // 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnFilePrintPreview();
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-    CPoint m_localClick;
-    void ShowLocalFeature(CPoint point);
     afx_msg void OnLocalSettings();
     afx_msg void OnLocalIdentify();
     afx_msg void OnLocalToggle();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	CLocalOverlay m_localOverlay;
-    CAnalysisWorkspace m_analysis;
+
     afx_msg void OnAnalysisCommand(UINT id);
     afx_msg BOOL OnAnalysisInputCommand(UINT id);
     afx_msg void OnUpdateAnalysis(CCmdUI* ui);
@@ -376,8 +380,6 @@ public:
     afx_msg void OnOverlayLayerNew();
     afx_msg void OnOverlayLayerOpen();
     afx_msg void OnOverlayLayerSave();
-    BOOL SaveLocalOverlayIfModified();
-    void ResetLocalOverlay(){m_localOverlay.Clear();RefreshOverlayLayers();Invalidate(FALSE);}
 	virtual void OnInitialUpdate();
 	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
 	CMapFrameCache m_mapFrameCache;

@@ -131,7 +131,7 @@ public:  // 컨트롤 모음이 포함된 멤버입니다.
 	CMFCRibbonColorButton* m_pRibbonDrawShapeLineColor;		// 투명도 속성 선 색상
 	CMFCRibbonGallery* m_pRibbonDrawShapeLineWidth;
 	CMFCRibbonGallery* m_pRibbonDrawShapeLineDesh;
-	CMFCRibbonGallery* m_pRibbonDrawShapeLineBow;
+	CMFCRibbonButton* m_pRibbonDrawShapeLineBow;
 	CMFCRibbonColorButton* m_pRibbonDrawShapeFillColor;		// 투명도 속성 내부 색상
 	CMFCRibbonColorButton* m_pRibbonDrawShapePatternColor;	// 투명도 속성 패턴 색상
 	CMFCRibbonColorButton* m_pRibbonDrawShapeGradientColor;	// 투명도 속성 그라데이션 색상
@@ -159,12 +159,12 @@ public:  // 컨트롤 모음이 포함된 멤버입니다.
 	CMFCToolBarImages m_mtbi_Line;							// 투명도 선 이미지
 	CMFCToolBarImages m_mtbi_Rect;							// 투명도 사각형 이미지
 	CMFCToolBarImages m_mtbi_default;						// 투명도 기본도형 이미지
-	CMFCRibbonGallery* m_pRibbonSortGallery;				// 투명도 도형 정렬
-	CMFCRibbonGallery* m_pRibbonStyleGallery;				// 투명도 도형 스타일
+	CMFCRibbonButton* m_pRibbonSortGallery;				// 투명도 도형 정렬
+	CMFCRibbonButton* m_pRibbonStyleGallery;				// 투명도 도형 스타일
 
-	CMFCRibbonGallery* m_pRibbonGradationGallery;				// 투명도 도형 그라데이션
-	CMFCRibbonGallery* m_pRibbonTextureGallery;				// 투명도 도형 질감
-	CMFCRibbonGallery* m_pRibbonPatternGallery;				// 투명도 도형 패턴
+	CMFCRibbonButton* m_pRibbonGradationGallery;				// 투명도 도형 그라데이션
+	CMFCRibbonButton* m_pRibbonTextureGallery;				// 투명도 도형 질감
+	CMFCRibbonButton* m_pRibbonPatternGallery;				// 투명도 도형 패턴
 
 
 	std::vector<CString> m_vSystemFontList;	// 시스템 폰트 종류 백업
