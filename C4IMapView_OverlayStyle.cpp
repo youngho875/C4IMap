@@ -2,6 +2,7 @@
 #include "C4IMapViewHeader.h"
 #include "OverlayStyleDialog.h"
 #include "OverlayRibbonRender.h"
+#include "OverlayTextRibbonEdit.h"
 
 BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
 {
@@ -159,10 +160,17 @@ BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
             style.gradientPosition = _ttoi(edit->GetEditText());
     }
     else if (id == ID_MENU_OVERLAY_TEXT_STRING)
-        wcsncpy_s(style.text, CStringW(frame->m_pRibbonDrawShapeTextString->GetEditText()),
-                  _TRUNCATE);
+    {
+        auto edit = DYNAMIC_DOWNCAST(COverlayTextRibbonEdit,
+                                    frame->m_pRibbonDrawShapeTextString);
+        if (edit)
+            wcsncpy_s(style.text, edit->CommittedText(), _TRUNCATE);
+        else
+            wcsncpy_s(style.text, CA2W(frame->m_pRibbonDrawShapeTextString->GetEditText(),
+                                     CP_ACP), _TRUNCATE);
+    }
     else if (id == ID_MENU_OVERLAY_TEXT_KIND)
-        wcsncpy_s(style.font, CStringW(frame->m_pRibbonDrawShapeTextKind->GetEditText()),
+        wcsncpy_s(style.font, CA2W(frame->m_pRibbonDrawShapeTextKind->GetEditText(), CP_ACP),
                   _TRUNCATE);
     else if (id == ID_MENU_OVERLAY_TEXT_SIZE)
         style.fontSize = _ttoi(frame->m_pRibbonDrawShapeTextSize->GetEditText());
@@ -229,8 +237,20 @@ BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
                       _T("1~99입니다."));
         return TRUE;
     }
+    const auto previous = m_localOverlay.GetStyle();
+    const bool textProperty = id == ID_MENU_OVERLAY_TEXT_STRING ||
+        id == ID_MENU_OVERLAY_TEXT_KIND || id == ID_MENU_OVERLAY_TEXT_SIZE ||
+        id == ID_MENU_OVERLAY_TEXT_LINEINTERVAL;
+    if (textProperty && wcscmp(previous.text, style.text) == 0 &&
+        wcscmp(previous.font, style.font) == 0 && previous.fontSize == style.fontSize &&
+        previous.lineInterval == style.lineInterval)
+        return TRUE;
     if (m_localOverlay.SetStyle(style))
+    {
         Invalidate(FALSE);
+        if (textProperty)
+            UpdateWindow();
+    }
     return TRUE;
 }
 void CC4IMapView::OnUpdateOverlayStyle(CCmdUI *ui)
@@ -242,17 +262,29 @@ void CC4IMapView::OnUpdateOverlayStyle(CCmdUI *ui)
     if (frame)
     {
         auto edit = DYNAMIC_DOWNCAST(CMFCRibbonEdit, frame->m_wndRibbonBar.FindByID(ui->m_nID));
-        if (edit && !edit->IsFocused() && !edit->IsDroppedDown())
+        // IsFocused describes the ribbon element, not its native RichEdit child.
+        // Never synchronize model text into an editor while the user is typing
+        // or composing IME text, including editors hosted in a ribbon popup.
+        CWnd* focus = CWnd::GetFocus();
+        CMFCPopupMenu* popup = CMFCPopupMenu::GetActiveMenu();
+        const bool editingRibbon = focus &&
+            (frame->m_wndRibbonBar.IsChild(focus) || (popup && popup->IsChild(focus)));
+        // Spin controls still post their MFC command; preserve its pending value.
+        MSG pendingMessage = {};
+        const bool pendingCommand = ::PeekMessage(&pendingMessage, frame->GetSafeHwnd(),
+            WM_COMMAND, WM_COMMAND, PM_NOREMOVE) != FALSE;
+        if (edit && !pendingCommand && !editingRibbon && !edit->HasFocus() &&
+            !edit->IsFocused() && !edit->IsDroppedDown())
         {
             CString value;
             bool update = true;
             switch (ui->m_nID)
             {
             case ID_MENU_OVERLAY_TEXT_STRING:
-                value = s.text;
+                value = CW2A(s.text, CP_ACP);
                 break;
             case ID_MENU_OVERLAY_TEXT_KIND:
-                value = s.font;
+                value = CW2A(s.font, CP_ACP);
                 break;
             case ID_MENU_OVERLAY_TEXT_SIZE:
                 value.Format(_T("%d"), s.fontSize);

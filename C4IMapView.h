@@ -24,19 +24,13 @@
 #include "GeoDC/Coord.h"
 #include "GeoDC/CoordMgr.h"
 
-//#include "PointDisplay.h"
-//#include "FilePath.h"
 #include "TmsMgr.h"
-//#include "MapGeneratorDlg.h"
-//#include "CaptureWindow.h"
+
 #include "ComDefStringValue.h"
 #include "GPoint.h"
 #include "../inc/define_struct.h"
 
-//#include "ShapeT.h"
-#include "AltitudeMgr/Altitude.h"
-//#include "ObjectProp.h"
-//#include "PPTooltip.h"
+
 
 
 //#import "Altitude.tlb" no_namespace named_guids
@@ -63,13 +57,6 @@
 #define WM_ON_MINIMAP_CLOSE			WM_USER+6
 
 
-class COverlayThread;
-class CDlgOverlayControler;
-class CDlgObjectList;
-class CDlgOverlayProperty;
-class CDlgOverlayTextEdit;
-class CDlgOverlayEditObject;
-class CDlgOverlayEditObjectPoint;
 
 class CGDoublePoint;
 class CTmsMgr;
@@ -175,25 +162,6 @@ public:
 	int m_nOverlyaEditObjectPointX;
 	int m_nOverlyaEditObjectPointY;
 
-	void OnOverlayStartArrowStyle() ;
-	void OnOverlayEndArrowStyle() ;
-	void OnOverlayLineCapStyle() ;
-	void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
-	//void OnOverlayLinestripeStyle();
 
 	Gdiplus::Bitmap* m_pDoubleBuffer;	// 더블버퍼링용 이미지
 
@@ -273,9 +241,7 @@ private:
 	GPoint m_fHookPoint;
 
 public:
-	//CFilePath	m_pathConfig;
-	//CFilePath	m_pathDTED;
-	//CFilePath	m_pathScrCap;
+
 
 	MAP_STATUS_INFO	m_pStatusInfo; /**< 상태바 정보 */
 
@@ -380,7 +346,7 @@ public:
     afx_msg void OnOverlayLayerNew();
     afx_msg void OnOverlayLayerOpen();
     afx_msg void OnOverlayLayerSave();
-	virtual void OnInitialUpdate();
+	virtual void OnInitialUpdate(); 
 	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo = NULL);
 	CMapFrameCache m_mapFrameCache;
     afx_msg void OnPaint();

@@ -10,7 +10,7 @@ typedef enum SEARCHLIST_KIND
 	SEARCHLIST_COP_IMPORTANT,	// 상황도 중요도시요소
 	SEARCHLIST_COP_ALWAYS,	// 상황도 상시시현요소
 	SEARCHLIST_COP,			// 상황도 검색 결과
-};
+} SEARCHLIST_KIND;
 
 // COutputSearchList
 

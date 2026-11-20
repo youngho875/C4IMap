@@ -20,6 +20,7 @@
 #include "C4IMap.h"
 
 #include "MainFrm.h"
+#include "OverlayTextRibbonEdit.h"
 #include "C4IMapView.h"
 #include "ComDefStringValue.h"
 #include <memory>
@@ -1162,11 +1163,11 @@ void CMainFrame::InitializeRibbon()
 	CMFCRibbonPanel* pPanelTextProperty = pCategory->AddPanel(DEF_RBAR_DRAW_PANEL5);
 
 	// 내용
-	pPanelTextProperty->Add(m_pRibbonDrawShapeTextString = new CMFCRibbonEdit(ID_MENU_OVERLAY_TEXT_STRING, 100, _T("내용")));
+	pPanelTextProperty->Add(m_pRibbonDrawShapeTextString = new COverlayTextRibbonEdit(ID_MENU_OVERLAY_TEXT_STRING, 100, _T("내용")));
 
 	//#define DEF_RBAR_DRAW_PANEL5_CMD1				"글씨체"
 	CMFCRibbonFontComboBox::m_bDrawUsingFont = TRUE;
-	m_pRibbonDrawShapeTextKind = new CMFCRibbonFontComboBox(ID_MENU_OVERLAY_TEXT_KIND);
+	m_pRibbonDrawShapeTextKind = new COverlayFontRibbonCombo(ID_MENU_OVERLAY_TEXT_KIND);
 	m_pRibbonDrawShapeTextKind->SetWidth(50, FALSE); // Width in "floaty" mode
 	m_pRibbonDrawShapeTextKind->SelectItem(_T("굴림"));
 	m_pRibbonDrawShapeTextKind->SetDropDownHeight(500);
@@ -1177,7 +1178,7 @@ void CMainFrame::InitializeRibbon()
 		m_vSystemFontList.push_back(m_pRibbonDrawShapeTextKind->GetItem(i));
 
 	//#define DEF_RBAR_DRAW_PANEL5_CMD2				"글크기"
-	m_pRibbonDrawShapeTextSize = new CMFCRibbonComboBox(ID_MENU_OVERLAY_TEXT_SIZE, FALSE, 30);
+	m_pRibbonDrawShapeTextSize = new COverlaySizeRibbonCombo(ID_MENU_OVERLAY_TEXT_SIZE, 50);
 	m_pRibbonDrawShapeTextSize->AddItem(_T("8"));
 	m_pRibbonDrawShapeTextSize->AddItem(_T("9"));
 	m_pRibbonDrawShapeTextSize->AddItem(_T("10"));
@@ -1199,7 +1200,7 @@ void CMainFrame::InitializeRibbon()
 	pPanelTextProperty->Add(m_pRibbonDrawShapeTextSize); //
 
 	// 줄간격
-	pPanelTextProperty->Add(m_pRibbonDrawShapeTextLineInterval = new CMFCRibbonEdit(ID_MENU_OVERLAY_TEXT_LINEINTERVAL, 50, _T("줄간격")));
+	pPanelTextProperty->Add(m_pRibbonDrawShapeTextLineInterval = new COverlayTextRibbonEdit(ID_MENU_OVERLAY_TEXT_LINEINTERVAL, 50, _T("줄간격")));
 	m_pRibbonDrawShapeTextLineInterval->EnableSpinButtons(10, 1000);
 	m_pRibbonDrawShapeTextLineInterval->SetEditText(_T("100"));
 

@@ -145,6 +145,21 @@
     <ClInclude Include="TerrainProfileDialog.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="AppPaths.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="GridSettingsDialog.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="MapGrid.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayStyleDialog.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayRibbonRender.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C4IMap.cpp">
@@ -253,6 +268,24 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="TerrainProfileDialog.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="AppPaths.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="GridSettingsDialog.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapGrid.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="OverlayStyleDialog.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C4IMapView_OverlayStyle.cpp">
+      <Filter>APP</Filter>
+    </ClCompile>
+    <ClCompile Include="OverlayRibbonRender.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

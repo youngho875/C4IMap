@@ -1067,22 +1067,3 @@ void CC4IMapView::OnUpdateGridSettings(CCmdUI* ui)
 }
 
 
-void CC4IMapView::OnOverlayStartArrowStyle() {};
-void CC4IMapView::OnOverlayEndArrowStyle() {};
-void CC4IMapView::OnOverlayLineCapStyle() {};
-void CC4IMapView::OnOverlayLinestripeStyle() {};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};
-//void CC4IMapView::OnOverlayLinestripeStyle(){};

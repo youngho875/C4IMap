@@ -578,6 +578,10 @@
     <ClInclude Include="AnalysisWorkspace.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OverlayTextRibbonEdit.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClInclude Include="OverlayTextRibbonEdit.h" />
     <ClCompile Include="OverlayRibbonRender.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
