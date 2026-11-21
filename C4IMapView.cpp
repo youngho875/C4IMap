@@ -44,6 +44,17 @@
 IMPLEMENT_DYNCREATE(CC4IMapView, CView)
 
 BEGIN_MESSAGE_MAP(CC4IMapView, CView)
+    ON_COMMAND(ID_MENU_COORDINATE_MOVE, &CC4IMapView::OnNavigationCoordinate)
+    ON_UPDATE_COMMAND_UI(ID_MENU_COORDINATE_MOVE, &CC4IMapView::OnUpdateNavigation)
+    ON_COMMAND_RANGE(ID_MENU_MAP_UNDO, ID_MENU_MAP_INIT, &CC4IMapView::OnNavigationCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_MAP_UNDO, ID_MENU_MAP_INIT, &CC4IMapView::OnUpdateNavigation)
+    ON_COMMAND_RANGE(ID_MENU_MAP_SCALE_CURRENT, ID_MENU_MAP_SCALE_ZOOM, &CC4IMapView::OnNavigationCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_MAP_SCALE_CURRENT, ID_MENU_MAP_SCALE_ZOOM, &CC4IMapView::OnUpdateNavigation)
+    ON_COMMAND_RANGE(ID_MENU_BRIGHT_SLIDER, ID_MENU_SAVE_IMAGEFILE, &CC4IMapView::OnMapRibbonCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_BRIGHT_SLIDER, ID_MENU_SAVE_IMAGEFILE, &CC4IMapView::OnUpdateMapRibbon)
+    ON_COMMAND_RANGE(ID_MENU_SEARCH_CLEAR, ID_MENU_SEARCH_MAP, &CC4IMapView::OnMapRibbonCommand)
+    ON_UPDATE_COMMAND_UI_RANGE(ID_MENU_SEARCH_CLEAR, ID_MENU_SEARCH_MAP, &CC4IMapView::OnUpdateMapRibbon)
+    ON_MESSAGE(WM_MAP_SEARCH_MOVE, &CC4IMapView::OnMapSearchMove)
     ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_LINE_BOW_COLOR, &CC4IMapView::OnUpdateOverlayStyle)
     ON_UPDATE_COMMAND_UI(ID_RIBBON_OVERLAY_SORT_GALLERY, &CC4IMapView::OnUpdateOverlayStyle)
     ON_UPDATE_COMMAND_UI(ID_MENU_OVERLAY_ARROW_STYLE, &CC4IMapView::OnUpdateOverlayStyle)
@@ -571,7 +582,7 @@ void CC4IMapView::ZoomAtPoint(CPoint point, bool zoomIn)
     const double oldScale = m_pCoordMgr->m_fScale;
     if (!(oldScale > 0.0) || oldScale > 1.0e12)
         return;
-    double newScale = zoomIn ? oldScale * 1.5 : oldScale / 1.5;
+    double newScale = zoomIn ? oldScale * m_navigationScroll : oldScale / m_navigationScroll;
     newScale = (std::max)(0.000001, (std::min)(2500.0, newScale));
     const double ratio = newScale / oldScale;
     const CPoint center = client.CenterPoint();
@@ -707,6 +718,7 @@ void CC4IMapView::OnLocalIdentify()
 
 void CC4IMapView::ShowLocalFeature(CPoint point)
 {
+    m_pCoordMgr->ScreenXY2WorldXY(point.x,point.y,&m_searchIdentifyLocation.x,&m_searchIdentifyLocation.y);
     CString title;std::vector<CString> fields,values;
     auto frame=get_mainfrm();
     MapSources().CancelIdentify();
@@ -715,11 +727,13 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
 		MapSources().Identify(point,m_pCoordMgr,title,fields,values))
 	{
         frame->m_wndMapProperties.SetSearchFeatureInfo(title,fields,values);
+        OutputMapIdentify(title,fields,values);
         frame->m_wndMapProperties.ShowPane(TRUE,FALSE,TRUE);
     }
 	else 
 	{
 		frame->m_wndMapProperties.SetSearchFeatureInfo(MapSources().IdentifyPending()?_T("서버 속성 조회 중..."):_T("선택된 객체 없음"),fields,values);
+        OutputMapIdentify(MapSources().IdentifyPending()?_T("서버 속성 조회 중..."):_T("선택된 객체 없음"),fields,values);
 	}
     DrawSituation(TRUE,TRUE,TRUE,TRUE);
 }
@@ -777,6 +791,11 @@ void CC4IMapView::OnUpdateLocalOverlay(CCmdUI* ui)
 
 BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
 {
+    if(msg->message==WM_KEYDOWN&&msg->wParam==VK_ESCAPE&&msg->hwnd==GetSafeHwnd()&&m_searchMode)
+    {
+        m_searchMode=0;m_searchDragging=false;if(GetCapture()==this)ReleaseCapture();Invalidate(FALSE);return TRUE;
+    }
+
     if (msg->message == WM_KEYDOWN && msg->hwnd == GetSafeHwnd())
     {
         if (msg->wParam == VK_ESCAPE && (m_analysis.Active() || m_analysis.Busy()))
@@ -825,6 +844,7 @@ BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
 
 void CC4IMapView::OnCaptureChanged(CWnd* wnd)
 {
+    if(m_searchDragging){m_searchDragging=false;m_searchMode=0;Invalidate(FALSE);}
     m_rotationDragging=false;
     if(m_localOverlay.IsDrawing())
 	{
@@ -857,6 +877,23 @@ void CC4IMapView::OnMapSourcesXml()
 
 void CC4IMapView::OnTimer(UINT_PTR id)
 {
+    if(id==ID_MAP_SOURCES_XML)
+    {
+        MapSearchReply reply;
+        if(m_searchJob.Poll(reply))
+        {
+            m_searchResults=reply.features;
+            get_mainfrm()->m_wndOutput.ShowMapSearch(reply);
+            Invalidate(FALSE);
+        }
+        auto frame=get_mainfrm();CWnd* focus=CWnd::GetFocus();
+        if(m_searchControlsDirty&&!m_searchDragging&&!CMFCPopupMenu::GetActiveMenu()&&
+            (!focus||!frame->m_wndRibbonBar.IsChild(focus)))
+        {
+            m_searchControlsDirty=false;
+            RefreshMapSearchControls();
+        }
+    }
     if (id == ID_MAP_SOURCES_XML)
     {
         if (m_analysis.Poll())
@@ -881,6 +918,7 @@ void CC4IMapView::OnTimer(UINT_PTR id)
             auto frame=get_mainfrm();
             frame->m_wndMapProperties.ClearPropList();
             frame->m_wndMapProperties.SetSearchFeatureInfo(title,fields,values);
+        OutputMapIdentify(title,fields,values);
             frame->m_wndMapProperties.ShowPane(TRUE,FALSE,TRUE);
         }
     }
@@ -897,6 +935,7 @@ void CC4IMapView::OnTimer(UINT_PTR id)
 	}
 	if(id== ID_MAP_SOURCES_XML && MapSources().Poll())
 	{
+        m_searchControlsDirty=true;
 		m_mapFrameCache.InvalidateFrom(CMapFrameCache::Sources);
         get_mainfrm()->SetMessageText(MapSources().Status());
 		Invalidate(FALSE);

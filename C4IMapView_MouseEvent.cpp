@@ -12,6 +12,8 @@ char		globalLong[10] = CENTERLONG;
 
 void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 {
+    if(m_searchDragging){m_searchEnd=point;Invalidate(FALSE);return;}
+
     if (m_analysis.Move(point, m_pCoordMgr))
     {
         Invalidate(FALSE);
@@ -86,6 +88,8 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 {
+    if(m_searchMode){SetFocus();if(m_searchMode==1){m_searchStart=m_searchEnd=point;m_searchDragging=true;SetCapture();}return;}
+
     if (GetMouseState() == MOUSE_ZOOMIN || GetMouseState() == MOUSE_ZOOMOUT)
     {
         SetFocus();
@@ -127,6 +131,15 @@ void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+    if(m_searchMode)
+    {
+        const int mode=m_searchMode;m_searchMode=0;m_searchDragging=false;m_searchEnd=point;
+        if(GetCapture()==this)ReleaseCapture();
+        if(mode==2)StartMapSearch(true,CRect(point.x-7,point.y-7,point.x+7,point.y+7),true);
+        else{CRect area(m_searchStart,point);area.NormalizeRect();if(area.Width()<2||area.Height()<2)area.InflateRect(4,4);StartMapSearch(true,area);}
+        Invalidate(FALSE);return;
+    }
+
     if (GetMouseState() == MOUSE_ZOOMIN || GetMouseState() == MOUSE_ZOOMOUT)
     {
         if (GetCapture() == this)

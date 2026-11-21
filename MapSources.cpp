@@ -2013,3 +2013,49 @@ void CMapSources::Configure(CWnd *parent)
     dlg.Show(parent);
 }
 #pragma pack(pop)
+
+void CMapSources::SearchSnapshot(CCoordMgr* coord, std::vector<MapSearchFeature>& features, bool schemaOnly) const
+{
+    if (!coord) return;
+    std::vector<std::shared_ptr<Tile>> ready;
+    std::vector<MapSourceLayer> sources;
+    { std::lock_guard<std::mutex> lock(p->mutex); ready=p->ready; sources=p->layers; }
+    std::set<CString> schemas;
+    for (const auto& tile : ready)
+    {
+        if (tile->sourceId >= sources.size() || !sources[tile->sourceId].visual || !Allowed(sources[tile->sourceId])) continue;
+        for (const auto& object : tile->features)
+        {
+            if (features.size() >= 20000) return;
+            if (!object.geometry) continue;
+            MapSearchFeature f;
+            f.layer = ST(sources[tile->sourceId].name);
+            if (f.layer.IsEmpty()) f.layer = ST(object.title);
+            if (schemaOnly && !schemas.insert(f.layer).second) continue;
+            for (const auto& field : object.fields) f.fields.push_back(ST(field));
+            for (const auto& value : object.values) f.values.push_back(ST(value));
+            for (size_t i=0;i<f.fields.size()&&i<f.values.size();++i)
+                if(f.fields[i].CompareNoCase(_T("FID"))==0||f.fields[i].CompareNoCase(_T("id"))==0)f.identity=f.values[i];
+            if (schemaOnly) { features.push_back(std::move(f)); continue; }
+            auto add=[&](double lon,double lat){
+                double x,y;
+                coord->WorldLonLat2ScreenXY(lon,lat,&x,&y,coord->m_fCenterX,coord->m_fCenterY,coord->m_fScale);
+                if(!std::isfinite(x)||!std::isfinite(y))return;
+                f.screen.emplace_back((int)(std::max)(-1e7,(std::min)(1e7,x)),(int)(std::max)(-1e7,(std::min)(1e7,y)));
+                MapSearchPoint world;coord->ScreenXY2WorldXY(x,y,&world.x,&world.y);f.world.push_back(world);
+            };
+            std::function<void(const OGRGeometry*)> walk;
+            walk=[&](const OGRGeometry* geometry){
+                const auto kind=wkbFlatten(geometry->getGeometryType());
+                if(kind==wkbPoint){auto point=geometry->toPoint();size_t before=f.screen.size();add(point->getX(),point->getY());f.parts.push_back((int)(f.screen.size()-before));}
+                else if(kind==wkbLineString||kind==wkbLinearRing){auto line=geometry->toLineString();size_t before=f.screen.size();for(int i=0;i<line->getNumPoints();++i)add(line->getX(i),line->getY(i));f.parts.push_back((int)(f.screen.size()-before));f.kind=(std::max)(f.kind,1);}
+                else if(kind==wkbPolygon){auto polygon=geometry->toPolygon();if(polygon->getExteriorRing())walk(polygon->getExteriorRing());for(int i=0;i<polygon->getNumInteriorRings();++i)walk(polygon->getInteriorRing(i));f.kind=2;}
+                else if(OGR_GT_IsSubClassOf(kind,wkbGeometryCollection)){auto collection=geometry->toGeometryCollection();for(int i=0;i<collection->getNumGeometries();++i)walk(collection->getGeometryRef(i));}
+            };
+            walk(object.geometry.get());
+            CRect view(0,0,coord->m_nDisplayViewWidth,coord->m_nDisplayViewHeight);
+            MapSearchQuery query;query.spatial=true;query.area=view;
+            if(!f.screen.empty()&&CMapSearchJob::Intersects(f,query))features.push_back(std::move(f));
+        }
+    }
+}

@@ -14,6 +14,7 @@
 //#include <vector>
 //#include <map>
 #include "OutputLogList.h"
+#include "MapRibbonTools.h"
 #include "OutputSearchList.h"
 
 
@@ -25,6 +26,7 @@ class COutputList : public CListBox
 	// 생성입니다.
 public:
 	COutputList();
+    void ShowMapSearch(const MapSearchReply& reply);
 
 	// 구현입니다.
 public:
@@ -35,6 +37,8 @@ protected:
 	afx_msg void OnEditCopy();
 	afx_msg void OnEditClear();
 	afx_msg void OnViewOutput();
+    afx_msg void OnSearchDoubleClick();
+    std::vector<MapSearchPoint> m_searchLocations;
 
 	DECLARE_MESSAGE_MAP()
 };
@@ -62,7 +66,8 @@ protected:
 	std::map<CString, UINT> m_mpwndOutputSearchResultExID;
 
 public:
-	void AddBuildWindow(CString& strMsg);
+	void ShowMapSearch(const MapSearchReply& reply);
+    void AddBuildWindow(CString& strMsg);
 	void AddDebugWindow(CString& strMsg);
 	void AddFindWindow(CString& strMsg);
 	void ClearBuildWindow();

@@ -376,17 +376,21 @@ void CMainFrame::InitializeRibbon()
 	std::unique_ptr<CMFCRibbonButtonsGroup> apScaleGroup(new CMFCRibbonButtonsGroup);
 	CMFCRibbonLabel* pBtnMapScaleInfoLabel = new CMFCRibbonLabel(_T("축 적  범 위"));
 	apScaleGroup->AddButton(pBtnMapScaleInfoLabel);
-	m_pRibbonMapMinScale = new CMFCRibbonEdit(ID_MENU_MAP_SCALE_MIN, 40);
+	m_pRibbonMapMinScale = new COverlayTextRibbonEdit(ID_MENU_MAP_SCALE_MIN, 40, nullptr);
 
 	apScaleGroup->AddButton(m_pRibbonMapMinScale);
 	CMFCRibbonLabel* pBtnMapScaleInfoLabel2 = new CMFCRibbonLabel("~");
 	apScaleGroup->AddButton(pBtnMapScaleInfoLabel2);
-	m_pRibbonMapMaxScale = new CMFCRibbonEdit(ID_MENU_MAP_SCALE_MAX, 60);
+	m_pRibbonMapMaxScale = new COverlayTextRibbonEdit(ID_MENU_MAP_SCALE_MAX, 60, nullptr);
 
 	apScaleGroup->AddButton(m_pRibbonMapMaxScale);
 	pPanel->Add(apScaleGroup.release());
-	pPanel->Add(m_pRibbonMapZoomScale = new CMFCRibbonEdit(ID_MENU_MAP_SCALE_ZOOM, 112, _T("스크롤축척")));
-	pPanel->Add(m_pRibbonMapCurrentScale = new CMFCRibbonEdit(ID_MENU_MAP_SCALE_CURRENT, 112, _T("현 재  축 적")));
+	pPanel->Add(m_pRibbonMapZoomScale = new COverlayTextRibbonEdit(ID_MENU_MAP_SCALE_ZOOM, 112, _T("스크롤축척")));
+	pPanel->Add(m_pRibbonMapCurrentScale = new COverlayTextRibbonEdit(ID_MENU_MAP_SCALE_CURRENT, 112, _T("현 재  축 적")));
+    m_pRibbonMapMinScale->SetToolTipText(_T("최소 축척 분모 (가장 확대된 화면)"));
+    m_pRibbonMapMaxScale->SetToolTipText(_T("최대 축척 분모 (가장 축소된 화면)"));
+    m_pRibbonMapZoomScale->SetToolTipText(_T("휠 한 단계 배율: 1 초과 ~ 10, 기본 1.5"));
+    m_pRibbonMapCurrentScale->SetToolTipText(_T("화면 중심 축척 분모: 예 1:100000"));
 	pPanel->AddSeparator();
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_MAP_ROTATE, DEF_RBAR_SCREEN_PANEL2_CMD3, 10, 10));		// "회전"
 	pButton = new CMFCRibbonButton(ID_MENU_PROJECTION, DEF_RBAR_SCREEN_PANEL2_CMD4, 11, 11);		// "투영"
@@ -416,7 +420,7 @@ void CMainFrame::InitializeRibbon()
 	m_pRibbonMapBrightSlider->SetRange(-100, 100);
 	m_pRibbonMapBrightSlider->SetPos(0);
 	pButtonsGroup->AddButton(m_pRibbonMapBrightSlider);
-	m_pRibbonMapBrightEdit = new CMFCRibbonEdit(ID_MENU_BRIGHT_EDIT, 30);
+	m_pRibbonMapBrightEdit = new COverlayTextRibbonEdit(ID_MENU_BRIGHT_EDIT, 30, nullptr);
 	CString strBrightness;
 	strBrightness.Format("%d%%", m_pRibbonMapBrightSlider->GetPos());
 	m_pRibbonMapBrightEdit->SetEditText(strBrightness);
@@ -430,7 +434,7 @@ void CMainFrame::InitializeRibbon()
 	m_pRibbonMapContrastSlider->SetRange(-100, 100);
 	m_pRibbonMapContrastSlider->SetPos(0);
 	pButtonsGroup->AddButton(m_pRibbonMapContrastSlider);
-	m_pRibbonMapContrastEdit = new CMFCRibbonEdit(ID_MENU_CONTRAST_EDIT, 30);
+	m_pRibbonMapContrastEdit = new COverlayTextRibbonEdit(ID_MENU_CONTRAST_EDIT, 30, nullptr);
 	CString strContrast;
 	strContrast.Format("%d%%", m_pRibbonMapContrastSlider->GetPos());
 	m_pRibbonMapContrastEdit->SetEditText(strContrast);
@@ -451,7 +455,7 @@ void CMainFrame::InitializeRibbon()
 	m_pRibbonSearchAreaType->AddItem(DEF_RBAR_SEARCH_PANEL3_CMD2_SUB2);		// "원"
 	m_pRibbonSearchAreaType->SelectItem(0);
 	pPanel->Add(m_pRibbonSearchMapInput = new CMFCRibbonEdit(ID_MENU_SEARCH_MAP_INPUT, 108, _T("")));	// "검색 어"
-	m_pRibbonSearchMapInput->SetEditText(_T("검색어 입력"));
+	m_pRibbonSearchMapInput->SetEditText(_T(""));
 	/*m_pRibbonSearchMapInput->EnableSpinButtons(0,99);
 	m_pRibbonSearchMapInput->SetEditText("검색어 입력");*/
 	pPanel->Add(new CMFCRibbonLabel(_T("")));

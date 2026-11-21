@@ -586,6 +586,18 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClInclude Include="OverlayTextRibbonEdit.h" />
+    <ClCompile Include="MapNavigation.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader><LanguageStandard>stdcpp17</LanguageStandard></ClCompile>
+    <ClCompile Include="C4IMapView_Navigation.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader><LanguageStandard>stdcpp17</LanguageStandard></ClCompile>
+    <ClInclude Include="MapNavigation.h" />
+    <ClCompile Include="MapRibbonTools.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="C4IMapView_MapTools.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <ClInclude Include="MapRibbonTools.h" />
     <ClCompile Include="OverlayRibbonRender.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -630,4 +642,5 @@
   <Target Name="CopyC4OverlaySDK" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
     <Copy SourceFiles="$(OverlaySdkRoot)\bin\$(Platform)\$(Configuration)\C4Overlay.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
+  <Import Project="$(ProjectDir)C4MapGdalRuntime.targets" />
 </Project>

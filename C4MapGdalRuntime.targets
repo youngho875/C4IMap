@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- Override this one property when relocating the GDAL SDK. -->
+    <C4GdalRuntimeDir Condition="'$(C4GdalRuntimeDir)'==''">$(MSBuildThisFileDirectory)..\gdal_sdk\bin</C4GdalRuntimeDir>
+  </PropertyGroup>
+  <!-- Package the same GDAL runtime used by the SDK, including MVT support.
+       Do not replace newer installed Microsoft C++ runtime DLLs. -->
+  <Target Name="CopyC4GdalRuntime" AfterTargets="Build" Condition="'$(Platform)'=='x64'">
+    <ItemGroup>
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\freexl.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\gdal.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\geos.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\geos_c.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\iconv-2.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libcrypto-3-x64.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libcurl.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libexpat.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libmysql.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libpng16.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\LIBPQ.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libssl-3-x64.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\libxml2.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\openjp2.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\pcre.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\proj_9.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\spatialite.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\sqlite3.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\tiff.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\xerces-c_3_3.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\zlib.dll" />
+      <C4GdalRuntime Include="$(C4GdalRuntimeDir)\zstd.dll" />
+    </ItemGroup>
+    <Error Condition="!Exists('%(C4GdalRuntime.Identity)')" Text="Missing GDAL runtime: %(C4GdalRuntime.Identity). Check C4GdalRuntimeDir." />
+    <Copy SourceFiles="@(C4GdalRuntime)" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

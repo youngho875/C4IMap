@@ -15,6 +15,8 @@
 #pragma once
 #include "AnalysisWorkspace.h"
 #include "MapFrameCache.h"
+#include "MapNavigation.h"
+#include "MapRibbonTools.h"
 #include "MapSources.h"
 #include "LocalOverlay.h"
 
@@ -336,6 +338,36 @@ protected:
     afx_msg void OnUpdateLocalOverlay(CCmdUI* ui);
     afx_msg void OnCaptureChanged(CWnd* wnd);
     virtual BOOL PreTranslateMessage(MSG* msg);
+    afx_msg void OnNavigationCoordinate();
+    afx_msg void OnNavigationCommand(UINT id);
+    afx_msg void OnUpdateNavigation(CCmdUI* ui);
+    double NavigationDenominator();
+    void SetNavigationScale(double denominator);
+    void CaptureNavigation();
+    bool RestoreNavigation(const MapNavigationView& view,bool historyStep);
+    afx_msg void OnMapRibbonCommand(UINT id);
+    afx_msg void OnUpdateMapRibbon(CCmdUI* ui);
+    afx_msg LRESULT OnMapSearchMove(WPARAM, LPARAM);
+    void RefreshMapSearchControls();
+    void StartMapSearch(bool spatial, CRect area, bool click = false);
+    void CaptureMapImage(bool clipboard);
+    void DrawMapSearch(CDC* dc);
+    void OutputMapIdentify(const CString& title, const std::vector<CString>& fields, const std::vector<CString>& values);
+private:
+    CMapNavigationHistory m_navigationHistory;
+    double m_navigationMin=1, m_navigationMax=1e9, m_navigationScroll=1.5;
+    bool m_navigationRestoring=false;
+    CMapImageAdjustment m_mapAdjustment;
+    int m_mapBrightness = 0, m_mapContrast = 0;
+    CMapSearchJob m_searchJob;
+    std::vector<MapSearchFeature> m_searchResults;
+    std::vector<CString> m_searchLayerNames, m_searchFieldNames;
+    int m_searchMode = 0;
+    bool m_searchDragging = false, m_searchControlsDirty = true;
+    CPoint m_searchStart, m_searchEnd;
+    MapSearchPoint m_searchIdentifyLocation;
+    COLORREF m_searchColor = RGB(255, 0, 0);
+public:
     afx_msg void OnMapSourcesXml();
     afx_msg void OnTimer(UINT_PTR id);
     DECLARE_MESSAGE_MAP()

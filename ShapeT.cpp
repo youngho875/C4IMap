@@ -2832,3 +2832,50 @@ bool CShapeT::LoadLocalCatalog(const CString &root, CString &message)
         return false;
     }
 }
+
+void CShapeT::SearchSnapshot(CCoordMgr* coord, std::vector<MapSearchFeature>& features, bool schemaOnly) const
+{
+    if (!coord) return;
+    if (m_catalog)
+    {
+        if (!m_catalog->visible) return;
+        for (auto index : m_catalog->active)
+        {
+            const auto& entry = m_catalog->entries[index];
+            if (!entry.renderer) continue;
+            const size_t start = features.size();
+            entry.renderer->SearchSnapshot(coord, features, schemaOnly);
+            for (size_t i = start; i < features.size(); ++i)
+                features[i].layer = entry.title + _T(" / ") + features[i].layer;
+        }
+        return;
+    }
+    if (!LocalVisible()) return;
+    std::set<CString> schemas;
+    std::set<std::pair<size_t, GIntBig>> seen;
+    for (const auto& hit : m_local->hits)
+    {
+        if (features.size() >= 20000) break;
+        if (hit.dataset >= m_local->datasets.size() || !seen.insert({hit.dataset, hit.fid}).second) continue;
+        const auto& ds = m_local->datasets[hit.dataset];
+        if (!ds->visible || !ds->layer) continue;
+        if (schemaOnly && !schemas.insert(hit.layer).second) continue;
+        MapSearchFeature f;
+        f.layer = hit.layer; f.path = ds->path; f.fid = hit.fid; f.kind = hit.kind;
+        f.identity.Format(_T("%lld"), (long long)hit.fid);
+        auto def = ds->layer->GetLayerDefn();
+        for (int i = 0; i < def->GetFieldCount(); ++i)
+            f.fields.push_back(LocalText(def->GetFieldDefn(i)->GetNameRef()));
+        if (schemaOnly) { features.push_back(std::move(f)); continue; }
+        for (auto point : hit.points)
+        {
+            f.screen.push_back(CPoint(point));
+            MapSearchPoint world;
+            coord->ScreenXY2WorldXY(point.x, point.y, &world.x, &world.y);
+            f.world.push_back(world);
+        }
+        f.parts = hit.counts;
+        if (f.parts.empty() && !f.screen.empty()) f.parts.push_back((int)f.screen.size());
+        features.push_back(std::move(f));
+    }
+}

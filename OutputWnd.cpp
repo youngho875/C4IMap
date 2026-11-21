@@ -89,7 +89,7 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_wndTabs.AddTab(&m_wndOutputLog, _T("로그"), (UINT)DEF_OUTPUTLIST_LOG);
 
 	// 출력 창을 만듭니다.
-	const DWORD dwStyle = LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
+	const DWORD dwStyle = LBS_NOTIFY | LBS_NOINTEGRALHEIGHT | WS_CHILD | WS_VISIBLE | WS_HSCROLL | WS_VSCROLL;
 	if (!m_wndOutputDebug.Create(dwStyle, rectDummy, &m_wndTabs, DEF_OUTPUTLIST_DEBUG))
 	{
 		TRACE0("출력 창을 만들지 못했습니다.\n");
@@ -102,7 +102,7 @@ int COutputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	bNameValid = strTabName.LoadString(IDS_DEBUG_TAB);
 	ASSERT(bNameValid);
-	m_wndTabs.AddTab(&m_wndOutputDebug, strTabName, (UINT)DEF_OUTPUTLIST_DEBUG);
+	m_wndTabs.AddTab(&m_wndOutputDebug, _T("출력"), (UINT)DEF_OUTPUTLIST_DEBUG);
 
 	m_nExtTabID = m_wndTabs.GetTabsNum() + 10;
 
@@ -174,6 +174,7 @@ COutputList::~COutputList()
 }
 
 BEGIN_MESSAGE_MAP(COutputList, CListBox)
+    ON_CONTROL_REFLECT(LBN_DBLCLK, &COutputList::OnSearchDoubleClick)
 	ON_WM_CONTEXTMENU()
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_CLEAR, OnEditClear)
@@ -507,4 +508,45 @@ void COutputWnd::OnSetFocus(CWnd* pOldWnd)
 				pList->SetFocus();
 		}
 	}
+}
+void COutputWnd::ShowMapSearch(const MapSearchReply& reply)
+{
+    m_wndOutputDebug.ShowMapSearch(reply);
+    AdjustHorzScroll(m_wndOutputDebug);
+    SetActiveTab(_T("출력"));
+    ShowPane(TRUE, FALSE, TRUE);
+}
+
+void COutputList::ShowMapSearch(const MapSearchReply& reply)
+{
+    SetRedraw(FALSE);
+    ResetContent();
+    m_searchLocations.clear();
+    int header=AddString(reply.message);SetItemData(header,0);
+    for(const auto& feature:reply.features)
+    {
+        CString row=feature.layer;
+        if(!feature.identity.IsEmpty())row+=_T(" | ID=")+feature.identity;
+        for(size_t i=0;i<feature.fields.size()&&i<feature.values.size();++i)
+        {
+            CString value=feature.values[i];value.Replace(_T("\r"),_T(" "));value.Replace(_T("\n"),_T(" / "));
+            row+=_T(" | ")+feature.fields[i]+_T("=")+value;
+        }
+        int index=AddString(row);
+        if(feature.world.empty()){SetItemData(index,0);continue;}
+        double minX=feature.world[0].x,maxX=minX,minY=feature.world[0].y,maxY=minY;
+        for(auto point:feature.world){minX=(std::min)(minX,point.x);maxX=(std::max)(maxX,point.x);minY=(std::min)(minY,point.y);maxY=(std::max)(maxY,point.y);}
+        m_searchLocations.push_back({(minX+maxX)/2,(minY+maxY)/2});
+        SetItemData(index,m_searchLocations.size());
+    }
+    SetRedraw(TRUE);Invalidate(FALSE);
+}
+
+void COutputList::OnSearchDoubleClick()
+{
+    int selected=GetCurSel();if(selected==LB_ERR)return;
+    auto index=GetItemData(selected);
+    if(index==0||index==LB_ERR||index>m_searchLocations.size())return;
+    auto frame=DYNAMIC_DOWNCAST(CFrameWnd,AfxGetMainWnd());
+    if(frame&&frame->GetActiveView())frame->GetActiveView()->SendMessage(WM_MAP_SEARCH_MOVE,0,(LPARAM)&m_searchLocations[index-1]);
 }

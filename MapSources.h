@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "MapRibbonTools.h"
+class CCoordMgr;
 #include "MapBuildOptions.h"
 #pragma pack(push,8)
 #include <string>
@@ -16,6 +18,8 @@ struct MapSourceLayer
 class CMapSources 
 {
 public:
+    void SearchSnapshot(CCoordMgr* coord, std::vector<MapSearchFeature>& features, bool schemaOnly = false) const;
+
     CMapSources();~CMapSources();
     bool Load(const CString& xml,CString& error);
     bool Save(const CString& xml,const std::vector<MapSourceLayer>& layers,CString& error);

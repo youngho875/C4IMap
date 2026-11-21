@@ -1,4 +1,6 @@
-#pragma once
+ï»¿#pragma once
+#include "MapRibbonTools.h"
+class CCoordMgr;
 
 // Shared UI headers may leave pack(1) active. Keep this C++ ABI identical
 // in ShapeT.cpp and all callers, then restore the caller's packing.
@@ -29,8 +31,8 @@ typedef struct
 {
 	CString FullPath;
 	CString FileName;
-	CString GeoType;			//Á¡, ¼±, ¸é
-	CString MApType;			//Àü¼úÁ¶Ä¡¼± or ºñÇà±âÁöÁöµµ
+	CString GeoType;			//ì , ì„ , ë©´
+	CString MApType;			//ì „ìˆ ì¡°ì¹˜ì„  or ë¹„í–‰ê¸°ì§€ì§€ë„
 	GDALDataset* poDS;
 	BOOL IsData;
 }S_SHP_INFO;
@@ -60,6 +62,8 @@ typedef struct
 class CShapeT
 {
 public:
+    void SearchSnapshot(CCoordMgr* coord, std::vector<MapSearchFeature>& features, bool schemaOnly = false) const;
+
 	CShapeT();
 	~CShapeT();
 
@@ -105,6 +109,7 @@ public:
     std::vector<std::pair<CString,bool>> LocalLayerList() const;
     void SetLocalLayerVisible(size_t index,bool visible);
     CString LocalReport() const;
+
 private:
     std::unique_ptr<BaseMapState> m_baseMap;
     void DrawBaseDetails(CDC* dc,float cx,float cy,float scale);

@@ -45,6 +45,8 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
 
     // TMS and all overlays share GeoDC's geographic display projection.
     PrepareWorldMapView(*m_pCoordMgr);
+    const double denominator=NavigationDenominator();
+    if(denominator>0&&(denominator<m_navigationMin||denominator>m_navigationMax))SetNavigationScale(denominator);
     const auto savedCenterX=m_pCoordMgr->m_fCenterX;
     const auto savedCenterY=m_pCoordMgr->m_fCenterY;
 
@@ -87,6 +89,7 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
             m_mapFrameCache.Store(CMapFrameCache::Sources,m_dcMainTemp);
         }
         DrawShape();
+        m_searchControlsDirty=true;
 
         for(auto layer:{m_dcMapLayer,m_dcShpLayer,m_dcDTEDLayer,m_dcRasterLayer})
             ::TransparentBlt(m_dcMainTemp->m_hDC,-pStartPoint.x,-pStartPoint.y,(int)fWidth,(int)fHeight, layer->m_hDC,0,0,(int)fWidth,(int)fHeight,RGB(0,0,0)); 
@@ -96,6 +99,9 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
         m_dcMainTemp->SetCoordMgr(m_pCoordMgr);
         m_mapFrameCache.Store(CMapFrameCache::Shapes,m_dcMainTemp);
     }
+    // Adjust only the composed map, preserving the unmodified layer caches.
+    m_mapAdjustment.Apply(m_dcMainTemp,(int)fWidth,(int)fHeight,m_mapBrightness,m_mapContrast);
+    DrawMapSearch(m_dcMainTemp);
     // Overlays/selection and decorations never contaminate the cached map.
 	m_localOverlay.Draw(m_dcMainTemp,m_pCoordMgr);
     CRect analysisRect;
@@ -128,6 +134,7 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
 	BufferDC.SelectObject(p_pen);
     CClientDC screen(this);
     screen.BitBlt(0, 0, fWidth, fHeight, &BufferDC, 0, 0, SRCCOPY);
+    CaptureNavigation();
 }
 
 void CC4IMapView::DrawMap()
