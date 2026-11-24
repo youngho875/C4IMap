@@ -2,6 +2,8 @@
 #include "C4IMapViewHeader.h"
 #include "TerrainLayer.h"
 #include "TerrainTileLayer.h"
+#include <cmath>
+#include <memory>
 
 
 
@@ -223,35 +225,39 @@ void CC4IMapView::UpdateStatusBar(CPoint point)
 
 LRESULT CC4IMapView::move_with_coord(WPARAM w, LPARAM l)
 {
-	CStringArray* parray_value;
-	parray_value = (CStringArray*)w;
-	if (parray_value == NULL)
-		return FALSE;
-	if (parray_value->GetSize() < 2)
-	{
-		delete parray_value;
-		return FALSE;
-	}
+    // WM_MOVE_WITH_COORD transfers ownership: [latitude, longitude] in degrees.
+    std::unique_ptr<CStringArray> values(reinterpret_cast<CStringArray*>(w));
+    if (!values || values->GetSize() < 2 || !m_pCoordMgr)
+        return FALSE;
 
-	CString str_latitude = parray_value->GetAt(0);
-	CString str_longitude = parray_value->GetAt(1);
+    CString latitude = values->GetAt(0), longitude = values->GetAt(1);
+    latitude.Trim();
+    longitude.Trim();
+    TCHAR* latEnd = nullptr;
+    TCHAR* lonEnd = nullptr;
+    const double lat = _tcstod(latitude, &latEnd);
+    const double lon = _tcstod(longitude, &lonEnd);
+    if (latitude.IsEmpty() || longitude.IsEmpty() || *latEnd || *lonEnd ||
+        !std::isfinite(lat) || !std::isfinite(lon) || lat < -90 || lat > 90 ||
+        lon < -180 || lon > 180)
+        return FALSE;
 
+    CRect client;
+    GetClientRect(&client);
+    if (client.IsRectEmpty())
+        return FALSE;
 
-	double longitude = atof(str_latitude);
-	double latitude = atof(str_longitude);
-	if (m_pCoordMgr)
-	{
-		double lx, ly;
-		double _latitude, _longitude;
-		m_Coord.degrees_lat_long_to_x_y(longitude, latitude, &_latitude, &_longitude);
-		m_pCoordMgr->WorldXY2ScreenXY(_latitude, _longitude, &lx, &ly, m_pCoordMgr->m_fCenterX, m_pCoordMgr->m_fCenterY, m_pCoordMgr->m_fScale);
+    double screenX, screenY;
+    m_pCoordMgr->WorldLonLat2ScreenXY(lon, lat, &screenX, &screenY,
+        m_pCoordMgr->m_fCenterX, m_pCoordMgr->m_fCenterY, m_pCoordMgr->m_fScale);
+    if (!std::isfinite(screenX) || !std::isfinite(screenY))
+        return FALSE;
 
-		m_pCoordMgr->SetNewCenter((double)lx, (double)ly);
-		//	DrawSituation(FALSE, FALSE, FALSE, FALSE);
-		Invalidate(false);
-	}
-	delete parray_value;
-
-	return TRUE;
+    // Preserve the main view's projection, rotation and scale.
+    m_pCoordMgr->m_fCenterX += client.left + client.Width() / 2.0 - screenX;
+    m_pCoordMgr->m_fCenterY += client.top + client.Height() / 2.0 - screenY;
+    m_mapFrameCache.InvalidateFrom();
+    Invalidate(FALSE);
+    return TRUE;
 }
 

@@ -6,6 +6,7 @@
 #include "MainFrm.h"
 #include "C4IMapView.h"
 #include "IndexMapWnd.h"
+#include <cmath>
 
 
 // MiniMap
@@ -107,6 +108,10 @@ int CIndexMapWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	GetClientRect(&rect);
 
 	m_pCoordMgr = CreateIndependentCoordMgr();
+    // Match the geographic projection used by CShapeT::IndexMapDraw.
+    m_pCoordMgr->m_bFlat = TRUE;
+    m_pCoordMgr->SetDisplayTransform(nullptr, nullptr, nullptr);
+    m_Coord.initialize_adaptation_data();
 	m_pCoordMgr->InitDisplayParameter(rect);
 	m_pCoordMgr->m_fScale = 0.5;
 	m_pCoordMgr->SetDisplayCenter(rect.Width()/2, rect.Height()/2);
@@ -454,38 +459,6 @@ void CIndexMapWnd::OnLButtonUp(UINT nFlags, CPoint point)
 	CWnd::OnLButtonUp(nFlags, point);
 }
 
-void CIndexMapWnd::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	// TODO: Add your message handler code here and/or call default
-
-	m_ptBearingStart = point;
-
-	double fXCoord, fYCoord;
-	double geo_x, geo_y;
-
-	m_pCoordMgr->ScreenXY2WorldXY(point.x, point.y, &fXCoord, &fYCoord);
-	m_Coord.x_y_to_degrees_lat_long(fXCoord, fYCoord, &geo_y , &geo_x);
-
-
-	m_fHookPoint.x = fXCoord;
-	m_fHookPoint.y = fYCoord;
-
-	//BOOL isHit = m_pParentWnd->HitTest(fXCoord, fYCoord, m_pCoordMgr->m_fCenterX, m_pCoordMgr->m_fCenterY, m_pCoordMgr->m_fScale);
-
-	CStringArray* parray_value = new CStringArray();
-	parray_value->Add(std::to_string(geo_y).c_str());
-	parray_value->Add(std::to_string(geo_x).c_str());
-	//m_pParentWnd->SendMessage(WM_MOVE_WITH_COORD, (WPARAM)parray_value, NULL);
-
-	//m_pParentWnd->OpenDetailFromTrack();
-
-	m_ptPrevPoint = point;
-	m_ptZoomStart = m_ptZoomEnd = point;
-	
-	m_bOnZoom = TRUE;
-
-	CWnd::OnLButtonDown(nFlags, point);
-}
 
 void CIndexMapWnd::OnRButtonDown(UINT nFlags, CPoint point)
 {
@@ -552,4 +525,41 @@ BOOL CIndexMapWnd::PreCreateWindow(CREATESTRUCT& cs)
 	cs.style ^= FWS_ADDTOTITLE;
 
 	return CWnd::PreCreateWindow(cs);
+}
+
+void CIndexMapWnd::OnLButtonDown(UINT nFlags, CPoint point)
+{
+    m_ptBearingStart = point;
+    if (!m_pCoordMgr)
+        return;
+
+    // This manager uses the same flat geographic projection as IndexMapDraw.
+    double worldX, worldY, longitude, latitude;
+    m_pCoordMgr->ScreenXY2WorldXY(point.x, point.y, &worldX, &worldY,
+        m_pCoordMgr->m_fCenterX, m_pCoordMgr->m_fCenterY, m_pCoordMgr->m_fScale);
+    m_Coord.x_y_to_degrees_lat_long(worldX, worldY, &latitude, &longitude);
+    if (!std::isfinite(latitude) || !std::isfinite(longitude) ||
+        latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180)
+        return;
+
+    auto frame = DYNAMIC_DOWNCAST(CMainFrame, AfxGetMainWnd());
+    auto view = frame ? DYNAMIC_DOWNCAST(CC4IMapView, frame->GetActiveView()) : nullptr;
+    if (view)
+    {
+        CString latText, lonText;
+        latText.Format(_T("%.17g"), latitude);
+        lonText.Format(_T("%.17g"), longitude);
+        auto values = new CStringArray;
+        values->Add(latText);
+        values->Add(lonText);
+        // The synchronous receiver owns and releases this latitude/longitude pair.
+        view->SendMessage(WM_MOVE_WITH_COORD, reinterpret_cast<WPARAM>(values), 0);
+    }
+
+	m_ptPrevPoint = point;
+	m_ptZoomStart = m_ptZoomEnd = point;
+
+	m_bOnZoom = TRUE;
+
+	CWnd::OnLButtonDown(nFlags, point);
 }
