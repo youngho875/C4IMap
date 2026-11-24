@@ -44,6 +44,10 @@
 IMPLEMENT_DYNCREATE(CC4IMapView, CView)
 
 BEGIN_MESSAGE_MAP(CC4IMapView, CView)
+    ON_COMMAND(ID_GLOBE_SYNC_START, &CC4IMapView::OnGlobeSyncStart)
+    ON_COMMAND(ID_GLOBE_SYNC_STOP, &CC4IMapView::OnGlobeSyncStop)
+    ON_UPDATE_COMMAND_UI(ID_GLOBE_SYNC_START, &CC4IMapView::OnUpdateGlobeSync)
+    ON_UPDATE_COMMAND_UI(ID_GLOBE_SYNC_STOP, &CC4IMapView::OnUpdateGlobeSync)
     ON_COMMAND(ID_MENU_COORDINATE_MOVE, &CC4IMapView::OnNavigationCoordinate)
     ON_UPDATE_COMMAND_UI(ID_MENU_COORDINATE_MOVE, &CC4IMapView::OnUpdateNavigation)
     ON_COMMAND_RANGE(ID_MENU_MAP_UNDO, ID_MENU_MAP_INIT, &CC4IMapView::OnNavigationCommand)
@@ -877,6 +881,7 @@ void CC4IMapView::OnMapSourcesXml()
 
 void CC4IMapView::OnTimer(UINT_PTR id)
 {
+    if(id==ID_MAP_SOURCES_XML) SyncGlobeView();
     if(id==ID_MAP_SOURCES_XML)
     {
         MapSearchReply reply;

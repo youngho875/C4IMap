@@ -172,7 +172,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	ASSERT(bNameValid);
 
 	m_wndStatusBar.AddElement(new CMFCRibbonStatusBarPane(ID_STATUSBAR_PANE1, _T(" Lon:000° 00' 00.000, Lat: 00° 00' 00.000 (X:000.000000, Y:00.000000) \
-							| MGRS : 00ABC 00000 00000 | UTM : 00A 00000 00000 | GEOREF : ABCD0000000000 | GARS : 000AB00 | Alt: 000m"), TRUE), strTitlePane1);
+							| MGRS : 00ABC 00000 00000 | UTM : 00A 00000 00000 | GEOREF : ABCD0000000000 | GARS : 000AB00 | Alt: 000m   "), TRUE), strTitlePane1);
 	m_wndStatusBar.AddExtendedElement(new CMFCRibbonStatusBarPane(59220, _T("Scale 1:000,000,000"), TRUE), _T("Scale"));
 	m_wndStatusBar.AddExtendedElement(new CMFCRibbonStatusBarPane(ID_STATUSBAR_PANE2, strTitlePane2, TRUE), strTitlePane2);
 	
@@ -468,7 +468,7 @@ void CMainFrame::InitializeRibbon()
 	pPanel = pCategory->AddPanel(DEF_RBAR_SCREEN_PANEL3);
 	pPanel->Add((m_pRibbonMapBookMarkCombo = new CMFCRibbonComboBox(ID_MENU_BOOKMARK, FALSE, 50))); // 1~9 < 9이하만 입력 가능 >
 	pButtonsGroup = new CMFCRibbonButtonsGroup;
-	pButtonsGroup->AddButton(new CMFCRibbonButton(ID_MENU_ADD_BOOKMARK, DEF_RBAR_SCREEN_PANEL3_CMD2, 1));
+	pButtonsGroup->AddButton(new CMFCRibbonButton(ID_MENU_ADD_BOOKMARK, DEF_RBAR_SCREEN_PANEL3_CMD1, 1));
 	pButtonsGroup->AddButton(new CMFCRibbonButton(ID_MENU_MOVE_BOOKMARK, DEF_RBAR_SCREEN_PANEL3_CMD2, 2));
 	pButtonsGroup->AddButton(new CMFCRibbonButton(ID_MENU_DELETE_BOOKMARK, DEF_RBAR_SCREEN_PANEL3_CMD3, 3));
 	pPanel->Add(pButtonsGroup);
@@ -479,6 +479,9 @@ void CMainFrame::InitializeRibbon()
 	pPanel->Add(new CMFCRibbonButton(ID_MENU_SAVE_IMAGEFILE, _T("파일 저장"), 4, 4));	// "이미지"
 
 	// 보기
+    pPanel = pCategory->AddPanel(_T("Globe3D 동기화"));
+    pPanel->Add(new CMFCRibbonButton(ID_GLOBE_SYNC_START, _T("동기화 시작")));
+    pPanel->Add(new CMFCRibbonButton(ID_GLOBE_SYNC_STOP, _T("동기화 중단")));
 	pPanel = pCategory->AddPanel(_T("보기"));
 	pPanel->Add(m_pRibbonMapMgrOnOff = new CMFCRibbonCheckBox(ID_MENU_MAPMANAGER_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD1));		// 지도레이어 관리
 	pPanel->Add(m_pRibbonMapPropertyOnOff = new CMFCRibbonCheckBox(ID_MENU_MAPPROP_ONOFF, DEF_RBAR_VIEW_PANEL6_CMD3));		// "지도레이어 속성"

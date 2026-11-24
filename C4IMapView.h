@@ -16,6 +16,7 @@
 #include "AnalysisWorkspace.h"
 #include "MapFrameCache.h"
 #include "MapNavigation.h"
+#include "../MapViewSync/MapViewSync.h"
 #include "MapRibbonTools.h"
 #include "MapSources.h"
 #include "LocalOverlay.h"
@@ -354,6 +355,12 @@ protected:
     void DrawMapSearch(CDC* dc);
     void OutputMapIdentify(const CString& title, const std::vector<CString>& fields, const std::vector<CString>& values);
 private:
+    CMapViewSync m_globeSync{0};
+    bool CaptureGlobeSyncState(MapViewSyncState& state);
+    void SyncGlobeView();
+    afx_msg void OnGlobeSyncStart();
+    afx_msg void OnGlobeSyncStop();
+    afx_msg void OnUpdateGlobeSync(CCmdUI* ui);
     CMapNavigationHistory m_navigationHistory;
     double m_navigationMin=1, m_navigationMax=1e9, m_navigationScroll=1.5;
     bool m_navigationRestoring=false;
