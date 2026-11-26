@@ -224,6 +224,8 @@ int CC4IMapApp::ExitInstance()
 	//TODO: 추가한 추가 리소스를 처리합니다.
 	AfxOleTerm(FALSE);
 
+	ExitICOPS();
+
 	//GDI+ 종료
 	if (m_gdiplusToken != 0)
 	{
@@ -232,10 +234,6 @@ int CC4IMapApp::ExitInstance()
 	}
 	//ReleaseMutex(m_hMutex);
 
-/*
-	ExitICOPS();
-	ICOPS::CLog::AddLog(__FILE__, __LINE__, ICOPS::CLog::Log_Info, _T("Ending C4IMap Application."));
-*/
 
 	return 1;
 }
@@ -347,7 +345,7 @@ void CC4IMapApp::Begin(void)
 // 군대부호처리
 BOOL CC4IMapApp::InitICOPS(void)
 {
-/*
+
 	BOOL		bRes;
 	CString		strUrl;
 	ICOPS::CAppContext* pAppCxt;
@@ -363,7 +361,7 @@ BOOL CC4IMapApp::InitICOPS(void)
 	//	strUrl = GetProfileString(_T("Settings"), _T("app_context"));
 	//#endif
 	// 
-	strUrl = L"D:/work/상황도/ICOPS/config/ICOPS_AppContext_test.xml";
+	strUrl = L"D:/work/상황도/ICOPS/config/ICOPS_AppContext.xml";
 	ICOPS::CLog::AddLog(__FILE__, __LINE__, ICOPS::CLog::Log_Info, _T("실행환경 설정정보 파일 경로 : %s"), strUrl);
 	if (strUrl.IsEmpty())
 	{
@@ -372,7 +370,7 @@ BOOL CC4IMapApp::InitICOPS(void)
 	}
 
 	// Initialize application context
-	bRes = pAppCxt->Initialize(_T("ICOPS_Framework"), _T(".dll"), _T("CAppContextDataAgentXml"), "D:/work/상황도/ICOPS/config/ICOPS_AppContext_test.xml");
+	bRes = pAppCxt->Initialize(_T("ICOPS_Framework"), _T(".dll"), _T("CAppContextDataAgentXml"), strUrl, FALSE);
 	if (!bRes)
 	{
 		ICOPS::CLog::AddLog(__FILE__, __LINE__, ICOPS::CLog::Log_Error, _T("실행환경 설정정보 초기화 실패."));
@@ -396,7 +394,7 @@ BOOL CC4IMapApp::InitICOPS(void)
 		return FALSE;
 	}
 	m_piSymFac = piFac;
-*/
+
 
 	return TRUE;
 }
@@ -404,9 +402,9 @@ BOOL CC4IMapApp::InitICOPS(void)
 void CC4IMapApp::ExitICOPS(void)
 {
 	// CAppContext에서 gdiplus 해제하기 전에 객체 해제해야함
-/*
+
  	m_piSymFac = NULL;							
 	if (m_pAppCxt != NULL) delete m_pAppCxt;
-*/
+
 }
 

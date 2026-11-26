@@ -4,6 +4,9 @@
 #include "BaseMapOptions.h"
 #include <algorithm>
 #include <cmath>
+#pragma pack(push,8)
+#include "cpl_json.h"
+#include "AppPaths.h"
 
 bool CC4IMapView::CaptureGlobeSyncState(MapViewSyncState& state)
 {
@@ -26,6 +29,8 @@ bool CC4IMapView::CaptureGlobeSyncState(MapViewSyncState& state)
 }
 void CC4IMapView::OnGlobeSyncStart()
 {
+    m_globeScene.ForcePublish();
+    PublishGlobeScene();
     MapViewSyncState state;
     if (!CaptureGlobeSyncState(state) || !m_globeSync.Start(state))
         AfxMessageBox(_T("Globe3D 동기화를 시작하지 못했습니다. 지도 준비 후 다시 시도하세요."));
@@ -39,6 +44,7 @@ void CC4IMapView::OnUpdateGlobeSync(CCmdUI* ui)
 }
 void CC4IMapView::SyncGlobeView()
 {
+    if(m_globeSync.IsEnabled() && GetTickCount64()-m_globeSceneTick>=500){PublishGlobeScene();m_globeSceneTick=GetTickCount64();}
     MapViewSyncState current,incoming;
     if(!CaptureGlobeSyncState(current) || !m_globeSync.Tick(current,incoming)) return;
     CRect client;GetClientRect(&client);const auto center=client.CenterPoint();
@@ -77,3 +83,78 @@ void CC4IMapView::SyncGlobeView()
     if(CaptureGlobeSyncState(current))m_globeSync.Applied(current);
     Invalidate(FALSE);
 }
+
+void CC4IMapView::PublishGlobeScene()
+{
+    if(!m_bDCInitialized || !m_pCoordMgr)return;
+    CPLJSONObject root;
+    root.Add("version",1);root.Add("owner",(int)GetCurrentProcessId());
+    root.Add("autoScale",MapAutoScaleEnabled());root.Add("buildMode",C4MAP_BUILD_MODE);
+    root.Add("baseMapXml",BaseMapConfig().file);
+    CPLJSONArray sources;
+    for(const auto& source:MapSources().Layers())
+    {
+        CPLJSONObject entry;
+        entry.Add("identifyType",source.identifyType);
+        entry.Add("identifyEndpoint",source.identifyEndpoint);
+        entry.Add("identifyLayer",source.identifyLayer);
+        entry.Add("category",source.category);
+        entry.Add("tileScheme",source.tileScheme);
+        entry.Add("styleSld",source.styleSld);
+        entry.Add("localStyleXml",source.localStyleXml);
+        entry.Add("localLayerName",source.localLayerName);
+        entry.Add("id",source.id);
+        entry.Add("name",source.name);
+        entry.Add("type",source.type);
+        entry.Add("family",source.family);
+        entry.Add("path",source.path);
+        entry.Add("extensions",source.extensions);
+        entry.Add("endpoint",source.endpoint);
+        entry.Add("layer",source.layer);
+        entry.Add("matrix",source.matrix);
+        entry.Add("style",source.style);
+        entry.Add("format",source.format);
+        entry.Add("version",source.version);
+        entry.Add("srs",source.srs);
+        entry.Add("scale",source.scale);
+        entry.Add("minScale",source.minScale);
+        entry.Add("maxScale",source.maxScale);
+        entry.Add("recursive",source.recursive);
+        entry.Add("visual",source.visual && CMapSources::Enabled(source));
+        sources.Add(entry);
+    }
+    root.Add("sources",sources);
+    CPLJSONArray bases;
+    const char* names[]={"SmallScale","World","NaturalEarth"};
+    for(int i=0;i<3;++i)
+    {
+        if(!BaseMapConfigured(i))continue;
+        CPLJSONObject layer;layer.Add("id",names[i]);layer.Add("visual",BaseMapVisible(i));
+        for(const char* field:{"Path","BoundaryPath","LabelPath","CityPath"})
+        {
+            std::string key=std::string(names[i])+"."+field;
+            CStringW value(BaseMapPath(key.c_str(),""));
+            layer.Add(field,std::string(CW2A(value,CP_UTF8)));
+        }
+        bases.Add(layer);
+    }
+    root.Add("bases",bases);
+    CPLJSONArray layers;
+    for(const auto& layer:m_localOverlay.Layers())
+    {
+        CPLJSONObject entry;entry.Add("id",layer.id);entry.Add("visible",layer.visible);
+        CStringW name(layer.name);entry.Add("name",std::string(CW2A(name,CP_UTF8)));layers.Add(entry);
+    }
+    root.Add("overlayLayers",layers);
+    CPLJSONDocument shapes,symbols;
+    if(!shapes.LoadMemory(m_localOverlay.SyncObjects(m_pCoordMgr)) ||
+       !symbols.LoadMemory(m_militaryOverlay.SyncObjects(m_pCoordMgr)))return;
+    root.Add("overlays",shapes.GetRoot());root.Add("military",symbols.GetRoot());
+    // Let the receiving renderer resolve the same centrally configured paths.
+    root.Add("gssRoot",AppPath("GssRoot"));
+    std::string error;
+    if(!m_globeScene.Publish(root.Format(CPLJSONObject::PrettyFormat::Plain),error))
+        OutputDebugStringA(("Globe scene: "+error+"\n").c_str());
+}
+
+#pragma pack(pop)

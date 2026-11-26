@@ -44,6 +44,10 @@
 IMPLEMENT_DYNCREATE(CC4IMapView, CView)
 
 BEGIN_MESSAGE_MAP(CC4IMapView, CView)
+    ON_COMMAND(ID_C4_MILITARY_CHOOSE, &CC4IMapView::OnMilitaryChoose)
+    ON_COMMAND(ID_C4_MILITARY_EDIT, &CC4IMapView::OnMilitaryEdit)
+    ON_UPDATE_COMMAND_UI(ID_C4_MILITARY_CHOOSE, &CC4IMapView::OnUpdateMilitary)
+    ON_UPDATE_COMMAND_UI(ID_C4_MILITARY_EDIT, &CC4IMapView::OnUpdateMilitary)
     ON_COMMAND(ID_GLOBE_SYNC_START, &CC4IMapView::OnGlobeSyncStart)
     ON_COMMAND(ID_GLOBE_SYNC_STOP, &CC4IMapView::OnGlobeSyncStop)
     ON_UPDATE_COMMAND_UI(ID_GLOBE_SYNC_START, &CC4IMapView::OnUpdateGlobeSync)
@@ -744,6 +748,7 @@ void CC4IMapView::ShowLocalFeature(CPoint point)
 
 void CC4IMapView::OnLocalOverlayCommand(UINT id)
 {
+    if(id>=ID_C4OVER_PAN && id<=ID_C4OVER_ELLIPSE) m_militaryOverlay.Cancel();
     SetMouseState(MOUSE_DEFAULT);
     m_analysis.Cancel();
     m_localOverlay.Cancel();
@@ -778,6 +783,7 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
 				return;
             CString error;
 			bool ok=load?m_localOverlay.Load(dlg.GetPathName(),error):m_localOverlay.Save(dlg.GetPathName(),error);
+            if(ok) ok=load?m_militaryOverlay.Load(dlg.GetPathName(),error):m_militaryOverlay.Save(dlg.GetPathName(),error);
             if(!ok)
 				AfxMessageBox(error,MB_ICONERROR);
         }
@@ -802,6 +808,9 @@ BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
 
     if (msg->message == WM_KEYDOWN && msg->hwnd == GetSafeHwnd())
     {
+        if(msg->wParam==VK_ESCAPE){m_militaryOverlay.Cancel();Invalidate(FALSE);}
+        if(msg->wParam==VK_RETURN && m_militaryOverlay.Finish()){RefreshOverlayLayers();Invalidate(FALSE);return TRUE;}
+        if(msg->wParam==VK_F2 && m_militaryOverlay.Selected()){OnMilitaryEdit();return TRUE;}
         if (msg->wParam == VK_ESCAPE && (m_analysis.Active() || m_analysis.Busy()))
         {
             m_analysis.Cancel();
@@ -860,7 +869,7 @@ void CC4IMapView::OnCaptureChanged(CWnd* wnd)
 
 BOOL CC4IMapView::SaveLocalOverlayIfModified()
 {
-    if(!m_localOverlay.IsModified())
+    if(!m_localOverlay.IsModified() && !m_militaryOverlay.Modified())
 		return TRUE;
     int answer=AfxMessageBox(_T("Overlay 도형 변경 내용을 XML로 저장하시겠습니까?"),MB_YESNOCANCEL|MB_ICONQUESTION);
     if(answer==IDCANCEL)
@@ -868,7 +877,7 @@ BOOL CC4IMapView::SaveLocalOverlayIfModified()
     if(answer==IDNO)
 		return TRUE;
     OnLocalOverlayCommand(ID_C4OVER_SAVE);
-    return !m_localOverlay.IsModified();
+    return !m_localOverlay.IsModified() && !m_militaryOverlay.Modified();
 }
 
 void CC4IMapView::OnMapSourcesXml()
@@ -1111,3 +1120,25 @@ void CC4IMapView::OnUpdateGridSettings(CCmdUI* ui)
 }
 
 
+
+void CC4IMapView::OnMilitaryChoose()
+{
+    OnLocalOverlayCommand(ID_C4OVER_PAN);
+    if(!m_localOverlay.ActiveLayer()) m_localOverlay.AddLayer(_T("군대부호"));
+    const int layer=m_localOverlay.ActiveLayer();
+    for(const auto& entry:m_localOverlay.Layers())
+        if(entry.id==layer && !entry.visible){AfxMessageBox(_T("먼저 활성 레이어를 표시해 주세요."));return;}
+    m_militaryOverlay.Choose(this,layer);
+    RefreshOverlayLayers();
+    SetFocus();
+    Invalidate(FALSE);
+}
+void CC4IMapView::OnMilitaryEdit()
+{
+    m_militaryOverlay.Edit(this);
+    Invalidate(FALSE);
+}
+void CC4IMapView::OnUpdateMilitary(CCmdUI* ui)
+{
+    ui->Enable(ui->m_nID==ID_C4_MILITARY_CHOOSE || m_militaryOverlay.Selected());
+}

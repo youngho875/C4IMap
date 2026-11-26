@@ -104,6 +104,7 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
     DrawMapSearch(m_dcMainTemp);
     // Overlays/selection and decorations never contaminate the cached map.
 	m_localOverlay.Draw(m_dcMainTemp,m_pCoordMgr);
+    m_militaryOverlay.Draw(m_dcMainTemp,m_pCoordMgr,m_localOverlay);
     CRect analysisRect;
     GetClientRect(&analysisRect);
     m_analysis.Draw(m_dcMainTemp, m_pCoordMgr, analysisRect);

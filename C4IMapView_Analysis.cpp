@@ -135,6 +135,7 @@ void CC4IMapView::OnAnalysisCommand(UINT id)
     if (input && dialog.Show() != IDOK)
         return;
     SetMouseState(MOUSE_DEFAULT);
+    m_militaryOverlay.Cancel();
     m_localOverlay.SetTool(CLocalOverlay::Pan);
     m_bPanning = FALSE;
     m_bOnZoom = FALSE;
@@ -165,7 +166,7 @@ void CC4IMapView::OnOverlayEdit(UINT id)
     switch (id)
     {
     case ID_MENU_OVERLAY_DELETE:
-        success = m_localOverlay.DeleteSelected();
+        success = m_militaryOverlay.Delete() || m_localOverlay.DeleteSelected();
         break;
     case ID_MENU_OVERLAY_COPY:
         success = m_localOverlay.CopySelected(GetSafeHwnd());
@@ -189,7 +190,7 @@ void CC4IMapView::OnOverlayEdit(UINT id)
 void CC4IMapView::OnUpdateOverlayEdit(CCmdUI *ui)
 {
     ui->Enable(ui->m_nID == ID_MENU_OVERLAY_PASTE ? CLocalOverlay::CanPaste()
-                                                  : m_localOverlay.HasSelection());
+                                                  : (m_localOverlay.HasSelection() || m_militaryOverlay.Selected()));
 }
 
 BOOL CC4IMapView::OnAnalysisInputCommand(UINT id)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <C4MilitaryRoot Condition="'$(C4MilitaryRoot)'==''">$(ProjectDir)..\ICOPS</C4MilitaryRoot>
+    <C4MilitarySuffix>_2019</C4MilitarySuffix>
+    <C4MilitarySuffix Condition="'$(Platform)'=='x64'">$(C4MilitarySuffix)X64</C4MilitarySuffix>
+    <C4MilitarySuffix Condition="'$(CharacterSet)'=='Unicode'">$(C4MilitarySuffix)U</C4MilitarySuffix>
+    <C4MilitarySuffix Condition="'$(Configuration)'=='Debug'">$(C4MilitarySuffix)D</C4MilitarySuffix>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile><AdditionalIncludeDirectories>$(C4MilitaryRoot)\SDK\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories></ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(C4MilitaryRoot)\SDK\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ICOPS_Framework$(C4MilitarySuffix).lib;ICOPS_LogManager$(C4MilitarySuffix).lib;ICOPS_WarSym$(C4MilitarySuffix).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup><ClCompile Include="MilitaryOverlay.cpp"/><ClInclude Include="MilitaryOverlay.h"/></ItemGroup>
+  <Target Name="CopyMilitaryRuntime" AfterTargets="Build">
+    <ItemGroup><C4MilitaryDll Include="$(C4MilitaryRoot)\bin\*$(C4MilitarySuffix).dll"/></ItemGroup>
+    <Copy SourceFiles="@(C4MilitaryDll)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true"/>
+  </Target>
+</Project>

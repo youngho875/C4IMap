@@ -6,6 +6,7 @@
 
 BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
 {
+    if(id==IDM_POPOVERLAY_PROPERTY && m_militaryOverlay.Selected()){OnMilitaryEdit();return TRUE;}
     if (m_localOverlay.IsDrawing())
         return TRUE;
     auto style = m_localOverlay.GetStyle();

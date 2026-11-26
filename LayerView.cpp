@@ -369,7 +369,7 @@ void CLayerView::RefreshMsgList(){
     auto view=frame?DYNAMIC_DOWNCAST(CC4IMapView,frame->GetActiveView()):nullptr;if(!view)return;
     m_refreshingOverlay=true;m_wndCOPView.SetRedraw(FALSE);m_wndCOPView.DeleteAllItems();
     for(const auto& layer:view->OverlayLayers().Layers()){
-        int row=m_wndCOPView.InsertItem(m_wndCOPView.GetItemCount(),layer.name);CString count;count.Format(_T("%llu"),(unsigned long long)layer.count);
+        int row=m_wndCOPView.InsertItem(m_wndCOPView.GetItemCount(),layer.name);CString count;count.Format(_T("%llu"),(unsigned long long)(layer.count+view->MilitaryCount(layer.id)));
         m_wndCOPView.SetItemText(row,COPLAYER_ITEMSIZE,count);m_wndCOPView.SetItemText(row,COPLAYER_TYPE,_T("Åõ¸íµµ (Overlay)"));
         m_wndCOPView.SetItemData(row,(DWORD_PTR)layer.id);m_wndCOPView.SetCheck(row,layer.visible);
         if(layer.id==view->OverlayLayers().ActiveLayer())m_wndCOPView.SetItemState(row,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);

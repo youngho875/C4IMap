@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <string>
 #include <vector>
 class CCoordMgr;
 // Keep SDK/STL layout independent of legacy application packing.
@@ -129,6 +130,7 @@ class CLocalOverlay
     size_t Count() const;
     COLORREF Color() const;
     void SetColor(COLORREF color);
+    std::string SyncObjects(CCoordMgr* coord) const;
     bool Save(LPCTSTR path, CString &error) const;
     bool Load(LPCTSTR path, CString &error);
 

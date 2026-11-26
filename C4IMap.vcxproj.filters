@@ -160,6 +160,16 @@
     <ClInclude Include="OverlayRibbonRender.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="MapNavigation.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="MapRibbonTools.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayTextRibbonEdit.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MapViewSync\MapViewSync.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C4IMap.cpp">
@@ -261,9 +271,6 @@
     <ClCompile Include="AnalysisWorkspace.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="C4IMapView_Analysis.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="MapAnalysis.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -288,6 +295,26 @@
     <ClCompile Include="OverlayRibbonRender.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="C4IMapView_MapTools.cpp">
+      <Filter>APP</Filter>
+    </ClCompile>
+    <ClCompile Include="C4IMapView_Navigation.cpp">
+      <Filter>APP</Filter>
+    </ClCompile>
+    <ClCompile Include="MapNavigation.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="MapRibbonTools.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="OverlayTextRibbonEdit.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="C4IMapView_Analysis.cpp">
+      <Filter>APP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MapViewSync\MapViewSync.cpp" />
+    <ClCompile Include="C4IMapView_GlobeSync.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="C4IMap.rc">

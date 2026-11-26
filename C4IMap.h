@@ -23,9 +23,9 @@
 
 
 
-//#include "../inc/ICOPS2010V11520/ICOPS_Framework/CAppContext.h"
-//#include "../inc/ICOPS2010V11520/ICOPS_WarSym/IWarSymFactory.h"
-//#include "../inc/ICOPS2010V11520/ICOPS_LogManager/CLog.h"
+#include "ICOPS_Framework/CAppContext.h"
+#include "ICOPS_WarSym/IWarSymFactory.h"
+#include "ICOPS_LogManager/CLog.h"
 
 // CC4IMapApp:
 // 이 클래스의 구현에 대해서는 C4IMap.cpp을(를) 참조하세요.
@@ -50,8 +50,8 @@ public:
 	virtual int ExitInstance();
 
 	// 군대부호
-	//ICOPS::CAppContext* m_pAppCxt;
-	//ICOPS::IWarSymFactoryPtr	m_piSymFac;
+	ICOPS::CAppContext* m_pAppCxt;
+	ICOPS::IWarSymFactoryPtr	m_piSymFac;
 
 private:
 	//GDI+를 위한 변수 선언 

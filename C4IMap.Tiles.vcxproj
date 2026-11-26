@@ -133,7 +133,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration);d:/work/상황도/Debug/Lib;c:/gdal_sdk/lib;D:\work\상황도\Debug\Lib\ICOPS2010V11520</AdditionalLibraryDirectories>
-      <AdditionalDependencies>GeoDC.lib;GeoTrans.lib;CIDataMgr.lib;Loadshp_rtree.lib;geotiff.lib;tiff.lib;BMGlib.lib;BMGLibJPEG.lib;BMGLibPNG.lib;BMGGeoTIFF.lib;$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration)\C4Overlay.lib;AltitudeMgr.lib;gdal_i.lib;rpcrt4.lib;ICOPS_Framework_2010.lib;ICOPS_LogManager_2010.lib;ICOPS_WarSym_2010.lib</AdditionalDependencies>
+      <AdditionalDependencies>GeoDC.lib;GeoTrans.lib;CIDataMgr.lib;Loadshp_rtree.lib;geotiff.lib;tiff.lib;BMGlib.lib;BMGLibJPEG.lib;BMGLibPNG.lib;BMGGeoTIFF.lib;$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration)\C4Overlay.lib;gdal_i.lib;rpcrt4.lib;</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <Midl>
@@ -194,7 +194,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalDependencies>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration)\C4Overlay.lib;GeoDC.lib;GeoTrans.lib;geotiff.lib;tiff.lib;gdal_i.lib;AltitudeMgr.lib;rpcrt4.lib</AdditionalDependencies>
+      <AdditionalDependencies>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration)\C4Overlay.lib;GeoDC.lib;GeoTrans.lib;geotiff.lib;tiff.lib;gdal_i.lib;rpcrt4.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OverlaySdkRoot)\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSrc\lib\$(Platform)\$(Configuration);$(ProjectDir)..\LibSrc\lib;$(ProjectDir)..\gdal_sdk\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
@@ -643,4 +643,10 @@
     <Copy SourceFiles="$(OverlaySdkRoot)\bin\$(Platform)\$(Configuration)\C4Overlay.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
   </Target>
   <Import Project="$(ProjectDir)C4MapGdalRuntime.targets" />
-</Project>
+  <ItemGroup>
+    <ClCompile Include="..\MapViewSync\MapViewSync.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile>
+    <ClCompile Include="C4IMapView_GlobeSync.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile>
+    <ClInclude Include="..\MapViewSync\MapViewSync.h" />
+  </ItemGroup>
+  <Import Project="C4MapMilitary.props" />
+<ItemGroup><ClCompile Include="..\MapViewSync\MapSceneSync.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile><ClInclude Include="..\MapViewSync\MapSceneSync.h"/></ItemGroup></Project>

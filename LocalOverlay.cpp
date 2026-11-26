@@ -1545,3 +1545,69 @@ bool CLocalOverlay::GroupSelection(bool ungroup)
     p->modified = true;
     return true;
 }
+
+#include "MapDecoration.h"
+#pragma pack(push,8)
+#include "cpl_json.h"
+std::string CLocalOverlay::SyncObjects(CCoordMgr* coord) const
+{
+    CPLJSONArray objects;
+    if(!coord) return objects.Format(CPLJSONObject::PrettyFormat::Plain);
+    auto point=[coord](double x,double y) {
+        double sx,sy,lon=0,lat=0;
+        coord->WorldXY2ScreenXY(x,y,&sx,&sy);
+        CPLJSONArray result;
+        if(MapScreenLonLat(coord,sx,sy,lon,lat)){result.Add(lon);result.Add(lat);}
+        return result;
+    };
+    size_t index=0;
+    for(const auto& item:p->items)
+    {
+        CPLJSONObject object;object.Add("id",std::to_string(index++));
+        object.Add("layer",item.layer);object.Add("type",item.type);
+        object.Add("start",point(item.x1,item.y1));object.Add("end",point(item.x2,item.y2));
+        CPLJSONArray points;
+        for(int n=0;n<item.geometry.count;++n)points.Add(point(item.geometry.x[n],item.geometry.y[n]));
+        object.Add("points",points);
+        CPLJSONObject style;
+        style.Add("lineColor",static_cast<double>(item.style.lineColor));
+        style.Add("fillColor",static_cast<double>(item.style.fillColor));
+        style.Add("patternColor",static_cast<double>(item.style.patternColor));
+        style.Add("width",static_cast<double>(item.style.width));
+        style.Add("lineAlpha",static_cast<double>(item.style.lineAlpha));
+        style.Add("fillAlpha",static_cast<double>(item.style.fillAlpha));
+        style.Add("dash",static_cast<double>(item.style.dash));
+        style.Add("fillType",static_cast<double>(item.style.fillType));
+        style.Add("hatch",static_cast<double>(item.style.hatch));
+        style.Add("rotation",static_cast<double>(item.style.rotation));
+        style.Add("flipX",static_cast<double>(item.style.flipX));
+        style.Add("flipY",static_cast<double>(item.style.flipY));
+        style.Add("startArrow",static_cast<double>(item.style.startArrow));
+        style.Add("endArrow",static_cast<double>(item.style.endArrow));
+        style.Add("lineCap",static_cast<double>(item.style.lineCap));
+        style.Add("lineJoin",static_cast<double>(item.style.lineJoin));
+        style.Add("lineAlignment",static_cast<double>(item.style.lineAlignment));
+        style.Add("lineStripe",static_cast<double>(item.style.lineStripe));
+        style.Add("gradientMode",static_cast<double>(item.style.gradientMode));
+        style.Add("gradientPosition",static_cast<double>(item.style.gradientPosition));
+        style.Add("gradientColor",static_cast<double>(item.style.gradientColor));
+        style.Add("textColor",static_cast<double>(item.style.textColor));
+        style.Add("fontSize",static_cast<double>(item.style.fontSize));
+        style.Add("fontStyle",static_cast<double>(item.style.fontStyle));
+        style.Add("textAlign",static_cast<double>(item.style.textAlign));
+        style.Add("textAlignY",static_cast<double>(item.style.textAlignY));
+        style.Add("lineInterval",static_cast<double>(item.style.lineInterval));
+        style.Add("vertical",static_cast<double>(item.style.vertical));
+        style.Add("rightToLeft",static_cast<double>(item.style.rightToLeft));
+        style.Add("autoTextBox",static_cast<double>(item.style.autoTextBox));
+        style.Add("lineEnabled",static_cast<double>(item.style.lineEnabled));
+        style.Add("fillEnabled",static_cast<double>(item.style.fillEnabled));
+        style.Add("text",std::string(CW2A(item.style.text,CP_UTF8)));
+        style.Add("font",std::string(CW2A(item.style.font,CP_UTF8)));
+        style.Add("imagePath",std::string(CW2A(item.style.imagePath,CP_UTF8)));
+        object.Add("style",style);objects.Add(object);
+    }
+    return objects.Format(CPLJSONObject::PrettyFormat::Plain);
+}
+
+#pragma pack(pop)

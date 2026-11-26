@@ -25,6 +25,7 @@ void CC4IMapView::OnMouseMove(UINT nFlags, CPoint point)
         Invalidate(FALSE);
 		return;
     }
+    if(m_militaryOverlay.Move(point,m_pCoordMgr)){Invalidate(FALSE);return;}
     if(m_localOverlay.Move(point,m_pCoordMgr))
 	{
 		Invalidate(FALSE);
@@ -101,6 +102,7 @@ void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
         SetFocus();
         return;
     }
+    if(m_localOverlay.GetTool()==CLocalOverlay::Pan && m_militaryOverlay.Down(point,m_pCoordMgr,m_localOverlay)){m_localOverlay.SetTool(CLocalOverlay::Pan);SetFocus();SetCapture();RefreshOverlayLayers();Invalidate(FALSE);return;}
     if(m_localOverlay.Begin(point,m_pCoordMgr)){SetFocus();SetCapture();Invalidate(FALSE);return;}
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	
@@ -152,6 +154,7 @@ void CC4IMapView::OnLButtonUp(UINT nFlags, CPoint point)
         Invalidate(FALSE);
         return;
     }
+    if(m_militaryOverlay.Up()){if(GetCapture()==this)ReleaseCapture();RefreshOverlayLayers();Invalidate(FALSE);return;}
     if(m_localOverlay.End(point,m_pCoordMgr))
 	{
         RefreshOverlayLayers();
@@ -287,6 +290,8 @@ void CC4IMapView::OnMButtonUp(UINT, CPoint point)
 
 void CC4IMapView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
+    if(m_militaryOverlay.Finish()){RefreshOverlayLayers();Invalidate(FALSE);return;}
+    if(m_militaryOverlay.Selected()){OnMilitaryEdit();return;}
     if (m_analysis.Finish())
     {
         Invalidate(FALSE);

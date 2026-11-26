@@ -17,9 +17,11 @@
 #include "MapFrameCache.h"
 #include "MapNavigation.h"
 #include "../MapViewSync/MapViewSync.h"
+#include "../MapViewSync/MapSceneSync.h"
 #include "MapRibbonTools.h"
 #include "MapSources.h"
 #include "LocalOverlay.h"
+#include "MilitaryOverlay.h"
 
 #include "C4IMapDoc.h"
 #include "MainFrm.h"
@@ -293,7 +295,7 @@ public:
 	MOUSE_STATE GetMouseState();
 	void SetMouseState(MOUSE_STATE pState);
 	BOOL SaveLocalOverlayIfModified();
-	void ResetLocalOverlay() { m_localOverlay.Clear(); RefreshOverlayLayers(); Invalidate(FALSE); }
+	void ResetLocalOverlay() { m_localOverlay.Clear(); m_militaryOverlay.Clear(); RefreshOverlayLayers(); Invalidate(FALSE); }
 
 // 재정의입니다.
 public:
@@ -314,6 +316,13 @@ public:
 
 protected:
 	CLocalOverlay m_localOverlay;
+    CMilitaryOverlay m_militaryOverlay;
+    afx_msg void OnMilitaryChoose();
+    afx_msg void OnMilitaryEdit();
+    afx_msg void OnUpdateMilitary(CCmdUI* ui);
+public:
+    size_t MilitaryCount(int layer) const { return m_militaryOverlay.Count(layer); }
+protected:
 	CAnalysisWorkspace m_analysis;
 
 	BOOL BeginView();
@@ -356,6 +365,9 @@ protected:
     void OutputMapIdentify(const CString& title, const std::vector<CString>& fields, const std::vector<CString>& values);
 private:
     CMapViewSync m_globeSync{0};
+    CMapSceneSync m_globeScene;
+    ULONGLONG m_globeSceneTick = 0;
+    void PublishGlobeScene();
     bool CaptureGlobeSyncState(MapViewSyncState& state);
     void SyncGlobeView();
     afx_msg void OnGlobeSyncStart();
