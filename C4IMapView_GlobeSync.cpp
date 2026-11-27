@@ -124,6 +124,23 @@ void CC4IMapView::PublishGlobeScene()
         sources.Add(entry);
     }
     root.Add("sources",sources);
+    // Share the actual height source, independently of terrain visibility.
+    auto& config = BaseMapConfig();
+    std::string altitude = config.Value("AltitudeSource", "auto");
+    int heightKind = 0;
+    std::string heightPath = config.Value("Elevation.Path", AppPath("ElevationRoot").c_str());
+    if (altitude == "terrain-server")
+    {
+        heightKind = 2; heightPath = config.Value("TerrainServer.LayerJson");
+    }
+    else if (altitude == "terrain-local" || (altitude == "auto" &&
+        GetFileAttributes(BaseMapPath("TerrainLocal.LayerJson", "")) != INVALID_FILE_ATTRIBUTES))
+    {
+        heightKind = 1; heightPath = config.Value("TerrainLocal.LayerJson");
+    }
+    root.Add("heightSource", heightPath);
+    root.Add("heightKind", heightKind);
+    root.Add("heightDll", AppPath(heightKind ? "TerrainTilesDll" : "TerrainElevationDll"));
     CPLJSONArray bases;
     const char* names[]={"SmallScale","World","NaturalEarth"};
     for(int i=0;i<3;++i)

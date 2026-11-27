@@ -210,6 +210,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CTest_OverItem.h" />
     <ClInclude Include="GPoint.h" />
     <ClInclude Include="MapSources.h" />
     <ClInclude Include="MapBuildOptions.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="ViewTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CTest_OverItem.cpp" />
     <ClCompile Include="GPoint.cpp" />
     <ClCompile Include="MapSources.cpp" />
     <ClCompile Include="BaseMapOptions.cpp">
@@ -655,4 +657,10 @@
     <ClInclude Include="..\MapViewSync\MapViewSync.h" />
   </ItemGroup>
   <Import Project="C4MapMilitary.props" />
-<ItemGroup><ClCompile Include="..\MapViewSync\MapSceneSync.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile><ClInclude Include="..\MapViewSync\MapSceneSync.h"/></ItemGroup></Project>
+  <ItemGroup>
+    <ClCompile Include="..\MapViewSync\MapSceneSync.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClInclude Include="..\MapViewSync\MapSceneSync.h" />
+  </ItemGroup>
+<ItemGroup><ClInclude Include="MilitaryOverlayState.h"/></ItemGroup></Project>

@@ -170,6 +170,11 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\MapViewSync\MapViewSync.h" />
+    <ClInclude Include="MilitaryOverlay.h" />
+    <ClInclude Include="..\MapViewSync\MapSceneSync.h" />
+    <ClInclude Include="CTest_OverItem.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C4IMap.cpp">
@@ -315,6 +320,11 @@
     </ClCompile>
     <ClCompile Include="..\MapViewSync\MapViewSync.cpp" />
     <ClCompile Include="C4IMapView_GlobeSync.cpp" />
+    <ClCompile Include="MilitaryOverlay.cpp" />
+    <ClCompile Include="..\MapViewSync\MapSceneSync.cpp" />
+    <ClCompile Include="CTest_OverItem.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="C4IMap.rc">

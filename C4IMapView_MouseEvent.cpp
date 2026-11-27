@@ -102,7 +102,7 @@ void CC4IMapView::OnLButtonDown(UINT nFlags, CPoint point)
         SetFocus();
         return;
     }
-    if(m_localOverlay.GetTool()==CLocalOverlay::Pan && m_militaryOverlay.Down(point,m_pCoordMgr,m_localOverlay)){m_localOverlay.SetTool(CLocalOverlay::Pan);SetFocus();SetCapture();RefreshOverlayLayers();Invalidate(FALSE);return;}
+    if(m_localOverlay.GetTool()==CLocalOverlay::Pan && m_militaryOverlay.Down(point,m_pCoordMgr,m_localOverlay,nFlags)){m_localOverlay.SetTool(CLocalOverlay::Pan);SetFocus();SetCapture();RefreshOverlayLayers();Invalidate(FALSE);return;}
     if(m_localOverlay.Begin(point,m_pCoordMgr)){SetFocus();SetCapture();Invalidate(FALSE);return;}
 	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
 	
@@ -291,7 +291,20 @@ void CC4IMapView::OnMButtonUp(UINT, CPoint point)
 void CC4IMapView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 {
     if(m_militaryOverlay.Finish()){RefreshOverlayLayers();Invalidate(FALSE);return;}
-    if(m_militaryOverlay.Selected()){OnMilitaryEdit();return;}
+    if(m_militaryOverlay.Selected())
+    {
+        CMenu menu;menu.CreatePopupMenu();
+        menu.AppendMenu(MF_STRING|(m_militaryOverlay.SelectionCount()==1?0:MF_GRAYED),ID_C4_MILITARY_EDIT,_T("군대부호 속성 편집"));
+        menu.AppendMenu(MF_STRING|(m_militaryOverlay.CanGroup()?0:MF_GRAYED),61007,_T("그룹 (Ctrl+G)"));
+        menu.AppendMenu(MF_STRING|(m_militaryOverlay.CanUngroup()?0:MF_GRAYED),61008,_T("그룹 해제 (Ctrl+Shift+G)"));
+        menu.AppendMenu(MF_STRING,ID_MENU_OVERLAY_DELETE,_T("선택한 군대부호 삭제"));
+        CPoint screen=point;ClientToScreen(&screen);
+        UINT command=menu.TrackPopupMenu(TPM_RETURNCMD|TPM_RIGHTBUTTON,screen.x,screen.y,this);
+        if(command==ID_C4_MILITARY_EDIT) OnMilitaryEdit();
+        else if(command==61007 || command==61008) OnOverlayStyleCommand(command);
+        else if(command==ID_MENU_OVERLAY_DELETE) OnOverlayEdit(command);
+        return;
+    }
     if (m_analysis.Finish())
     {
         Invalidate(FALSE);

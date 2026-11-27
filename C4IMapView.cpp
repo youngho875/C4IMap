@@ -44,6 +44,8 @@
 IMPLEMENT_DYNCREATE(CC4IMapView, CView)
 
 BEGIN_MESSAGE_MAP(CC4IMapView, CView)
+    ON_COMMAND(ID_C4_MILITARY_SELECT, &CC4IMapView::OnMilitarySelect)
+    ON_UPDATE_COMMAND_UI(ID_C4_MILITARY_SELECT, &CC4IMapView::OnUpdateMilitary)
     ON_COMMAND(ID_C4_MILITARY_CHOOSE, &CC4IMapView::OnMilitaryChoose)
     ON_COMMAND(ID_C4_MILITARY_EDIT, &CC4IMapView::OnMilitaryEdit)
     ON_UPDATE_COMMAND_UI(ID_C4_MILITARY_CHOOSE, &CC4IMapView::OnUpdateMilitary)
@@ -769,9 +771,15 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
 			m_localOverlay.SetColor(dlg.GetColor());
 	}
     else if(id==ID_C4OVER_UNDO)
-		m_localOverlay.Undo();
+    {
+        if (m_militaryOverlay.SelectionMode()) m_militaryOverlay.Undo();
+        else m_localOverlay.Undo();
+    }
     else if(id==ID_C4OVER_REDO) 
-		m_localOverlay.Redo();
+    {
+        if (m_militaryOverlay.SelectionMode()) m_militaryOverlay.Redo();
+        else m_localOverlay.Redo();
+    }
     else if(id==ID_C4OVER_SAVE || id==ID_C4OVER_LOAD)
 	{
         BOOL load=id==ID_C4OVER_LOAD;
@@ -794,7 +802,11 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
 
 void CC4IMapView::OnUpdateLocalOverlay(CCmdUI* ui)
 {
-    ui->Enable(ui->m_nID==ID_C4OVER_REDO ? m_localOverlay.CanRedo() : (ui->m_nID!=ID_C4OVER_UNDO || m_localOverlay.CanUndo()));
+    const bool military = m_militaryOverlay.SelectionMode();
+    const bool canUndo = military ? m_militaryOverlay.CanUndo() : m_localOverlay.CanUndo();
+    const bool canRedo = military ? m_militaryOverlay.CanRedo() : m_localOverlay.CanRedo();
+    ui->Enable(ui->m_nID == ID_C4OVER_REDO ? canRedo :
+        (ui->m_nID != ID_C4OVER_UNDO || canUndo));
     if(ui->m_nID<=ID_C4OVER_ELLIPSE)
 		ui->SetRadio(m_localOverlay.GetTool()==int(ui->m_nID-ID_C4OVER_PAN));
 }
@@ -823,6 +835,17 @@ BOOL CC4IMapView::PreTranslateMessage(MSG* msg)
             return TRUE;
         }
         bool control = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
+        if(control && msg->wParam=='G' && m_militaryOverlay.Selected())
+        {
+            OnOverlayStyleCommand((GetKeyState(VK_SHIFT)&0x8000) ? 61008 : 61007);
+            return TRUE;
+        }
+        if(control && msg->wParam=='A' && m_militaryOverlay.SelectionMode())
+        {
+            m_militaryOverlay.SelectAll(m_localOverlay);
+            Invalidate(FALSE);
+            return TRUE;
+        }
         UINT command = 0;
         if (msg->wParam == VK_DELETE)
             command = ID_MENU_OVERLAY_DELETE;
@@ -859,6 +882,7 @@ void CC4IMapView::OnCaptureChanged(CWnd* wnd)
 {
     if(m_searchDragging){m_searchDragging=false;m_searchMode=0;Invalidate(FALSE);}
     m_rotationDragging=false;
+    m_militaryOverlay.CancelGesture();
     if(m_localOverlay.IsDrawing())
 	{
 		m_localOverlay.Cancel();
@@ -1140,5 +1164,15 @@ void CC4IMapView::OnMilitaryEdit()
 }
 void CC4IMapView::OnUpdateMilitary(CCmdUI* ui)
 {
-    ui->Enable(ui->m_nID==ID_C4_MILITARY_CHOOSE || m_militaryOverlay.Selected());
+    ui->Enable(ui->m_nID!=ID_C4_MILITARY_EDIT || m_militaryOverlay.SelectionCount()==1);
+    if(ui->m_nID==ID_C4_MILITARY_SELECT)
+        ui->SetCheck(m_militaryOverlay.SelectionMode());
+}
+
+void CC4IMapView::OnMilitarySelect()
+{
+    OnLocalOverlayCommand(ID_C4OVER_PAN);
+    m_militaryOverlay.SelectMode();
+    SetFocus();
+    Invalidate(FALSE);
 }

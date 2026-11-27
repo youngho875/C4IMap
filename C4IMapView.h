@@ -318,6 +318,7 @@ protected:
 	CLocalOverlay m_localOverlay;
     CMilitaryOverlay m_militaryOverlay;
     afx_msg void OnMilitaryChoose();
+    afx_msg void OnMilitarySelect();
     afx_msg void OnMilitaryEdit();
     afx_msg void OnUpdateMilitary(CCmdUI* ui);
 public:

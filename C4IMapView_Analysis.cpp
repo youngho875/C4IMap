@@ -162,6 +162,7 @@ BOOL CC4IMapView::OnOverlayDeleteCommand(UINT id)
 }
 void CC4IMapView::OnOverlayEdit(UINT id)
 {
+    if(m_militaryOverlay.Selected() && (id==ID_MENU_OVERLAY_COPY || id==ID_MENU_OVERLAY_CUT)) return;
     bool success = false;
     switch (id)
     {
@@ -189,6 +190,11 @@ void CC4IMapView::OnOverlayEdit(UINT id)
 }
 void CC4IMapView::OnUpdateOverlayEdit(CCmdUI *ui)
 {
+    if(m_militaryOverlay.Selected() && ui->m_nID!=ID_MENU_OVERLAY_DELETE && ui->m_nID!=ID_MENU_OVERLAY_PASTE)
+    {
+        ui->Enable(FALSE);
+        return;
+    }
     ui->Enable(ui->m_nID == ID_MENU_OVERLAY_PASTE ? CLocalOverlay::CanPaste()
                                                   : (m_localOverlay.HasSelection() || m_militaryOverlay.Selected()));
 }

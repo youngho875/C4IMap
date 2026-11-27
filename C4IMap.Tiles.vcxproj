@@ -649,4 +649,4 @@
     <ClInclude Include="..\MapViewSync\MapViewSync.h" />
   </ItemGroup>
   <Import Project="C4MapMilitary.props" />
-<ItemGroup><ClCompile Include="..\MapViewSync\MapSceneSync.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile><ClInclude Include="..\MapViewSync\MapSceneSync.h"/></ItemGroup></Project>
+<ItemGroup><ClCompile Include="..\MapViewSync\MapSceneSync.cpp"><PrecompiledHeader>NotUsing</PrecompiledHeader></ClCompile><ClInclude Include="..\MapViewSync\MapSceneSync.h"/></ItemGroup><ItemGroup><ClCompile Include="CTest_OverItem.cpp"/><ClInclude Include="CTest_OverItem.h"/></ItemGroup><ItemGroup><ClInclude Include="MilitaryOverlayState.h"/></ItemGroup></Project>

@@ -621,6 +621,7 @@ void CMainFrame::InitializeRibbon()
 	m_pRibbonDrawGallery = new CMFCRibbonGallery(ID_RIBBON_OVERLAY_DRAW_GALLERY, _T("도형"), -1, 0);
     m_pRibbonDrawGallery->AddSubItem(new CMFCRibbonButton(ID_C4_MILITARY_CHOOSE, _T("군대부호 그리기")));
     m_pRibbonDrawGallery->AddSubItem(new CMFCRibbonButton(ID_C4_MILITARY_EDIT, _T("군대부호 속성 편집")));
+    m_pRibbonDrawGallery->AddSubItem(new CMFCRibbonButton(ID_C4_MILITARY_SELECT, _T("군대부호 선택 (영역/Ctrl+클릭)")));
 
 	CMFCToolBarImages mtbi_Recently;
 	CBitmap bmRecently;

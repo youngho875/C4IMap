@@ -6,6 +6,15 @@
 
 BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
 {
+    if(id>=61007 && id<=61010 && (m_militaryOverlay.Selected() || m_militaryOverlay.SelectionMode()))
+    {
+        if(id==61010) m_militaryOverlay.SelectAll(m_localOverlay);
+        else if(!m_militaryOverlay.GroupSelection(id==61008))
+            AfxMessageBox(id==61008 ? _T("해제할 군대부호 그룹을 선택하세요.") :
+                _T("같은 레이어의 군대부호를 두 개 이상 선택하세요."));
+        Invalidate(FALSE);
+        return TRUE;
+    }
     if(id==IDM_POPOVERLAY_PROPERTY && m_militaryOverlay.Selected()){OnMilitaryEdit();return TRUE;}
     if (m_localOverlay.IsDrawing())
         return TRUE;
@@ -256,6 +265,12 @@ BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
 }
 void CC4IMapView::OnUpdateOverlayStyle(CCmdUI *ui)
 {
+    if(ui->m_nID>=61007 && ui->m_nID<=61010 &&
+       (m_militaryOverlay.Selected() || m_militaryOverlay.SelectionMode()))
+    {
+        ui->Enable(ui->m_nID==61010 || (ui->m_nID==61008 ? m_militaryOverlay.CanUngroup() : m_militaryOverlay.CanGroup()));
+        return;
+    }
     ui->Enable(!m_localOverlay.IsDrawing() &&
                (ui->m_nID < 61000 || ui->m_nID > 61006 || m_localOverlay.HasSelection()));
     auto s = m_localOverlay.GetStyle();

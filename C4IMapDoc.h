@@ -15,7 +15,7 @@
 
 #pragma once
 
-//#include "CTest_OverItem.h"
+#include "CTest_OverItem.h"
 
 class CC4IMapDoc : public CDocument
 {
@@ -25,7 +25,7 @@ protected: // serialization에서만 만들어집니다.
 
 // 특성입니다.
 public:
-	//CPtrArrayCTest_OverItem		m_parOverItems;
+	CPtrArrayCTest_OverItem		m_parOverItems;
 
 // 작업입니다.
 public:

@@ -68,7 +68,6 @@ BOOL CC4IMapDoc::OnNewDocument()
 
 void CC4IMapDoc::Serialize(CArchive& ar)
 {
-/*
 	bool		bRes;
 	CString		strXml;
 	CFile* pFile;
@@ -130,14 +129,19 @@ void CC4IMapDoc::Serialize(CArchive& ar)
 		CTest_OverItem::SetOverlayXmlString(m_parOverItems, strXml);
 
 	}
-*/
 }
 
 void CC4IMapDoc::DeleteContents()
 {
     POSITION pos=GetFirstViewPosition();
-    while(pos){auto view=DYNAMIC_DOWNCAST(CC4IMapView,GetNextView(pos));if(view)view->ResetLocalOverlay();}
-/*
+    while(pos)
+	{
+		auto view=DYNAMIC_DOWNCAST(CC4IMapView,GetNextView(pos));
+		if(view)
+			view->ResetLocalOverlay();
+	}
+
+
 	INT_PTR		inx, count;
 	ULONG		nRefCount;
 	CTest_OverItem* pOverItem;
@@ -154,7 +158,6 @@ void CC4IMapDoc::DeleteContents()
 		}
 		m_parOverItems.RemoveAll();
 	}
-*/
 	CDocument::DeleteContents();
 }
 
