@@ -12,6 +12,7 @@ public:
     bool Choose(CWnd* owner, int layer);
     bool Edit(CWnd* owner);
     void Draw(CDC* dc, CCoordMgr* coord, const CLocalOverlay& layers);
+    void DrawSelection(CDC* dc, CCoordMgr* coord, const CLocalOverlay& layers);
     bool Down(CPoint point, CCoordMgr* coord, const CLocalOverlay& layers, UINT flags = 0);
     bool Move(CPoint point, CCoordMgr* coord);
     bool Up();

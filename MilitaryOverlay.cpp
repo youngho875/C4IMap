@@ -231,57 +231,114 @@ bool CMilitaryOverlay::Edit(CWnd* owner)
     return ok;
 }
 
+bool CMilitaryOverlay::Impl::Bounds(MilitaryItem& item, Gdiplus::Graphics& graphics,
+    const std::vector<Gdiplus::PointF>& points, Gdiplus::RectF& rectangle)
+{
+    if(points.empty()) return false;
+    const auto state = graphics.Save();
+    Gdiplus::RectF sdkBox;
+    const bool measured = item.GetBoundingRect(&graphics,pixels,1.0,&sdkBox,TRUE) != FALSE;
+    graphics.Restore(state);
+    if(measured && std::isfinite(sdkBox.X) && std::isfinite(sdkBox.Y) &&
+        std::isfinite(sdkBox.Width) && std::isfinite(sdkBox.Height) &&
+        sdkBox.Width>=0 && sdkBox.Height>=0 && sdkBox.Width+sdkBox.Height>0)
+    {
+        rectangle=sdkBox;
+        if(rectangle.Width<8){rectangle.X-=(8-rectangle.Width)/2;rectangle.Width=8;}
+        if(rectangle.Height<8){rectangle.Y-=(8-rectangle.Height)/2;rectangle.Height=8;}
+        return true;
+    }
+    // Some SDK symbols have no cached device bounds until first rendering.
+    float left=points[0].X,right=left,top=points[0].Y,bottom=top;
+    for(const auto& point:points)
+    {
+        left=std::min(left,point.X);right=std::max(right,point.X);
+        top=std::min(top,point.Y);bottom=std::max(bottom,point.Y);
+    }
+    const float size=item.m_piSym->GetSymbolSize();
+    const float padding=std::isfinite(size)?std::max(12.f,std::min(size*.75f,256.f)):16.f;
+    rectangle=Gdiplus::RectF(left-padding,top-padding,right-left+2*padding,bottom-top+2*padding);
+    return true;
+}
+
 void CMilitaryOverlay::Draw(CDC* dc,CCoordMgr* coord,const CLocalOverlay& layers)
 {
-    if(!dc || !coord || (p->items.empty()&&!p->adding)) 
-        return;
+    if(!dc || !coord || (p->items.empty()&&!p->adding)) return;
     for(auto it=p->selection.begin();it!=p->selection.end();)
     {
         if(!p->Visible(p->items[*it]->layer,layers)) it=p->selection.erase(it);
         else ++it;
     }
     p->UpdatePrimary();
-    Gdiplus::Graphics g(dc->GetSafeHdc());
-    g.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
+    Gdiplus::Graphics graphics(dc->GetSafeHdc());
+    graphics.SetSmoothingMode(Gdiplus::SmoothingModeAntiAlias);
     Gdiplus::Pen pen(Gdiplus::Color(255,0,120,255),1);
-    Gdiplus::SolidBrush white(Gdiplus::Color::White);
-    auto draw=[&](MilitaryItem& item,bool selected)
+    auto draw=[&](MilitaryItem& item)
     {
-        if(!p->Visible(item.layer,layers)) 
-            return;
-        std::vector<Gdiplus::PointF> pts;
-        if(!p->Prepare(item,coord,pts)) 
-            return;
-        const INT_PTR required=item.m_piSym->CountAnchorPoints(0,(INT_PTR)pts.size());
-        if((required>0 && pts.size()>=(size_t)required)||(required<0 && pts.size()>=(size_t)-required))
-            item.Draw(&g,pts.data(),(INT_PTR)pts.size(),1.0);
-        else if(pts.size()>1)
-            g.DrawLines(&pen,pts.data(),(INT)pts.size());
-        if(selected)
-        {
-            Gdiplus::RectF box;
-            if(item.GetBoundingRect(&g,p->pixels,1.0,&box,TRUE))
-                g.DrawRectangle(&pen,box);
-            if(p->selection.size()<=1 && item.group==0)
-            for(auto pt:pts)
-            {
-                g.FillRectangle(&white,pt.X-4,pt.Y-4,8.0f,8.0f);
-                g.DrawRectangle(&pen,pt.X-4,pt.Y-4,8.0f,8.0f);
-            }
-        }
+        if(!p->Visible(item.layer,layers)) return;
+        std::vector<Gdiplus::PointF> points;
+        if(!p->Prepare(item,coord,points)) return;
+        const auto state=graphics.Save();
+        const INT_PTR required=item.m_piSym->CountAnchorPoints(0,(INT_PTR)points.size());
+        if((required>0 && points.size()>=(size_t)required)||(required<0 && points.size()>=(size_t)-required))
+            item.Draw(&graphics,points.data(),(INT_PTR)points.size(),1.0);
+        else if(points.size()>1)
+            graphics.DrawLines(&pen,points.data(),(INT)points.size());
+        graphics.Restore(state);
     };
-    for(size_t i=0;i<p->items.size();++i)
-        draw(*p->items[i],p->selection.count((int)i)!=0);
-    if(p->adding)
-        draw(*p->adding,true);
+    for(auto& item:p->items) draw(*item);
+    if(p->adding) draw(*p->adding);
+}
+
+void CMilitaryOverlay::DrawSelection(CDC* dc,CCoordMgr* coord,const CLocalOverlay& layers)
+{
+    if(!dc || !coord) return;
+    Gdiplus::Graphics graphics(dc->GetSafeHdc());
+    graphics.SetPageUnit(Gdiplus::UnitPixel);
+    graphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
+    graphics.SetCompositingMode(Gdiplus::CompositingModeSourceOver);
+    Gdiplus::Pen halo(Gdiplus::Color(255,255,255,255),4.f);
+    Gdiplus::Pen outline(Gdiplus::Color(255,0,100,240),2.f);
+    Gdiplus::SolidBrush white(Gdiplus::Color(255,255,255,255));
+    Gdiplus::RectF combined;
+    bool hasCombined=false;
+    auto selection=[&](MilitaryItem& item,bool handles)
+    {
+        if(!p->Visible(item.layer,layers)) return;
+        std::vector<Gdiplus::PointF> points;
+        if(!p->Prepare(item,coord,points)) return;
+        Gdiplus::RectF box;
+        if(!p->Bounds(item,graphics,points,box)) return;
+        box.Inflate(4.f,4.f);
+        graphics.DrawRectangle(&halo,box);
+        graphics.DrawRectangle(&outline,box);
+        if(hasCombined){Gdiplus::RectF united;Gdiplus::RectF::Union(united,combined,box);combined=united;}
+        else {combined=box;hasCombined=true;}
+        if(handles)
+            for(const auto& point:points)
+            {
+                graphics.FillRectangle(&white,point.X-4,point.Y-4,8.f,8.f);
+                graphics.DrawRectangle(&outline,point.X-4,point.Y-4,8.f,8.f);
+            }
+    };
+    for(int index:p->selection)
+        if(index>=0 && (size_t)index<p->items.size())
+            selection(*p->items[index],p->selection.size()==1 && p->items[index]->group==0);
+    if(p->adding) selection(*p->adding,true);
+    if(hasCombined && p->selection.size()>1)
+    {
+        combined.Inflate(5.f,5.f);
+        graphics.DrawRectangle(&halo,combined);
+        outline.SetDashStyle(Gdiplus::DashStyleDash);
+        graphics.DrawRectangle(&outline,combined);
+    }
     if(p->boxing)
     {
-        CRect rectangle(p->boxStart,p->boxEnd);
-        rectangle.NormalizeRect();
+        CRect rectangle(p->boxStart,p->boxEnd);rectangle.NormalizeRect();
         Gdiplus::SolidBrush fill(Gdiplus::Color(35,0,120,255));
-        pen.SetDashStyle(Gdiplus::DashStyleDash);
-        g.FillRectangle(&fill,rectangle.left,rectangle.top,rectangle.Width(),rectangle.Height());
-        g.DrawRectangle(&pen,rectangle.left,rectangle.top,rectangle.Width(),rectangle.Height());
+        outline.SetDashStyle(Gdiplus::DashStyleDash);
+        graphics.FillRectangle(&fill,rectangle.left,rectangle.top,rectangle.Width(),rectangle.Height());
+        graphics.DrawRectangle(&outline,rectangle.left,rectangle.top,rectangle.Width(),rectangle.Height());
     }
 }
 
@@ -342,7 +399,7 @@ bool CMilitaryOverlay::Down(CPoint point,CCoordMgr* coord,const CLocalOverlay& l
         if(!p->Prepare(item,coord,points))
             continue;
         Gdiplus::RectF box;
-        if(!item.GetBoundingRect(&graphics,p->pixels,1.0,&box,TRUE))
+        if(!p->Bounds(item,graphics,points,box))
             continue;
         // Include a small hit tolerance even for thin/point symbols.
         box.Inflate(5.f,5.f);

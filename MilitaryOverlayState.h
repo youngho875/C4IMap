@@ -71,6 +71,8 @@ struct CMilitaryOverlay::Impl
     bool Visible(int layer, const CLocalOverlay& overlay) const;
     bool Prepare(MilitaryItem& item, CCoordMgr* coord, std::vector<Gdiplus::PointF>& points);
     bool Ready();
+    bool Bounds(MilitaryItem& item, Gdiplus::Graphics& graphics,
+        const std::vector<Gdiplus::PointF>& points, Gdiplus::RectF& rectangle);
     void SelectUnit(int index, bool select);
     void UpdatePrimary();
 };

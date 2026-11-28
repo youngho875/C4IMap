@@ -108,6 +108,7 @@ void CC4IMapView::DrawSituation(BOOL bMapRedraw, BOOL bSymRedraw, BOOL bMCRCRedr
     CRect analysisRect;
     GetClientRect(&analysisRect);
     m_analysis.Draw(m_dcMainTemp, m_pCoordMgr, analysisRect);
+    m_militaryOverlay.DrawSelection(m_dcMainTemp,m_pCoordMgr,m_localOverlay);
 	BufferDC.BitBlt(0, 0, fWidth, fHeight, m_dcMainTemp, 0, 0, SRCCOPY);
     DrawMapDecoration(&BufferDC,m_pCoordMgr,get_mainfrm(),ClientRect);
 
