@@ -19,25 +19,23 @@ const TCHAR *TmNames[] = {_T("Korea 2000 중부원점 2010 (EPSG:5186)"),
                           _T("Korean 1985 수정 동해원점 (EPSG:5177)")};
 } // namespace
 
-BEGIN_MESSAGE_MAP(CGridSettingsDialog, CDialogEx)
+BEGIN_MESSAGE_MAP(CGridSettingsDialog, CModelessDialog)
 ON_BN_CLICKED(ColorButton, &CGridSettingsDialog::OnColor)
 ON_CBN_SELCHANGE(51406, &CGridSettingsDialog::OnProjectionChanged)
 END_MESSAGE_MAP()
 
 CGridSettingsDialog::CGridSettingsDialog(const CMapGridSettings &settings, CWnd *parent)
-    : CDialogEx((UINT)0, parent), value(settings)
+    : CModelessDialog((UINT)0, parent), value(settings)
 {
 }
 
-INT_PTR CGridSettingsDialog::Show()
+bool CGridSettingsDialog::Show(std::function<void(CGridSettingsDialog&)> accepted)
 {
     EmptyTemplate layout{};
     layout.dialog.style = WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_MODALFRAME;
     layout.dialog.cx = 370;
     layout.dialog.cy = 365;
-    if (!InitModalIndirect(&layout.dialog))
-        return IDCANCEL;
-    return DoModal();
+    return OpenTemplate(&layout.dialog, m_pParentWnd, [this, accepted]() { if (accepted) accepted(*this); });
 }
 
 CMapGridSettings CGridSettingsDialog::Settings() const
@@ -47,7 +45,7 @@ CMapGridSettings CGridSettingsDialog::Settings() const
 
 BOOL CGridSettingsDialog::OnInitDialog()
 {
-    CDialogEx::OnInitDialog();
+    CModelessDialog::OnInitDialog();
     SetWindowText(_T("그리드 기준 좌표계 설정"));
     auto box = [&](int l, int t, int r, int b) {
         CRect rc(l, t, r, b);
@@ -123,12 +121,10 @@ void CGridSettingsDialog::UpdateColor()
 
 void CGridSettingsDialog::OnColor()
 {
-    CColorDialog dialog(value.color, CC_FULLOPEN, this);
-    if (dialog.DoModal() == IDOK)
-    {
-        value.color = dialog.GetColor();
+    ModelessDialogs::Color(this, value.color, [this](COLORREF color) {
+        value.color = color;
         UpdateColor();
-    }
+    });
 }
 
 void CGridSettingsDialog::OnOK()
@@ -166,7 +162,7 @@ void CGridSettingsDialog::OnOK()
         return;
     }
     value = next;
-    CDialogEx::OnOK();
+    CModelessDialog::OnOK();
 }
 
 void CGridSettingsDialog::OnProjectionChanged()

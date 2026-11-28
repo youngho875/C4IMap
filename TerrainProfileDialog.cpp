@@ -36,14 +36,7 @@ CTerrainProfileDialog::CTerrainProfileDialog(const std::vector<AnalysisProfileSa
 }
 INT_PTR CTerrainProfileDialog::Show()
 {
-    ProfileDialogTemplate layout{};
-    layout.dialog.style =
-        WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | DS_MODALFRAME;
-    layout.dialog.cx = 560;
-    layout.dialog.cy = 310;
-    if (!InitModalIndirect(&layout.dialog, m_pParentWnd))
-        return IDCANCEL;
-    return DoModal();
+    return Open(data, m_pParentWnd) ? IDOK : IDCANCEL;
 }
 bool CTerrainProfileDialog::Open(const std::vector<AnalysisProfileSample>& samples, CWnd* parent)
 {

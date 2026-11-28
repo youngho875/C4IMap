@@ -65,10 +65,12 @@ const char* types[] = {"NULL_TYPE", "LINE", "LINE", "RECT", "ELLIPSE", "ROUND_RE
     "TRIANGLE", "TRIANGLE", "POLYGON", "POLYGON", "DIAMOND", "PENTAGON", "SIX_ANGLE",
     "ARC", "PIE", "ARC", "LINKED_LINE", "CURVE", "TEXT", "POLYLINE", "POLYGON",
     "CURVE", "CURVE"};
+
 CPLXMLNode* Root(CPLXMLNode* node, const char* name)
 {
     for (; node; node = node->psNext)
-        if (node->eType == CXT_Element && !strcmp(node->pszValue, name)) return node;
+        if (node->eType == CXT_Element && !strcmp(node->pszValue, name)) 
+            return node;
     return nullptr;
 }
 void Attr(CPLXMLNode* node, const char* name, const char* value)
@@ -93,7 +95,8 @@ bool OverlayXmlFormat::Encode(const std::string& legacy, std::string& xml)
 {
     Tree source(CPLParseXMLString(legacy.c_str()), CPLDestroyXMLNode);
     auto old = Root(source.get(), "C4IMapOverlay");
-    if (!old) return false;
+    if (!old) 
+        return false;
     Tree result(CPLCreateXMLNode(nullptr, CXT_Element, "ovd"), CPLDestroyXMLNode);
     auto root = result.get();
     Attr(root, "format", "C4IMap-XMLControl");
@@ -103,14 +106,16 @@ bool OverlayXmlFormat::Encode(const std::string& legacy, std::string& xml)
     size_t objectId = 0;
     for (auto layer = old->psChild; layer; layer = layer->psNext)
     {
-        if (layer->eType != CXT_Element) continue;
+        if (layer->eType != CXT_Element)
+            continue;
         auto info = CPLCreateXMLNode(root, CXT_Element, "ovi");
         Copy(layer, "id", info, "gid");
         Copy(layer, "name", info, "nm");
         Copy(layer, "visible", info, "sh");
         for (auto item = layer->psChild; item; item = item->psNext)
         {
-            if (item->eType != CXT_Element) continue;
+            if (item->eType != CXT_Element) 
+                continue;
             auto shape = CPLCreateXMLNode(info, CXT_Element, "ovs");
             Attr(shape, "oid", std::to_string(++objectId).c_str());
             Copy(layer, "id", shape, "gid");
@@ -167,17 +172,22 @@ bool OverlayXmlFormat::Decode(const std::string& xml, std::string& legacy)
     Copy(root, "active", old, "active");
     for (auto info = root->psChild; info; info = info->psNext)
     {
-        if (info->eType != CXT_Element) continue;
-        if (!strcmp(info->pszValue, "iov")) continue; // SDK military symbols.
-        if (strcmp(info->pszValue, "ovi")) return false;
+        if (info->eType != CXT_Element) 
+            continue;
+        if (!strcmp(info->pszValue, "iov")) 
+            continue; // SDK military symbols.
+        if (strcmp(info->pszValue, "ovi")) 
+            return false;
         auto layer = CPLCreateXMLNode(old, CXT_Element, "Layer");
         Copy(info, "gid", layer, "id");
         Copy(info, "nm", layer, "name");
         Copy(info, "sh", layer, "visible");
         for (auto shape = info->psChild; shape; shape = shape->psNext)
         {
-            if (shape->eType != CXT_Element) continue;
-            if (strcmp(shape->pszValue, "ovs")) return false;
+            if (shape->eType != CXT_Element) 
+                continue;
+            if (strcmp(shape->pszValue, "ovs")) 
+                return false;
             auto item = CPLCreateXMLNode(layer, CXT_Element, "Object");
             Copy(shape, "type", item, "type");
             Copy(shape, "group", item, "group");

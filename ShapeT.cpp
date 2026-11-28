@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "ModelessDialog.h"
 #include "AppPaths.h"
 #include "MapBuildOptions.h"
 #include "BaseMapOptions.h"
@@ -2430,7 +2431,7 @@ bool CShapeT::IdentifyLocal(CPoint point, CString &title, std::vector<CString> &
 
 namespace
 {
-class LocalShpDialog : public CDialogEx
+class LocalShpDialog : public CModelessDialog
 {
 private:
     CShapeT &owner_;
@@ -2455,12 +2456,12 @@ private:
     }
 
 public:
-    LocalShpDialog(CShapeT &owner, CWnd *parent) : CDialogEx(IDD_LOCAL_SHP, parent), owner_(owner)
+    LocalShpDialog(CShapeT &owner, CWnd *parent) : CModelessDialog(IDD_LOCAL_SHP, parent), owner_(owner)
     {
     }
     BOOL OnInitDialog() override
     {
-        CDialogEx::OnInitDialog();
+        CModelessDialog::OnInitDialog();
         list_.SubclassDlgItem(IDC_LOCAL_LAYERS, this);
         list_.SetExtendedStyle(LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
         list_.InsertColumn(0, _T("레이어 / 파일 (체크: 표시)"), LVCFMT_LEFT, 780);
@@ -2476,29 +2477,25 @@ public:
     }
     afx_msg void Folder()
     {
-        CFolderPickerDialog d(Value(IDC_LOCAL_FOLDER), 0, this);
-        if (d.DoModal() == IDOK)
-        {
-            SetDlgItemText(IDC_LOCAL_FOLDER, d.GetPathName());
+        ModelessDialogs::File(this, true, Value(IDC_LOCAL_FOLDER), _T(""), [this](CString path, UINT) {
+            SetDlgItemText(IDC_LOCAL_FOLDER, path);
             CString xml = Value(IDC_LOCAL_XML), gss = Value(IDC_LOCAL_GSS);
-            CShapeT::ResolveLocalStyles(d.GetPathName(), xml, gss);
+            CShapeT::ResolveLocalStyles(path, xml, gss);
             SetDlgItemText(IDC_LOCAL_XML, xml);
             SetDlgItemText(IDC_LOCAL_GSS, gss);
-        }
+        }, true);
     }
     afx_msg void Xml()
     {
-        CFileDialog d(TRUE, _T("xml"), nullptr, OFN_FILEMUSTEXIST, _T("MapX XML (*.xml)|*.xml||"),
-                      this);
-        if (d.DoModal() == IDOK)
-            SetDlgItemText(IDC_LOCAL_XML, d.GetPathName());
+        ModelessDialogs::File(this, true, Value(IDC_LOCAL_XML), _T("MapX XML (*.xml)|*.xml||"),
+            [this](CString path, UINT) { SetDlgItemText(IDC_LOCAL_XML, path); });
     }
     afx_msg void Gss()
     {
-        CFolderPickerDialog d(Value(IDC_LOCAL_GSS), 0, this);
-        if (d.DoModal() == IDOK)
-            SetDlgItemText(IDC_LOCAL_GSS, d.GetPathName());
+        ModelessDialogs::File(this, true, Value(IDC_LOCAL_GSS), _T(""),
+            [this](CString path, UINT) { SetDlgItemText(IDC_LOCAL_GSS, path); }, true);
     }
+
     afx_msg void Load()
     {
         CWaitCursor wait;
@@ -2545,11 +2542,11 @@ public:
         }
         for (int i = 0; i < list_.GetItemCount(); ++i)
             owner_.SetLocalLayerVisible(i, list_.GetCheck(i) != FALSE);
-        CDialogEx::OnOK();
+        CModelessDialog::OnOK();
     }
     DECLARE_MESSAGE_MAP()
 };
-BEGIN_MESSAGE_MAP(LocalShpDialog, CDialogEx)
+BEGIN_MESSAGE_MAP(LocalShpDialog, CModelessDialog)
 ON_BN_CLICKED(IDC_LOCAL_FOLDER_PICK, &LocalShpDialog::Folder)
 ON_BN_CLICKED(IDC_LOCAL_XML_PICK, &LocalShpDialog::Xml)
 ON_BN_CLICKED(IDC_LOCAL_GSS_PICK, &LocalShpDialog::Gss)
@@ -2611,8 +2608,8 @@ CString CShapeT::LocalReport() const
 }
 void CShapeT::ConfigureLocal(CWnd *parent)
 {
-    LocalShpDialog d(*this, parent);
-    d.DoModal();
+    auto* dialog = new LocalShpDialog(*this, parent);
+    dialog->OpenResource(IDD_LOCAL_SHP, parent);
 }
 
 std::vector<LocalDisplayLayer> CShapeT::LocalDisplayLayers() const

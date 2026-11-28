@@ -1,4 +1,5 @@
-#pragma once
+﻿#pragma once
+#include "ModelessDialog.h"
 #include <afxwin.h>
 #include <afxdialogex.h>
 #pragma pack(push,8)
@@ -26,11 +27,11 @@ private:
     MapNavigationView m_initial;
     bool m_hasInitial=false;
 };
-class CMapCoordinateDialog : public CDialogEx
+class CMapCoordinateDialog : public CModelessDialog
 {
 public:
     CMapCoordinateDialog(double longitude,double latitude,CWnd* parent);
-    INT_PTR Show();
+    bool Show(std::function<void(CMapCoordinateDialog&)> accepted);
     double Longitude() const;
     double Latitude() const;
 protected:

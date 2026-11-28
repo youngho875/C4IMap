@@ -13,6 +13,7 @@
 //
 
 #include "pch.h"
+#include "ModelessDialog.h"
 #include "AppPaths.h"
 #include <stdexcept>
 #include <atlconv.h>
@@ -243,7 +244,7 @@ int CC4IMapApp::ExitInstance()
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
-class CAboutDlg : public CDialogEx
+class CAboutDlg : public CModelessDialog
 {
 public:
 	CAboutDlg() noexcept;
@@ -261,7 +262,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-CAboutDlg::CAboutDlg() noexcept : CDialogEx(IDD_ABOUTBOX)
+CAboutDlg::CAboutDlg() noexcept : CModelessDialog(IDD_ABOUTBOX)
 {
 }
 
@@ -270,14 +271,14 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAboutDlg, CModelessDialog)
 END_MESSAGE_MAP()
 
 // 대화 상자를 실행하기 위한 응용 프로그램 명령입니다.
 void CC4IMapApp::OnAppAbout()
 {
-	CAboutDlg aboutDlg;
-	aboutDlg.DoModal();
+	auto* aboutDlg = new CAboutDlg;
+    aboutDlg->OpenResource(IDD_ABOUTBOX, m_pMainWnd);
 }
 
 // CC4IMapApp 사용자 지정 로드/저장 방법

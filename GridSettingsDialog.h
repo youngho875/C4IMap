@@ -1,12 +1,13 @@
 ﻿#pragma once
+#include "ModelessDialog.h"
 #include <afxdialogex.h>
 #include "MapGrid.h"
 
-class CGridSettingsDialog : public CDialogEx
+class CGridSettingsDialog : public CModelessDialog
 {
   public:
     CGridSettingsDialog(const CMapGridSettings &settings, CWnd *parent);
-    INT_PTR Show();
+    bool Show(std::function<void(CGridSettingsDialog&)> accepted);
     CMapGridSettings Settings() const;
 
   protected:

@@ -130,10 +130,7 @@ void CC4IMapView::OnAnalysisCommand(UINT id)
     }
     if (settings.color == static_cast<COLORREF>(-1))
         settings.color = RGB(255, 0, 0);
-    CAnalysisLocationDialog dialog(this);
-    bool input = id == ID_MENU_ANALYSIS_RADIUS_INPUT || id == ID_ANALYSIS_VISIBLE_INPUT;
-    if (input && dialog.Show() != IDOK)
-        return;
+    auto start = [this, mode, settings](const AnalysisPoint* location) {
     SetMouseState(MOUSE_DEFAULT);
     m_militaryOverlay.Cancel();
     m_localOverlay.SetTool(CLocalOverlay::Pan);
@@ -146,10 +143,21 @@ void CC4IMapView::OnAnalysisCommand(UINT id)
         AfxMessageBox(_T("같은 종류의 분석이 아직 계산 중입니다. 다른 분석 도구는 사용할 수 있습니다."));
         return;
     }
-    if (input)
-        m_analysis.Place(dialog.Location());
+    if (location)
+        m_analysis.Place(*location);
     SetFocus();
     Invalidate(FALSE);
+    };
+    if (id == ID_MENU_ANALYSIS_RADIUS_INPUT || id == ID_ANALYSIS_VISIBLE_INPUT)
+    {
+        auto* dialog = new CAnalysisLocationDialog(this);
+        dialog->Show([start](CAnalysisLocationDialog& input) {
+            const auto location = input.Location();
+            start(&location);
+        });
+    }
+    else start(nullptr);
+
 }
 void CC4IMapView::OnUpdateAnalysis(CCmdUI *ui)
 {

@@ -33,16 +33,16 @@ bool CMapNavigationHistory::ParseNumber(CString text,double& value,bool scale)
     return end&&*end==0&&std::isfinite(value)&&value>0;
 }
 CMapCoordinateDialog::CMapCoordinateDialog(double longitude,double latitude,CWnd* parent)
-    : CDialogEx((UINT)0,parent),m_longitude(longitude),m_latitude(latitude) {}
-INT_PTR CMapCoordinateDialog::Show()
+    : CModelessDialog((UINT)0,parent),m_longitude(longitude),m_latitude(latitude) {}
+bool CMapCoordinateDialog::Show(std::function<void(CMapCoordinateDialog&)> accepted)
 {
     WORD storage[32]={};auto dialog=reinterpret_cast<DLGTEMPLATE*>(storage);
     dialog->style=WS_POPUP|WS_CAPTION|WS_SYSMENU|DS_MODALFRAME;dialog->cx=230;dialog->cy=90;
-    if(!InitModalIndirect(dialog))return IDCANCEL;return DoModal();
+    return OpenTemplate(dialog, m_pParentWnd, [this, accepted]() { if (accepted) accepted(*this); });
 }
 BOOL CMapCoordinateDialog::OnInitDialog()
 {
-    CDialogEx::OnInitDialog();SetWindowText(_T("좌표 이동 - WGS84 십진도"));
+    CModelessDialog::OnInitDialog();SetWindowText(_T("좌표 이동 - WGS84 십진도"));
     CRect r;GetClientRect(&r);int width=r.Width();
     m_lonLabel.Create(_T("경도 (-180 ~ 180)"),WS_CHILD|WS_VISIBLE,CRect(12,14,165,36),this);
     m_latLabel.Create(_T("위도 (-90 ~ 90)"),WS_CHILD|WS_VISIBLE,CRect(12,48,165,70),this);
@@ -59,7 +59,7 @@ void CMapCoordinateDialog::OnOK()
     double lon,lat;
     if(!parse(m_lonEdit,lon)||!parse(m_latEdit,lat)||lon<-180||lon>180||lat<-90||lat>90)
     {AfxMessageBox(_T("경도 -180~180, 위도 -90~90 범위의 십진도를 입력하세요."));return;}
-    m_longitude=lon;m_latitude=lat;CDialogEx::OnOK();
+    m_longitude=lon;m_latitude=lat;CModelessDialog::OnOK();
 }
 double CMapCoordinateDialog::Longitude() const{return m_longitude;}
 double CMapCoordinateDialog::Latitude() const{return m_latitude;}

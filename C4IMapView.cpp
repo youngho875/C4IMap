@@ -13,6 +13,7 @@
 //
 
 #include "pch.h"
+#include "ModelessDialog.h"
 #include "DisplayProjection.h"
 #include "GridSettingsDialog.h"
 #include "TerrainProfileDialog.h"
@@ -44,6 +45,7 @@
 IMPLEMENT_DYNCREATE(CC4IMapView, CView)
 
 BEGIN_MESSAGE_MAP(CC4IMapView, CView)
+    ON_MESSAGE(WM_C4_MODELESS_CHANGED, &CC4IMapView::OnModelessMapChanged)
     ON_COMMAND(ID_C4_MILITARY_SELECT, &CC4IMapView::OnMilitarySelect)
     ON_UPDATE_COMMAND_UI(ID_C4_MILITARY_SELECT, &CC4IMapView::OnUpdateMilitary)
     ON_COMMAND(ID_C4_MILITARY_CHOOSE, &CC4IMapView::OnMilitaryChoose)
@@ -766,10 +768,11 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
 		m_localOverlay.SetTool(id-ID_C4OVER_PAN);
     else if(id==ID_C4OVER_COLOR)
 	{
-		CColorDialog dlg(m_localOverlay.Color(),CC_FULLOPEN,this);
-		if(dlg.DoModal()==IDOK)
-			m_localOverlay.SetColor(dlg.GetColor());
-	}
+        ModelessDialogs::Color(this, m_localOverlay.Color(), [this](COLORREF color) {
+            m_localOverlay.SetColor(color);
+            Invalidate(FALSE);
+        });
+    }
     else if(id==ID_C4OVER_UNDO)
     {
         if (m_militaryOverlay.SelectionMode()) m_militaryOverlay.Undo();
@@ -783,15 +786,14 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
     else if(id==ID_C4OVER_SAVE || id==ID_C4OVER_LOAD)
 	{
         BOOL load=id==ID_C4OVER_LOAD;
-        CFileDialog dlg(load,_T("xml"),_T("overlay.xml"),OFN_HIDEREADONLY|(load?OFN_FILEMUSTEXIST:OFN_OVERWRITEPROMPT),_T("C4IMap Overlay XML (*.xml)|*.xml||"),this);
-        if(dlg.DoModal()==IDOK)
-		{
+        ModelessDialogs::File(this, load != FALSE, _T("overlay.xml"),
+            _T("C4IMap Overlay XML (*.xml)|*.xml||"), [this, load](CString selectedPath, UINT) {
             if(load && !m_localOverlay.Layers().empty() && AfxMessageBox(_T("현재 Overlay 도형을 선택한 파일로 교체하시겠습니까? \
 				저장하지 않은 도형은 사라집니다."),MB_YESNO|MB_ICONQUESTION)!=IDYES)
 				return;
             CString error;
 			bool ok = false;
-            const CString path = dlg.GetPathName();
+            const CString path = selectedPath;
             if (load)
             {
                 CLocalOverlay shapes;
@@ -822,8 +824,12 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
             }
             if(!ok)
 				AfxMessageBox(error,MB_ICONERROR);
-        }
+
+            RefreshOverlayLayers();
+            Invalidate(FALSE);
+        });
     }
+
     RefreshOverlayLayers();
     Invalidate(FALSE);
 }
@@ -1148,8 +1154,8 @@ void CC4IMapView::OnUpdateMapRotate(CCmdUI* ui){ui->Enable(m_pCoordMgr!=nullptr)
 void CC4IMapView::OnGridSettings()
 {
     if (!m_pCoordMgr) return;
-    CGridSettingsDialog dialog(MapGridSettings(), this);
-    if (dialog.Show() != IDOK) return;
+    auto* dialog = new CGridSettingsDialog(MapGridSettings(), this);
+    dialog->Show([this](CGridSettingsDialog& dialog) {
     const auto value = dialog.Settings();
     if (DisplayProjection().Kind() == 6 && value.tmEpsg != DisplayProjection().TmEpsg())
     {
@@ -1164,6 +1170,7 @@ void CC4IMapView::OnGridSettings()
     if (!MapGridSettings().Save())
         AfxMessageBox(_T("그리드는 적용했지만 base-map.xml을 저장하지 못했습니다. 파일 경로와 쓰기 권한을 확인하세요."));
     Invalidate(FALSE);
+    });
 }
 
 void CC4IMapView::OnUpdateGridSettings(CCmdUI* ui)
@@ -1203,4 +1210,12 @@ void CC4IMapView::OnMilitarySelect()
     m_militaryOverlay.SelectMode();
     SetFocus();
     Invalidate(FALSE);
+}
+
+LRESULT CC4IMapView::OnModelessMapChanged(WPARAM, LPARAM)
+{
+    m_mapFrameCache.InvalidateFrom();
+    get_mainfrm()->m_wndMapObjectManager.RefreshLocalShapeTree();
+    Invalidate(FALSE);
+    return 0;
 }

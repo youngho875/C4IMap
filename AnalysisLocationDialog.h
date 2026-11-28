@@ -1,11 +1,12 @@
-#pragma once
+﻿#pragma once
+#include "ModelessDialog.h"
 #include "MapAnalysis.h"
 #pragma pack(push, 8)
-class CAnalysisLocationDialog : public CDialog
+class CAnalysisLocationDialog : public CModelessDialog
 {
 public:
     explicit CAnalysisLocationDialog(CWnd* parent);
-    INT_PTR Show();
+    bool Show(std::function<void(CAnalysisLocationDialog&)> accepted);
     AnalysisPoint Location() const;
 protected:
     BOOL OnInitDialog() override;

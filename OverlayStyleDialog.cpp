@@ -16,23 +16,21 @@ struct DialogLayout
     WORD menu = 0, windowClass = 0, title = 0;
 };
 } // namespace
-BEGIN_MESSAGE_MAP(COverlayStyleDialog, CDialogEx)
+BEGIN_MESSAGE_MAP(COverlayStyleDialog, CModelessDialog)
 ON_CONTROL_RANGE(BN_CLICKED, LineColor, PatternColor, &COverlayStyleDialog::OnColor)
 END_MESSAGE_MAP()
 COverlayStyleDialog::COverlayStyleDialog(const CLocalOverlay::Style &style, bool selected,
                                          CWnd *parent)
-    : CDialogEx((UINT)0, parent), value(style), selectedObject(selected)
+    : CModelessDialog((UINT)0, parent), value(style), selectedObject(selected)
 {
 }
-INT_PTR COverlayStyleDialog::Show()
+bool COverlayStyleDialog::Show(std::function<void(COverlayStyleDialog&)> accepted)
 {
     DialogLayout layout{};
     layout.dialog.style = WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_MODALFRAME;
     layout.dialog.cx = 330;
     layout.dialog.cy = 245;
-    if (!InitModalIndirect(&layout.dialog))
-        return IDCANCEL;
-    return DoModal();
+    return OpenTemplate(&layout.dialog, m_pParentWnd, [this, accepted]() { if (accepted) accepted(*this); });
 }
 CLocalOverlay::Style COverlayStyleDialog::Style() const
 {
@@ -40,8 +38,8 @@ CLocalOverlay::Style COverlayStyleDialog::Style() const
 }
 BOOL COverlayStyleDialog::OnInitDialog()
 {
-    CDialogEx::OnInitDialog();
-    SetWindowText(selectedObject ? _T("선택 도형 속성") : _T("새 도형 기본 속성"));
+    CModelessDialog::OnInitDialog();
+    SetWindowText(_T("도형 속성 - 확인 시 현재 선택에 적용"));
     auto box = [&](int l, int t, int r, int b) {
         CRect rc(l, t, r, b);
         MapDialogRect(&rc);
@@ -103,12 +101,12 @@ void COverlayStyleDialog::OnColor(UINT id)
 {
     COLORREF &color = id == LineColor ? value.lineColor
                                       : (id == FillColor ? value.fillColor : value.patternColor);
-    CColorDialog dialog(color, CC_FULLOPEN, this);
-    if (dialog.DoModal() == IDOK)
-    {
-        color = dialog.GetColor();
+    ModelessDialogs::Color(this, color, [this, id](COLORREF selected) {
+        COLORREF& target = id == LineColor ? value.lineColor :
+            (id == FillColor ? value.fillColor : value.patternColor);
+        target = selected;
         UpdateColors();
-    }
+    });
 }
 void COverlayStyleDialog::OnOK()
 {
@@ -141,5 +139,5 @@ void COverlayStyleDialog::OnOK()
     }
     if (!CLocalOverlay::ValidStyle(value))
         return;
-    CDialogEx::OnOK();
+    CModelessDialog::OnOK();
 }

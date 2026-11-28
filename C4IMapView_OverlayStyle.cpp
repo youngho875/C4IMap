@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "ModelessDialog.h"
 #include "C4IMapViewHeader.h"
 #include "OverlayStyleDialog.h"
 #include "OverlayRibbonRender.h"
@@ -101,19 +102,16 @@ BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
         style.gradientMode = id - ID_MENU_OVERLAY_GARDIENT_LINERMODE_0;
     else if (id == 61050)
     {
-        CFileDialog file(TRUE, nullptr, nullptr, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
-                         _T("OLE 문서|*.*||"), this);
-        if (file.DoModal() != IDOK)
-            return TRUE;
-        CString path, error;
-        if (!OverlayRibbonRender::ImportOlePreview(file.GetPathName(), path, error))
-        {
-            AfxMessageBox(error);
-            return TRUE;
-        }
-        wcsncpy_s(style.imagePath, CStringW(path), _TRUNCATE);
-        style.fillType = 5;
-        style.fillEnabled = true;
+        ModelessDialogs::File(this, true, _T(""), _T("OLE 문서|*.*||"),
+            [this, style](CString file, UINT) mutable {
+                CString path, error;
+                if (!OverlayRibbonRender::ImportOlePreview(file, path, error))
+                { AfxMessageBox(error); return; }
+                wcsncpy_s(style.imagePath, CT2W(path, CP_ACP), _TRUNCATE);
+                style.fillType = 5; style.fillEnabled = true;
+                if (m_localOverlay.SetStyle(style)) Invalidate(FALSE);
+            });
+        return TRUE;
     }
     else if (id >= 61017 && id <= 61021)
     {
@@ -205,20 +203,19 @@ BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
     else if (id == ID_MENU_OVERLAY_FILL_IMAGE || id == ID_RIBBON_OVERLAY_TEXTURE_ETC_GALLERY ||
              id == ID_RIBBON_OVERLAY_TEXTURE_GALLERY)
     {
-        CFileDialog file(TRUE, nullptr, nullptr, OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
-                         _T("이미지 (*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp|모든 파일|*.*||"), this);
-        if (file.DoModal() != IDOK)
-            return TRUE;
-        CStringW path(file.GetPathName());
-        Gdiplus::Image image(path);
-        if (image.GetLastStatus() != Gdiplus::Ok)
-        {
-            AfxMessageBox(_T("이미지를 읽을 수 없습니다."));
-            return TRUE;
-        }
-        wcsncpy_s(style.imagePath, path, _TRUNCATE);
-        style.fillType = id == ID_MENU_OVERLAY_FILL_IMAGE ? 5 : 6;
-        style.fillEnabled = true;
+        ModelessDialogs::File(this, true, _T(""),
+            _T("이미지 (*.png;*.jpg;*.bmp)|*.png;*.jpg;*.bmp|모든 파일|*.*||"),
+            [this, style, id](CString file, UINT) mutable {
+                CT2W path(file, CP_ACP);
+                Gdiplus::Image image(path);
+                if (image.GetLastStatus() != Gdiplus::Ok)
+                { AfxMessageBox(_T("이미지를 읽을 수 없습니다.")); return; }
+                wcsncpy_s(style.imagePath, path, _TRUNCATE);
+                style.fillType = id == ID_MENU_OVERLAY_FILL_IMAGE ? 5 : 6;
+                style.fillEnabled = true;
+                if (m_localOverlay.SetStyle(style)) Invalidate(FALSE);
+            });
+        return TRUE;
     }
     else if (id == ID_RIBBON_OVERLAY_QUICKSTYLE_GALLERY ||
              id == ID_RIBBON_OVERLAY_PATTERN_GALLERY ||
@@ -236,10 +233,11 @@ BOOL CC4IMapView::OnOverlayStyleCommand(UINT id)
         dialog = true;
     if (dialog)
     {
-        COverlayStyleDialog editor(style, m_localOverlay.HasSelection(), this);
-        if (editor.Show() != IDOK)
-            return TRUE;
-        style = editor.Style();
+        auto* editor = new COverlayStyleDialog(style, m_localOverlay.HasSelection(), this);
+        editor->Show([this](COverlayStyleDialog& editor) {
+            if (m_localOverlay.SetStyle(editor.Style())) Invalidate(FALSE);
+        });
+        return TRUE;
     }
     if (!CLocalOverlay::ValidStyle(style))
     {

@@ -14,23 +14,21 @@ struct LocationDialogTemplate
 };
 #pragma pack(pop)
 } // namespace
-CAnalysisLocationDialog::CAnalysisLocationDialog(CWnd *parent) : CDialog()
+CAnalysisLocationDialog::CAnalysisLocationDialog(CWnd *parent) : CModelessDialog()
 {
     m_pParentWnd = parent;
 }
-INT_PTR CAnalysisLocationDialog::Show()
+bool CAnalysisLocationDialog::Show(std::function<void(CAnalysisLocationDialog&)> accepted)
 {
     LocationDialogTemplate layout{};
     layout.dialog.style = WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_MODALFRAME;
     layout.dialog.cx = 240;
     layout.dialog.cy = 115;
-    if (!InitModalIndirect(&layout.dialog, m_pParentWnd))
-        return IDCANCEL;
-    return DoModal();
+    return OpenTemplate(&layout.dialog, m_pParentWnd, [this, accepted]() { if (accepted) accepted(*this); });
 }
 BOOL CAnalysisLocationDialog::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+    CModelessDialog::OnInitDialog();
     SetWindowText(_T("지점 입력 (WGS84 십진 도)"));
     CRect area;
     GetClientRect(&area);
@@ -70,7 +68,7 @@ void CAnalysisLocationDialog::OnOK()
         return;
     }
     location = {x, y};
-    CDialog::OnOK();
+    CModelessDialog::OnOK();
 }
 AnalysisPoint CAnalysisLocationDialog::Location() const
 {

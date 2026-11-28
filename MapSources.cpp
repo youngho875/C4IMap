@@ -1,4 +1,5 @@
 ﻿#include "pch.h"
+#include "ModelessDialog.h"
 #include "AppPaths.h"
 #include "BaseMapOptions.h"
 #pragma pack(push, 8)
@@ -1757,7 +1758,7 @@ void CMapSources::Draw(CDC *dc, CCoordMgr *c)
 #pragma pack(push, 8)
 namespace
 {
-class SourceDialog : public CDialog
+class SourceDialog : public CModelessDialog
 {
 private:
     CMapSources &owner;
@@ -1889,7 +1890,7 @@ private:
     }
     BOOL OnInitDialog() override
     {
-        CDialog::OnInitDialog();
+        CModelessDialog::OnInitDialog();
         SetWindowText(_T("XML 지도 소스 설정"));
         font.CreatePointFont(90, _T("맑은 고딕"));
         list.Create(WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | LBS_NOTIFY,
@@ -1953,64 +1954,51 @@ private:
             if (!Apply())
                 return TRUE;
             CString path = owner.Path();
-            CFileDialog dlg(FALSE, _T("xml"), path, OFN_OVERWRITEPROMPT,
-                            _T("지도 정의 XML (*.xml)|*.xml||"), this);
-            if (dlg.DoModal() == IDOK)
-            {
-                CString err;
-                if (owner.Save(dlg.GetPathName(), data, err) && owner.Load(dlg.GetPathName(), err))
-                {
-                    SetDlgItemText(7300, _T("XML 저장 및 적용 완료"));
-                }
-                else
-                    AfxMessageBox(err, MB_ICONERROR);
-            }
+            ModelessDialogs::File(this, false, path, _T("지도 정의 XML (*.xml)|*.xml||"),
+                [this](CString path, UINT) {
+                    CString err;
+                    if (owner.Save(path, data, err) && owner.Load(path, err))
+                        SetDlgItemText(7300, _T("XML 저장 및 적용 완료"));
+                    else AfxMessageBox(err, MB_ICONERROR);
+                });
             return TRUE;
         }
         if (id == OPEN || id == RELOAD)
         {
-            CString path = owner.Path();
+            auto load = [this](CString path, UINT) {
+                CString err;
+                if (owner.Load(path, err))
+                {
+                    data = owner.Layers(); Fill(); SetDlgItemText(7300, owner.Status());
+                }
+                else AfxMessageBox(err, MB_ICONERROR);
+            };
             if (id == OPEN)
-            {
-                CFileDialog dlg(TRUE, _T("xml"), path, OFN_FILEMUSTEXIST,
-                                _T("지도 정의 XML (*.xml)|*.xml||"), this);
-                if (dlg.DoModal() != IDOK)
-                    return TRUE;
-                path = dlg.GetPathName();
-            }
-            CString err;
-            if (owner.Load(path, err))
-            {
-                data = owner.Layers();
-                Fill();
-                SetDlgItemText(7300, owner.Status());
-            }
-            else
-                AfxMessageBox(err, MB_ICONERROR);
+                ModelessDialogs::File(this, true, owner.Path(), _T("지도 정의 XML (*.xml)|*.xml||"), load);
+            else load(owner.Path(), 1);
             return TRUE;
         }
-        return CDialog::OnCommand(wp, lp);
+        return CModelessDialog::OnCommand(wp, lp);
     }
 
 public:
     SourceDialog(CMapSources &o) : owner(o), data(o.Layers())
     {
     }
-    INT_PTR Show(CWnd *parent)
+    bool Show(CWnd *parent)
     {
         MapSourceDialogTemplate t = {};
         t.dlg.style = WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_MODALFRAME;
         t.dlg.cx = 540;
         t.dlg.cy = 390;
-        InitModalIndirect(&t.dlg, parent);
-        return DoModal();
+        return OpenTemplate(&t.dlg, parent);
     }
 };
 } // namespace
 void CMapSources::Configure(CWnd *parent)
 {
-    SourceDialog dlg(*this);
-    dlg.Show(parent);
+    auto* dialog = new SourceDialog(*this);
+    dialog->Show(parent);
 }
 #pragma pack(pop)
 

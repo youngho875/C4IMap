@@ -1,11 +1,12 @@
 ﻿#pragma once
+#include "ModelessDialog.h"
 #include <afxdialogex.h>
 #include "LocalOverlay.h"
-class COverlayStyleDialog : public CDialogEx
+class COverlayStyleDialog : public CModelessDialog
 {
 public:
     COverlayStyleDialog(const CLocalOverlay::Style& style, bool selected, CWnd* parent);
-    INT_PTR Show();
+    bool Show(std::function<void(COverlayStyleDialog&)> accepted);
     CLocalOverlay::Style Style() const;
 protected:
     BOOL OnInitDialog() override;

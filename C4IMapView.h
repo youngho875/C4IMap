@@ -390,6 +390,7 @@ private:
 public:
     afx_msg void OnMapSourcesXml();
     afx_msg void OnTimer(UINT_PTR id);
+    afx_msg LRESULT OnModelessMapChanged(WPARAM, LPARAM);
     DECLARE_MESSAGE_MAP()
 
 public:
