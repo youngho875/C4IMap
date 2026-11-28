@@ -47,7 +47,8 @@ BOOL CGridSettingsDialog::OnInitDialog()
 {
     CModelessDialog::OnInitDialog();
     SetWindowText(_T("그리드 기준 좌표계 설정"));
-    auto box = [&](int l, int t, int r, int b) {
+    auto box = [&](int l, int t, int r, int b) 
+    {
         CRect rc(l, t, r, b);
         MapDialogRect(&rc);
         return rc;

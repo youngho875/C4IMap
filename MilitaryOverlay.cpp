@@ -96,7 +96,10 @@ bool CMilitaryOverlay::Impl::Capture(MilitaryHistoryState& state)
         state.primary = selected;
         return true;
     }
-    catch (CException* error) { error->Delete(); }
+    catch (CException* error) 
+    {
+        error->Delete();
+    }
     return false;
 }
 
@@ -142,13 +145,15 @@ bool CMilitaryOverlay::Impl::BeginChange()
 
 void CMilitaryOverlay::Impl::CommitChange()
 {
-    if (!pendingHistory) return;
+    if (!pendingHistory) 
+        return;
     MilitaryHistoryState after;
     if (Capture(after) && after.data != pending.data)
     {
         undo.push_back(std::move(pending));
         // Bound history memory growth for long editing sessions.
-        if (undo.size() > 50) undo.erase(undo.begin());
+        if (undo.size() > 50) 
+            undo.erase(undo.begin());
         redo.clear();
     }
     pendingHistory = false;
@@ -170,9 +175,11 @@ bool CMilitaryOverlay::Undo()
 {
     CancelGesture();
     p->adding.reset();
-    if (!CanUndo()) return false;
+    if (!CanUndo())
+        return false;
     MilitaryHistoryState current;
-    if (!p->Capture(current) || !p->Restore(p->undo.back())) return false;
+    if (!p->Capture(current) || !p->Restore(p->undo.back()))
+        return false;
     p->redo.push_back(std::move(current));
     p->undo.pop_back();
     p->selectionMode = true;
@@ -183,9 +190,11 @@ bool CMilitaryOverlay::Redo()
 {
     CancelGesture();
     p->adding.reset();
-    if (!CanRedo()) return false;
+    if (!CanRedo()) 
+        return false;
     MilitaryHistoryState current;
-    if (!p->Capture(current) || !p->Restore(p->redo.back())) return false;
+    if (!p->Capture(current) || !p->Restore(p->redo.back()))
+        return false;
     p->undo.push_back(std::move(current));
     p->redo.pop_back();
     p->selectionMode = true;
@@ -228,7 +237,8 @@ bool CMilitaryOverlay::Edit(CWnd* owner)
     if(!app->m_piSymFac->CreatePropertyEditor(&editor)||!editor)
         return false;
     editor->SetWarSymFactory(app->m_piSymFac);
-    if (!p->BeginChange()) return false;
+    if (!p->BeginChange())
+        return false;
     editor->SetTargetSymbol(p->items[p->selected]->m_piSym);
     const bool ok=!!editor->OpenEditor(_T("군대부호 속성 편집"),owner);
     p->modified=true;
@@ -240,7 +250,8 @@ bool CMilitaryOverlay::Edit(CWnd* owner)
 bool CMilitaryOverlay::Impl::Bounds(MilitaryItem& item, Gdiplus::Graphics& graphics,
     const std::vector<Gdiplus::PointF>& points, Gdiplus::RectF& rectangle)
 {
-    if(points.empty()) return false;
+    if(points.empty())
+        return false;
     const auto state = graphics.Save();
     Gdiplus::RectF sdkBox;
     const bool measured = item.GetBoundingRect(&graphics,pixels,1.0,&sdkBox,TRUE) != FALSE;
@@ -250,16 +261,26 @@ bool CMilitaryOverlay::Impl::Bounds(MilitaryItem& item, Gdiplus::Graphics& graph
         sdkBox.Width>=0 && sdkBox.Height>=0 && sdkBox.Width+sdkBox.Height>0)
     {
         rectangle=sdkBox;
-        if(rectangle.Width<8){rectangle.X-=(8-rectangle.Width)/2;rectangle.Width=8;}
-        if(rectangle.Height<8){rectangle.Y-=(8-rectangle.Height)/2;rectangle.Height=8;}
+        if(rectangle.Width<8)
+        {
+            rectangle.X-=(8-rectangle.Width)/2;
+            rectangle.Width=8;
+        }
+        if(rectangle.Height<8)
+        {
+            rectangle.Y-=(8-rectangle.Height)/2;
+            rectangle.Height=8;
+        }
         return true;
     }
     // Some SDK symbols have no cached device bounds until first rendering.
     float left=points[0].X,right=left,top=points[0].Y,bottom=top;
     for(const auto& point:points)
     {
-        left=std::min(left,point.X);right=std::max(right,point.X);
-        top=std::min(top,point.Y);bottom=std::max(bottom,point.Y);
+        left=std::min(left,point.X);
+        right=std::max(right,point.X);
+        top=std::min(top,point.Y);
+        bottom=std::max(bottom,point.Y);
     }
     const float size=item.m_piSym->GetSymbolSize();
     const float padding=std::isfinite(size)?std::max(12.f,std::min(size*.75f,256.f)):16.f;
@@ -269,11 +290,14 @@ bool CMilitaryOverlay::Impl::Bounds(MilitaryItem& item, Gdiplus::Graphics& graph
 
 void CMilitaryOverlay::Draw(CDC* dc,CCoordMgr* coord,const CLocalOverlay& layers)
 {
-    if(!dc || !coord || (p->items.empty()&&!p->adding)) return;
+    if(!dc || !coord || (p->items.empty()&&!p->adding)) 
+        return;
     for(auto it=p->selection.begin();it!=p->selection.end();)
     {
-        if(!p->Visible(p->items[*it]->layer,layers)) it=p->selection.erase(it);
-        else ++it;
+        if(!p->Visible(p->items[*it]->layer,layers))
+            it=p->selection.erase(it);
+        else 
+            ++it;
     }
     p->UpdatePrimary();
     Gdiplus::Graphics graphics(dc->GetSafeHdc());
@@ -281,9 +305,11 @@ void CMilitaryOverlay::Draw(CDC* dc,CCoordMgr* coord,const CLocalOverlay& layers
     Gdiplus::Pen pen(Gdiplus::Color(255,0,120,255),1);
     auto draw=[&](MilitaryItem& item)
     {
-        if(!p->Visible(item.layer,layers)) return;
+        if(!p->Visible(item.layer,layers))
+            return;
         std::vector<Gdiplus::PointF> points;
-        if(!p->Prepare(item,coord,points)) return;
+        if(!p->Prepare(item,coord,points))
+            return;
         const auto state=graphics.Save();
         const INT_PTR required=item.m_piSym->CountAnchorPoints(0,(INT_PTR)points.size());
         if((required>0 && points.size()>=(size_t)required)||(required<0 && points.size()>=(size_t)-required))
@@ -292,13 +318,16 @@ void CMilitaryOverlay::Draw(CDC* dc,CCoordMgr* coord,const CLocalOverlay& layers
             graphics.DrawLines(&pen,points.data(),(INT)points.size());
         graphics.Restore(state);
     };
-    for(auto& item:p->items) draw(*item);
-    if(p->adding) draw(*p->adding);
+    for(auto& item:p->items)
+        draw(*item);
+    if(p->adding) 
+        draw(*p->adding);
 }
 
 void CMilitaryOverlay::DrawSelection(CDC* dc,CCoordMgr* coord,const CLocalOverlay& layers)
 {
-    if(!dc || !coord) return;
+    if(!dc || !coord) 
+        return;
     Gdiplus::Graphics graphics(dc->GetSafeHdc());
     graphics.SetPageUnit(Gdiplus::UnitPixel);
     graphics.SetSmoothingMode(Gdiplus::SmoothingModeNone);
@@ -310,16 +339,27 @@ void CMilitaryOverlay::DrawSelection(CDC* dc,CCoordMgr* coord,const CLocalOverla
     bool hasCombined=false;
     auto selection=[&](MilitaryItem& item,bool handles)
     {
-        if(!p->Visible(item.layer,layers)) return;
+        if(!p->Visible(item.layer,layers)) 
+            return;
         std::vector<Gdiplus::PointF> points;
-        if(!p->Prepare(item,coord,points)) return;
+        if(!p->Prepare(item,coord,points))
+            return;
         Gdiplus::RectF box;
-        if(!p->Bounds(item,graphics,points,box)) return;
+        if(!p->Bounds(item,graphics,points,box))
+            return;
         box.Inflate(4.f,4.f);
         graphics.DrawRectangle(&halo,box);
         graphics.DrawRectangle(&outline,box);
-        if(hasCombined){Gdiplus::RectF united;Gdiplus::RectF::Union(united,combined,box);combined=united;}
-        else {combined=box;hasCombined=true;}
+        if(hasCombined)
+        {
+            Gdiplus::RectF united;Gdiplus::RectF::Union(united,combined,box);
+            combined=united;
+        }
+        else
+        {
+            combined=box;
+            hasCombined=true;
+        }
         if(handles)
             for(const auto& point:points)
             {
@@ -330,7 +370,8 @@ void CMilitaryOverlay::DrawSelection(CDC* dc,CCoordMgr* coord,const CLocalOverla
     for(int index:p->selection)
         if(index>=0 && (size_t)index<p->items.size())
             selection(*p->items[index],p->selection.size()==1 && p->items[index]->group==0);
-    if(p->adding) selection(*p->adding,true);
+    if(p->adding) 
+        selection(*p->adding,true);
     if(hasCombined && p->selection.size()>1)
     {
         combined.Inflate(5.f,5.f);
@@ -340,7 +381,8 @@ void CMilitaryOverlay::DrawSelection(CDC* dc,CCoordMgr* coord,const CLocalOverla
     }
     if(p->boxing)
     {
-        CRect rectangle(p->boxStart,p->boxEnd);rectangle.NormalizeRect();
+        CRect rectangle(p->boxStart,p->boxEnd);
+        rectangle.NormalizeRect();
         Gdiplus::SolidBrush fill(Gdiplus::Color(35,0,120,255));
         outline.SetDashStyle(Gdiplus::DashStyleDash);
         graphics.FillRectangle(&fill,rectangle.left,rectangle.top,rectangle.Width(),rectangle.Height());
@@ -361,8 +403,10 @@ void CMilitaryOverlay::Impl::SelectUnit(int index,bool select)
     {
         if((int)i!=index && (item.group==0 || items[i]->group!=item.group))
             continue;
-        if(select) selection.insert((int)i);
-        else selection.erase((int)i);
+        if(select) 
+            selection.insert((int)i);
+        else 
+            selection.erase((int)i);
     }
     UpdatePrimary();
 }
@@ -441,7 +485,8 @@ bool CMilitaryOverlay::Down(CPoint point,CCoordMgr* coord,const CLocalOverlay& l
         p->original.clear();
         for(int index:p->selection)
             p->original[index]=p->items[index]->points;
-        if (!p->BeginChange()) return true;
+        if (!p->BeginChange())
+            return true;
         p->modifiedBefore=p->modified;
         p->dragging=true;
         return true;
@@ -454,7 +499,8 @@ bool CMilitaryOverlay::Down(CPoint point,CCoordMgr* coord,const CLocalOverlay& l
     p->boxing=true;
     p->consumed=true;
     p->boxStart=p->boxEnd=point;
-    if(!additive) p->selection.clear();
+    if(!additive)
+        p->selection.clear();
     p->UpdatePrimary();
     return true;
 }
@@ -481,7 +527,7 @@ bool CMilitaryOverlay::Move(CPoint point,CCoordMgr* coord)
         const double dy=location.lat-p->last.lat;
         // Validate the entire group before changing any member.
         for(int index:p->selection)
-            for(const auto& vertex:p->items[index]->points)
+            for(const auto& vertex: p->items[index]->points)
                 if(vertex.lat+dy < -90 || vertex.lat+dy > 90)
                     return true;
         for(int index:p->selection)
@@ -530,7 +576,8 @@ bool CMilitaryOverlay::Finish()
     const auto n=p->adding->m_piSym->CountAnchorPoints(0,(INT_PTR)p->adding->points.size());
     if(n==0 || p->adding->points.size()<(size_t)std::abs(n))
         return false;
-    if (!p->BeginChange()) return false;
+    if (!p->BeginChange())
+        return false;
     p->modified=true;
     p->items.push_back(std::move(p->adding));
     p->selected=(int)p->items.size()-1;
@@ -572,9 +619,20 @@ void CMilitaryOverlay::SelectMode()
     p->selectionMode=true;
 }
 
-bool CMilitaryOverlay::SelectionMode() const { return p->selectionMode; }
-bool CMilitaryOverlay::Selected() const { return !p->selection.empty(); }
-size_t CMilitaryOverlay::SelectionCount() const { return p->selection.size(); }
+bool CMilitaryOverlay::SelectionMode() const 
+{ 
+    return p->selectionMode;
+}
+
+bool CMilitaryOverlay::Selected() const 
+{ 
+    return !p->selection.empty(); 
+}
+
+size_t CMilitaryOverlay::SelectionCount() const 
+{ 
+    return p->selection.size();
+}
 
 void CMilitaryOverlay::SelectAll(const CLocalOverlay& layers)
 {
@@ -589,13 +647,15 @@ void CMilitaryOverlay::SelectAll(const CLocalOverlay& layers)
 
 bool CMilitaryOverlay::CanGroup() const
 {
-    if(p->selection.size()<2 || p->dragging || p->boxing || p->adding) return false;
+    if(p->selection.size()<2 || p->dragging || p->boxing || p->adding) 
+        return false;
     const auto& first=*p->items[*p->selection.begin()];
     bool different=first.group==0;
     for(int index:p->selection)
     {
         const auto& item=*p->items[index];
-        if(item.layer!=first.layer) return false;
+        if(item.layer!=first.layer) 
+            return false;
         different |= item.group!=first.group;
     }
     return different;
@@ -603,29 +663,41 @@ bool CMilitaryOverlay::CanGroup() const
 
 bool CMilitaryOverlay::CanUngroup() const
 {
-    if(p->dragging || p->boxing || p->adding) return false;
-    for(int index:p->selection) if(p->items[index]->group>0) return true;
+    if(p->dragging || p->boxing || p->adding)
+        return false;
+    for(int index:p->selection) 
+        if(p->items[index]->group>0) 
+            return true;
     return false;
 }
 
 bool CMilitaryOverlay::GroupSelection(bool ungroup)
 {
-    if(ungroup ? !CanUngroup() : !CanGroup()) return false;
-    if (!ungroup && p->nextGroup==INT_MAX) return false;
-    if (!p->BeginChange()) return false;
+    if(ungroup ? !CanUngroup() : !CanGroup())
+        return false;
+    if (!ungroup && p->nextGroup==INT_MAX)
+        return false;
+    if (!p->BeginChange())
+        return false;
     if(ungroup)
     {
         std::set<int> groups;
-        for(int index:p->selection) groups.insert(p->items[index]->group);
+        for(int index:p->selection) 
+            groups.insert(p->items[index]->group);
         groups.erase(0);
-        for(auto& item:p->items) if(groups.count(item->group)) item->group=0;
-        if(p->selected>=0) p->selection={p->selected};
+        for(auto& item:p->items) 
+            if(groups.count(item->group))
+                item->group=0;
+        if(p->selected>=0) 
+            p->selection={p->selected};
     }
     else
     {
-        if(p->nextGroup==INT_MAX) return false;
+        if(p->nextGroup==INT_MAX) 
+            return false;
         const int group=p->nextGroup++;
-        for(int index:p->selection) p->items[index]->group=group;
+        for(int index:p->selection)
+            p->items[index]->group=group;
     }
     p->modified=true;
     p->CommitChange();
@@ -634,19 +706,27 @@ bool CMilitaryOverlay::GroupSelection(bool ungroup)
 
 bool CMilitaryOverlay::Delete()
 {
-    if(!Selected()) return false;
-    if (!p->BeginChange()) return false;
+    if(!Selected()) 
+        return false;
+    if (!p->BeginChange())
+        return false;
     // Descending indices keep the remaining selections valid during erasure.
     for(auto index=p->selection.rbegin();index!=p->selection.rend();++index)
         p->items.erase(p->items.begin()+*index);
-    p->selection.clear();p->selected=-1;
-    p->original.clear();p->dragging=p->boxing=p->consumed=false;
+    p->selection.clear();
+    p->selected=-1;
+    p->original.clear();
+    p->dragging=p->boxing=p->consumed=false;
     p->modified=true;
     p->CommitChange();
     return true;
 }
 
-bool CMilitaryOverlay::Modified()const{return p->modified;}
+bool CMilitaryOverlay::Modified()const
+{
+    return p->modified;
+}
+
 void CMilitaryOverlay::Clear()
 {
     Cancel();
@@ -714,10 +794,12 @@ bool CMilitaryOverlay::Save(const CString& path, CString& error) const
         CW2A utf8((const wchar_t*)document->xml, CP_UTF8);
         std::unique_ptr<CPLXMLNode, decltype(&CPLDestroyXMLNode)> tree(
             CPLParseXMLString(utf8), CPLDestroyXMLNode);
-        if (!tree) AfxThrowArchiveException(CArchiveException::badSchema);
+        if (!tree)
+            AfxThrowArchiveException(CArchiveException::badSchema);
         char* formatted = CPLSerializeXMLTree(tree.get());
         std::unique_ptr<char, decltype(&CPLFree)> text(formatted, CPLFree);
-        if (!formatted) AfxThrowMemoryException();
+        if (!formatted)
+            AfxThrowMemoryException();
         CFile file(temporary, CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive);
         const std::string bytes = OverlayXmlFormat::EscapeAttributeWhitespace(formatted);
         file.Write(bytes.data(), (UINT)bytes.size());
@@ -728,7 +810,10 @@ bool CMilitaryOverlay::Save(const CString& path, CString& error) const
     
         return true;
     }
-    catch (const _com_error&) { error = _T("Military symbol XML serialization failed."); }
+    catch (const _com_error&) 
+    { 
+        error = _T("Military symbol XML serialization failed."); 
+    }
     catch (CException* exception)
     {
         exception->Delete();
@@ -752,8 +837,10 @@ bool CMilitaryOverlay::LoadXml(const CString& path, CString& error, bool& recogn
         if (document->load(_variant_t((LPCWSTR)CT2W(path, CP_ACP))) != VARIANT_TRUE)
             AfxThrowArchiveException(CArchiveException::badSchema);
         auto root = document->documentElement;
-        if (!root) AfxThrowArchiveException(CArchiveException::badSchema);
-        if (_bstr_t(root->nodeName) != _bstr_t("ovd")) return true;
+        if (!root)
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        if (_bstr_t(root->nodeName) != _bstr_t("ovd")) 
+            return true;
         recognized = true; // Embedded XML wins over any stale .warsym companion.
         auto nodes = root->selectNodes(_bstr_t("iov/item"));
         if (nodes->length > 100000 || (nodes->length && !p->Ready()))
@@ -767,9 +854,11 @@ bool CMilitaryOverlay::LoadXml(const CString& path, CString& error, bool& recogn
             MSXML2::IXMLDOMNodePtr node = nodes->item[index];
             MSXML2::IXMLDOMElementPtr element = node;
             auto item = std::make_unique<MilitaryItem>();
-            const auto attribute = [&](const char* name) -> CString {
+            const auto attribute = [&](const char* name) -> CString 
+            {
                 auto value = element->getAttribute(_bstr_t(name));
-                if (value.vt != VT_BSTR) AfxThrowArchiveException(CArchiveException::badSchema);
+                if (value.vt != VT_BSTR) 
+                    AfxThrowArchiveException(CArchiveException::badSchema);
                 return CString(CW2T(value.bstrVal, CP_ACP));
             };
             const auto integer = [&](const char* name) -> int {
@@ -801,7 +890,8 @@ bool CMilitaryOverlay::LoadXml(const CString& path, CString& error, bool& recogn
                     AfxThrowArchiveException(CArchiveException::badSchema);
                 item->points.push_back(point);
             }
-            if (item->points.empty()) AfxThrowArchiveException(CArchiveException::badSchema);
+            if (item->points.empty())
+                AfxThrowArchiveException(CArchiveException::badSchema);
             item->LoadItemProperty(node);
             CString rotationText = attribute("rotation");
             CT2A rotationBytes(rotationText, CP_UTF8);
@@ -827,7 +917,10 @@ bool CMilitaryOverlay::LoadXml(const CString& path, CString& error, bool& recogn
         p->modified = false;
         return true;
     }
-    catch (const _com_error&) { error = _T("Invalid military symbol XML."); }
+    catch (const _com_error&) 
+    {
+        error = _T("Invalid military symbol XML.");
+    }
     catch (CException* exception)
     {
         exception->Delete();
@@ -839,11 +932,14 @@ bool CMilitaryOverlay::LoadXml(const CString& path, CString& error, bool& recogn
 bool CMilitaryOverlay::Load(const CString& path,CString& error)
 {
     bool recognized = false;
-    if (!LoadXml(path, error, recognized)) return false;
-    if (recognized) return true;
+    if (!LoadXml(path, error, recognized)) 
+        return false;
+    if (recognized)
+        return true;
     if(GetFileAttributes(path+_T(".warsym"))==INVALID_FILE_ATTRIBUTES)
     {
-        Clear();return true;
+        Clear();
+        return true;
     }
     try
     {
@@ -892,8 +988,12 @@ bool CMilitaryOverlay::Load(const CString& path,CString& error)
             }
             loaded.push_back(std::move(item));
         }
-        archive.Close();file.Close();
-        Cancel();p->ResetHistory();p->items.swap(loaded);p->nextGroup=nextGroup;p->modified=false;
+        archive.Close();
+        file.Close();
+        Cancel();p->ResetHistory();
+        p->items.swap(loaded);
+        p->nextGroup=nextGroup;
+        p->modified=false;
         return true;
     }
     catch(CException* exception)

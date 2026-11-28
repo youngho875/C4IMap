@@ -194,7 +194,8 @@ bool OverlayXmlFormat::Decode(const std::string& xml, std::string& legacy)
             for (const auto& mapping : mappings)
             {
                 auto child = CPLGetXMLNode(shape, mapping.tag);
-                if (child) Copy(child, mapping.name, item, mapping.oldName);
+                if (child)
+                    Copy(child, mapping.name, item, mapping.oldName);
                 if (child && !strcmp(mapping.oldName, "points"))
                 {
                     std::string points = CPLGetXMLValue(child, "pt", "");
