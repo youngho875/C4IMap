@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #pragma pack(push, 8)
 #include "LocalOverlay.h"
+#include "OverlayXmlFormat.h"
 #include "OverlayRibbonRender.h"
 #include <vector>
 #include <memory>
@@ -97,6 +98,23 @@ struct CLocalOverlay::Impl
     Item pending, original;
     int selected = -1, handle = -1;
     std::set<int> selection;
+    std::set<int> selectionBeforeBox;
+    bool boxing = false;
+    bool selectionClick = false;
+    CPoint boxStart, boxEnd;
+
+    void SelectUnit(int index, bool select)
+    {
+        if (index < 0 || index >= (int)items.size()) return;
+        const auto& item = items[index];
+        for (int n = 0; n < (int)items.size(); ++n)
+            if (n == index || (item.group && items[n].layer == item.layer && items[n].group == item.group))
+            {
+                if (select) selection.insert(n);
+                else selection.erase(n);
+            }
+    }
+
     int nextGroup = 1;
     DWORD clipboardSequence = 0;
     unsigned int pasteCount = 0;
@@ -186,11 +204,18 @@ int CLocalOverlay::GetTool() const
 
 bool CLocalOverlay::IsDrawing() const
 {
-    return p->drawing;
+    return p->drawing || p->boxing;
 }
 
 void CLocalOverlay::Cancel()
 {
+    if (p->boxing)
+    {
+        p->selection = p->selectionBeforeBox;
+        p->selected = p->selection.empty() ? -1 : *p->selection.rbegin();
+    }
+    p->boxing = p->selectionClick = false;
+    p->selectionBeforeBox.clear();
     p->drawing = false;
     p->editing = false;
 }
@@ -283,13 +308,16 @@ void CLocalOverlay::Clear()
     p->tool = Pan;
 }
 
-bool CLocalOverlay::Begin(CPoint pt, CCoordMgr *c)
+bool CLocalOverlay::Begin(CPoint pt, CCoordMgr *c, UINT flags)
 {
     if (!c)
         return false;
 
     if (p->tool == Pan)
     {
+        // Space keeps normal map panning available while editing overlay objects.
+        if (GetKeyState(VK_SPACE) & 0x8000) return false;
+        const bool control = (flags & MK_CONTROL) != 0;
         auto layer = std::find_if(p->layers.begin(), p->layers.end(), [&](const Impl::Layer &l) {
             return l.id == p->active && l.visible;
         });
@@ -300,7 +328,7 @@ bool CLocalOverlay::Begin(CPoint pt, CCoordMgr *c)
             return false;
         }
         p->handle = -1;
-        if ((GetKeyState(VK_CONTROL) & 0x8000) == 0 && p->selected >= 0 &&
+        if (!control && p->selection.size() == 1 && p->selected >= 0 &&
             p->selected < (int)p->items.size())
         {
             double x1, y1, x2, y2;
@@ -376,23 +404,26 @@ bool CLocalOverlay::Begin(CPoint pt, CCoordMgr *c)
                     break;
                 }
             }
-            if ((GetKeyState(VK_CONTROL) & 0x8000) != 0)
+            if (control && p->selected >= 0)
             {
+                const int hit = p->selected;
                 p->selection = oldSelection;
-                if (p->selected >= 0)
-                {
-                    if (p->selection.count(p->selected))
-                        p->selection.erase(p->selected);
-                    else
-                        p->selection.insert(p->selected);
-                }
+                p->SelectUnit(hit, !p->selection.count(hit));
                 p->selected = p->selection.empty() ? -1 : *p->selection.rbegin();
-                if (p->selected >= 0)
-                {
-                    p->original = p->pending = p->items[p->selected];
-                    p->start = pt;
-                    p->editing = p->drawing = true;
-                }
+                // A selection click must not move the object when the pointer jitters.
+                p->selectionClick = true;
+                return true;
+            }
+            if (p->selected < 0)
+            {
+                const bool hasItems = std::any_of(p->items.begin(), p->items.end(),
+                    [&](const Impl::Item& item) { return item.layer == p->active; });
+                if (!hasItems) return false;
+                p->selectionBeforeBox = oldSelection;
+                p->selection = control ? oldSelection : std::set<int>();
+                p->selected = p->selection.empty() ? -1 : *p->selection.rbegin();
+                p->boxStart = p->boxEnd = pt;
+                p->boxing = true;
                 return true;
             }
             if (p->selected >= 0 && oldSelection.count(p->selected))
@@ -446,6 +477,12 @@ bool CLocalOverlay::Begin(CPoint pt, CCoordMgr *c)
 
 bool CLocalOverlay::Move(CPoint pt, CCoordMgr *c)
 {
+    if (p->selectionClick) return true;
+    if (p->boxing)
+    {
+        p->boxEnd = pt;
+        return true;
+    }
     if (!c || !p->drawing)
         return false;
     if (p->editing)
@@ -536,6 +573,38 @@ bool CLocalOverlay::Move(CPoint pt, CCoordMgr *c)
 
 bool CLocalOverlay::End(CPoint pt, CCoordMgr *c)
 {
+    if (p->selectionClick)
+    {
+        p->selectionClick = false;
+        return true;
+    }
+    if (p->boxing)
+    {
+        p->boxEnd = pt;
+        CRect area(p->boxStart, pt);
+        area.NormalizeRect();
+        if (c && area.Width() + area.Height() >= 4)
+        {
+            for (int index = 0; index < (int)p->items.size(); ++index)
+            {
+                const auto& item = p->items[index];
+                if (item.layer != p->active) continue;
+                double x1, y1, x2, y2;
+                if (!Impl::Screen(item, c, x1, y1, x2, y2)) continue;
+                double cx = (x1 + x2) / 2, cy = (y1 + y2) / 2;
+                double rx = fabs(x2 - x1) / 2, ry = fabs(y2 - y1) / 2;
+                if (item.style.rotation % 2) std::swap(rx, ry);
+                // Include shapes touching the selection rectangle, including thin lines.
+                if (cx + rx >= area.left && cx - rx <= area.right &&
+                    cy + ry >= area.top && cy - ry <= area.bottom)
+                    p->SelectUnit(index, true);
+            }
+        }
+        p->selected = p->selection.empty() ? -1 : *p->selection.rbegin();
+        p->boxing = false;
+        p->selectionBeforeBox.clear();
+        return true;
+    }
     if (!Move(pt, c))
         return false;
     if (abs(pt.x - p->start.x) + abs(pt.y - p->start.y) >= 4 ||
@@ -633,6 +702,16 @@ void CLocalOverlay::Draw(CDC *dc, CCoordMgr *c)
             }
     if (p->drawing)
         draw(p->pending);
+    if (p->boxing)
+    {
+        CRect rectangle(p->boxStart, p->boxEnd);
+        rectangle.NormalizeRect();
+        Gdiplus::SolidBrush shade(Gdiplus::Color(35, 0, 120, 255));
+        Gdiplus::Pen edge(Gdiplus::Color(255, 0, 100, 220), 1.5f);
+        edge.SetDashStyle(Gdiplus::DashStyleDash);
+        g.FillRectangle(&shade, rectangle.left, rectangle.top, rectangle.Width(), rectangle.Height());
+        g.DrawRectangle(&edge, rectangle.left, rectangle.top, rectangle.Width(), rectangle.Height());
+    }
     for (int index : p->selection)
         if (index != p->selected && index >= 0 && index < (int)p->items.size())
         {
@@ -683,7 +762,7 @@ bool CLocalOverlay::Save(LPCTSTR path, CString &error) const
         << p->active << "\">\n";
     for (const auto &layer : p->layers)
     {
-        CStringW wide(layer.name);
+        CT2W wide(layer.name, CP_ACP);
         CW2A utf8(wide, CP_UTF8);
         char *escaped = CPLEscapeString(utf8, -1, CPLES_XML);
         out << "  <Layer id=\"" << layer.id << "\" name=\"" << escaped << "\" visible=\""
@@ -725,7 +804,12 @@ bool CLocalOverlay::Save(LPCTSTR path, CString &error) const
     try
     {
         CFile file(temp, CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive);
-        auto s = out.str();
+        std::string s;
+        if (!OverlayXmlFormat::Encode(out.str(), s))
+        {
+            error = _T("Overlay XML conversion failed.");
+            return false;
+        }
         file.Write(s.data(), (UINT)s.size());
         file.Flush();
         file.Close();
@@ -745,7 +829,7 @@ bool CLocalOverlay::Save(LPCTSTR path, CString &error) const
         DeleteFile(temp);
         return false;
     }
-    p->modified = false;
+
     return true;
 }
 bool CLocalOverlay::Load(LPCTSTR path, CString &error)
@@ -775,6 +859,13 @@ bool CLocalOverlay::Load(LPCTSTR path, CString &error)
         e->Delete();
         return false;
     }
+    std::string decoded;
+    if (!OverlayXmlFormat::Decode(bytes, decoded))
+    {
+        error = _T("Unsupported XMLControl overlay XML.");
+        return false;
+    }
+    bytes.swap(decoded);
     std::unique_ptr<CPLXMLNode, decltype(&CPLDestroyXMLNode)> tree(CPLParseXMLString(bytes.c_str()),
                                                                    CPLDestroyXMLNode);
     CPLXMLNode *root = nullptr;
@@ -1049,7 +1140,8 @@ bool CLocalOverlay::Load(LPCTSTR path, CString &error)
                 return fail();
 
             CA2W wide(CPLGetXMLValue(n, "name", ""), CP_UTF8);
-            CString name(wide);
+            CW2T nativeName(wide, CP_ACP);
+            CString name(nativeName);
             name.Trim();
             if (name.IsEmpty() || name.GetLength() > 128)
                 return fail();
@@ -1611,3 +1703,18 @@ std::string CLocalOverlay::SyncObjects(CCoordMgr* coord) const
 }
 
 #pragma pack(pop)
+
+void CLocalOverlay::Swap(CLocalOverlay& other)
+{
+    std::swap(p, other.p);
+}
+
+void CLocalOverlay::MarkSaved()
+{
+    p->modified = false;
+}
+
+size_t CLocalOverlay::SelectionCount() const
+{
+    return p->selection.size();
+}

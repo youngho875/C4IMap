@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "MilitaryOverlay.h"
+#include "OverlayXmlFormat.h"
 #include "MilitaryOverlayState.h"
 #include "C4IMap.h"
 #include "LocalOverlay.h"
@@ -13,6 +14,11 @@
 #include <memory>
 #include <cmath>
 #include <algorithm>
+#include <sstream>
+#include <iomanip>
+#include <locale>
+#include "cpl_minixml.h"
+#include "cpl_conv.h"
 
 bool CMilitaryOverlay::Impl::Ready()
 {
@@ -659,44 +665,182 @@ size_t CMilitaryOverlay::Count(int layer)const
     return n;
 }
 
-bool CMilitaryOverlay::Save(const CString& path,CString& error) const
+// SDK test_warsym XML: iov/item, symbol assembly, coordinates and SaveItemProperty.
+// WGS84 anchors come from our model, never the SDK's temporary screen coordinates.
+bool CMilitaryOverlay::Save(const CString& path, CString& error) const
 {
-    CString temporary;
+    CString temporary = path + _T(".military.tmp");
     try
     {
-        const CString target=path+_T(".warsym");
-        CString folder=target.Left(target.ReverseFind(_T('\\'))+1);
-        if(folder.IsEmpty()) folder=target.Left(target.ReverseFind(_T('/'))+1);
-        if(folder.IsEmpty()) folder=_T(".");
-        TCHAR name[MAX_PATH]={};
-        if(!GetTempFileName(folder,_T("wsy"),0,name)) AfxThrowFileException(CFileException::genericException);
-        temporary=name;
-        CFile file(temporary,CFile::modeCreate|CFile::modeWrite|CFile::shareExclusive);
-        CArchive archive(&file,CArchive::store);
-        archive << (DWORD)0x57535932 << (DWORD)p->items.size();
-        for(const auto& item:p->items)
+        MSXML2::IXMLDOMDocument2Ptr document;
+        if (FAILED(document.CreateInstance(__uuidof(MSXML2::DOMDocument60))))
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        document->async = VARIANT_FALSE;
+        document->validateOnParse = VARIANT_FALSE;
+        document->resolveExternals = VARIANT_FALSE;
+        if (document->load(_variant_t((LPCWSTR)CT2W(path, CP_ACP))) != VARIANT_TRUE)
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        auto root = document->documentElement;
+        if (!root || _bstr_t(root->nodeName) != _bstr_t("ovd"))
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        auto previous = root->selectSingleNode(_bstr_t("iov"));
+        if (previous) root->removeChild(previous);
+        auto symbols = document->createElement(_bstr_t("iov"));
+        symbols->setAttribute(_bstr_t("coordinates"), _variant_t("WGS84"));
+        root->appendChild(symbols);
+        for (const auto& item : p->items)
         {
-            item->SerializeSymbol(archive);
-            archive << (DWORD)item->points.size();
-            for(const auto& vertex:item->points) archive << vertex.lon << vertex.lat;
+            CString assembly;
+            if (!item->m_piSym || !item->GetAssembleStream(assembly) || item->points.empty())
+                AfxThrowArchiveException(CArchiveException::badSchema);
+            auto element = document->createElement(_bstr_t("item"));
+            element->setAttribute(_bstr_t("symbol"), _variant_t((LPCWSTR)CT2W(assembly, CP_ACP)));
+            element->setAttribute(_bstr_t("code"), _variant_t(item->m_piSym->GetSymbolCode()));
+            element->setAttribute(_bstr_t("layer"), _variant_t(item->layer));
+            element->setAttribute(_bstr_t("group"), _variant_t(item->group));
+            std::ostringstream coordinates;
+            coordinates.imbue(std::locale::classic());
+            coordinates << std::setprecision(17);
+            for (size_t index = 0; index < item->points.size(); ++index)
+            {
+                if (index) coordinates << ',';
+                coordinates << item->points[index].lon << ',' << item->points[index].lat;
+            }
+            element->setAttribute(_bstr_t("coord"), _variant_t(coordinates.str().c_str()));
+            item->SaveItemProperty(element);
+            element->setAttribute(_bstr_t("rotation"), _variant_t((double)item->m_piSym->GetSymbolRotate()));
+            symbols->appendChild(element);
         }
-        archive.Close();file.Flush();file.Close();
-        if(!MoveFileEx(temporary,target,MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))
+        CW2A utf8((const wchar_t*)document->xml, CP_UTF8);
+        std::unique_ptr<CPLXMLNode, decltype(&CPLDestroyXMLNode)> tree(
+            CPLParseXMLString(utf8), CPLDestroyXMLNode);
+        if (!tree) AfxThrowArchiveException(CArchiveException::badSchema);
+        char* formatted = CPLSerializeXMLTree(tree.get());
+        std::unique_ptr<char, decltype(&CPLFree)> text(formatted, CPLFree);
+        if (!formatted) AfxThrowMemoryException();
+        CFile file(temporary, CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive);
+        const std::string bytes = OverlayXmlFormat::EscapeAttributeWhitespace(formatted);
+        file.Write(bytes.data(), (UINT)bytes.size());
+        file.Flush();
+        file.Close();
+        if (!MoveFileEx(temporary, path, MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
             AfxThrowFileException(CFileException::genericException);
-        p->modified=false;
+    
         return true;
     }
-    catch(CException* exception)
+    catch (const _com_error&) { error = _T("Military symbol XML serialization failed."); }
+    catch (CException* exception)
     {
         exception->Delete();
-        if(!temporary.IsEmpty()) DeleteFile(temporary);
-        error=_T("군대부호 저장 실패. 기존 파일은 유지됩니다 (.warsym).");
-        return false;
+        error = _T("Military symbol XML save failed. Existing file preserved.");
     }
+    DeleteFile(temporary);
+    return false;
+}
+
+bool CMilitaryOverlay::LoadXml(const CString& path, CString& error, bool& recognized)
+{
+    recognized = false;
+    try
+    {
+        MSXML2::IXMLDOMDocument2Ptr document;
+        if (FAILED(document.CreateInstance(__uuidof(MSXML2::DOMDocument60))))
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        document->async = VARIANT_FALSE;
+        document->validateOnParse = VARIANT_FALSE;
+        document->resolveExternals = VARIANT_FALSE;
+        if (document->load(_variant_t((LPCWSTR)CT2W(path, CP_ACP))) != VARIANT_TRUE)
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        auto root = document->documentElement;
+        if (!root) AfxThrowArchiveException(CArchiveException::badSchema);
+        if (_bstr_t(root->nodeName) != _bstr_t("ovd")) return true;
+        recognized = true; // Embedded XML wins over any stale .warsym companion.
+        auto nodes = root->selectNodes(_bstr_t("iov/item"));
+        if (nodes->length > 100000 || (nodes->length && !p->Ready()))
+            AfxThrowArchiveException(CArchiveException::badSchema);
+        std::vector<std::unique_ptr<MilitaryItem>> loaded;
+        std::map<int, int> groupLayers;
+        int nextGroup = 1;
+        auto app = static_cast<CC4IMapApp*>(AfxGetApp());
+        for (long index = 0; index < nodes->length; ++index)
+        {
+            MSXML2::IXMLDOMNodePtr node = nodes->item[index];
+            MSXML2::IXMLDOMElementPtr element = node;
+            auto item = std::make_unique<MilitaryItem>();
+            const auto attribute = [&](const char* name) -> CString {
+                auto value = element->getAttribute(_bstr_t(name));
+                if (value.vt != VT_BSTR) AfxThrowArchiveException(CArchiveException::badSchema);
+                return CString(CW2T(value.bstrVal, CP_ACP));
+            };
+            const auto integer = [&](const char* name) -> int {
+                CString value = attribute(name);
+                TCHAR* end = nullptr;
+                long result = _tcstol(value, &end, 10);
+                if (end == (LPCTSTR)value || *end || result < 0 || result > 1000000)
+                    AfxThrowArchiveException(CArchiveException::badSchema);
+                return (int)result;
+            };
+            item->layer = integer("layer");
+            item->group = integer("group");
+            CString code = attribute("code");
+            if (!app->m_piSymFac->CreateSymbol(code, &item->m_piSym) || !item->m_piSym ||
+                !item->SetAssembleStream(attribute("symbol")))
+                AfxThrowArchiveException(CArchiveException::badSchema);
+            CString coordinateText = attribute("coord");
+            CT2A coordinateBytes(coordinateText, CP_UTF8);
+            std::string coordinates(coordinateBytes);
+            std::replace(coordinates.begin(), coordinates.end(), ',', ' ');
+            std::istringstream input(coordinates);
+            input.imbue(std::locale::classic());
+            while (input >> std::ws && !input.eof())
+            {
+                MilitaryPoint point;
+                if (!(input >> point.lon >> point.lat) || !std::isfinite(point.lon) ||
+                    !std::isfinite(point.lat) || std::abs(point.lon) > 180 ||
+                    std::abs(point.lat) > 90 || item->points.size() >= 100000)
+                    AfxThrowArchiveException(CArchiveException::badSchema);
+                item->points.push_back(point);
+            }
+            if (item->points.empty()) AfxThrowArchiveException(CArchiveException::badSchema);
+            item->LoadItemProperty(node);
+            CString rotationText = attribute("rotation");
+            CT2A rotationBytes(rotationText, CP_UTF8);
+            std::istringstream rotationInput((const char*)rotationBytes);
+            rotationInput.imbue(std::locale::classic());
+            double rotation = 0;
+            if (!(rotationInput >> rotation) || !std::isfinite(rotation) || rotationInput.peek() != EOF)
+                AfxThrowArchiveException(CArchiveException::badSchema);
+            item->m_piSym->SetSymbolRotate((Gdiplus::REAL)rotation);
+            if (item->group)
+            {
+                if (groupLayers.count(item->group) && groupLayers[item->group] != item->layer)
+                    AfxThrowArchiveException(CArchiveException::badSchema);
+                groupLayers[item->group] = item->layer;
+                nextGroup = std::max(nextGroup, item->group + 1);
+            }
+            loaded.push_back(std::move(item));
+        }
+        Cancel();
+        p->ResetHistory();
+        p->items.swap(loaded);
+        p->nextGroup = nextGroup;
+        p->modified = false;
+        return true;
+    }
+    catch (const _com_error&) { error = _T("Invalid military symbol XML."); }
+    catch (CException* exception)
+    {
+        exception->Delete();
+        error = _T("Military symbol XML load failed. Existing symbols preserved.");
+    }
+    return false;
 }
 
 bool CMilitaryOverlay::Load(const CString& path,CString& error)
 {
+    bool recognized = false;
+    if (!LoadXml(path, error, recognized)) return false;
+    if (recognized) return true;
     if(GetFileAttributes(path+_T(".warsym"))==INVALID_FILE_ATTRIBUTES)
     {
         Clear();return true;
@@ -805,3 +949,13 @@ std::string CMilitaryOverlay::SyncObjects(CCoordMgr*) const
 }
 
 #pragma pack(pop)
+
+void CMilitaryOverlay::Swap(CMilitaryOverlay& other)
+{
+    std::swap(p, other.p);
+}
+
+void CMilitaryOverlay::MarkSaved()
+{
+    p->modified = false;
+}

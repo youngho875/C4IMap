@@ -663,4 +663,11 @@
     </ClCompile>
     <ClInclude Include="..\MapViewSync\MapSceneSync.h" />
   </ItemGroup>
-<ItemGroup><ClInclude Include="MilitaryOverlayState.h"/></ItemGroup></Project>
+  <ItemGroup>
+    <ClInclude Include="MilitaryOverlayState.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="OverlayXmlFormat.cpp" />
+    <ClInclude Include="OverlayXmlFormat.h" />
+  </ItemGroup>
+</Project>

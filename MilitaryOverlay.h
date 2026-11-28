@@ -36,9 +36,12 @@ public:
     bool Delete();
     size_t Count(int layer) const;
     std::string SyncObjects(CCoordMgr* coord) const;
+    void MarkSaved();
+    void Swap(CMilitaryOverlay& other);
     bool Save(const CString& path, CString& error) const;
     bool Load(const CString& path, CString& error);
 private:
+    bool LoadXml(const CString& path, CString& error, bool& recognized);
     friend class MilitaryOverlayTests;
     struct Impl;
     Impl* p;

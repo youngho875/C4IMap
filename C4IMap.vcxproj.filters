@@ -175,6 +175,8 @@
     <ClInclude Include="CTest_OverItem.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="MilitaryOverlayState.h" />
+    <ClInclude Include="OverlayXmlFormat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C4IMap.cpp">
@@ -325,6 +327,7 @@
     <ClCompile Include="CTest_OverItem.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="OverlayXmlFormat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="C4IMap.rc">

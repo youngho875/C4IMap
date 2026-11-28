@@ -790,8 +790,36 @@ void CC4IMapView::OnLocalOverlayCommand(UINT id)
 				저장하지 않은 도형은 사라집니다."),MB_YESNO|MB_ICONQUESTION)!=IDYES)
 				return;
             CString error;
-			bool ok=load?m_localOverlay.Load(dlg.GetPathName(),error):m_localOverlay.Save(dlg.GetPathName(),error);
-            if(ok) ok=load?m_militaryOverlay.Load(dlg.GetPathName(),error):m_militaryOverlay.Save(dlg.GetPathName(),error);
+			bool ok = false;
+            const CString path = dlg.GetPathName();
+            if (load)
+            {
+                CLocalOverlay shapes;
+                CMilitaryOverlay symbols;
+                ok = shapes.Load(path, error) && symbols.Load(path, error);
+                if (ok)
+                {
+                    m_localOverlay.Swap(shapes);
+                    m_militaryOverlay.Swap(symbols);
+                }
+            }
+            else
+            {
+                // Save both components before replacing the user's file.
+                const CString temporary = path + _T(".saving.xml");
+                ok = m_localOverlay.Save(temporary, error) && m_militaryOverlay.Save(temporary, error);
+                if (ok && !MoveFileEx(temporary, path, MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))
+                {
+                    error = _T("Overlay XML replacement failed.");
+                    ok = false;
+                }
+                if (!ok) DeleteFile(temporary);
+                else
+                {
+                    m_localOverlay.MarkSaved();
+                    m_militaryOverlay.MarkSaved();
+                }
+            }
             if(!ok)
 				AfxMessageBox(error,MB_ICONERROR);
         }

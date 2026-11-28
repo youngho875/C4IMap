@@ -90,6 +90,7 @@ class CLocalOverlay
     };
 
     void SelectAll();
+    size_t SelectionCount() const;
     bool GroupSelection(bool ungroup);
     bool Arrange(int operation, CCoordMgr *coord);
     Style GetStyle() const;
@@ -109,7 +110,7 @@ class CLocalOverlay
 
     void SetTool(int tool);
     int GetTool() const;
-    bool Begin(CPoint point, CCoordMgr *coord);
+    bool Begin(CPoint point, CCoordMgr *coord, UINT flags = 0);
     bool Move(CPoint point, CCoordMgr *coord);
     bool End(CPoint point, CCoordMgr *coord);
     void Cancel();
@@ -131,6 +132,8 @@ class CLocalOverlay
     COLORREF Color() const;
     void SetColor(COLORREF color);
     std::string SyncObjects(CCoordMgr* coord) const;
+    void MarkSaved();
+    void Swap(CLocalOverlay& other);
     bool Save(LPCTSTR path, CString &error) const;
     bool Load(LPCTSTR path, CString &error);
 
